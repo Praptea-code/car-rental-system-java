@@ -162,7 +162,7 @@
                                 <div class="pp-img">
                                     <c:choose>
                                         <c:when test="${not empty product.imagePath}">
-                                            <img src="${pageContext.request.contextPath}/images/products/${product.imagePath}"
+                                            <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
                                                  alt="${product.name}" class="pp-product-img">
                                         </c:when>
                                         <c:otherwise>

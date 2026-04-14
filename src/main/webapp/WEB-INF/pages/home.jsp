@@ -110,7 +110,7 @@
                 <div class="product-img-area">
                     <c:choose>
                         <c:when test="${not empty product.imagePath}">
-                            <img src="${pageContext.request.contextPath}/images/products/${product.imagePath}"
+                            <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
                                  alt="${product.name}" class="product-img">
                         </c:when>
                         <c:otherwise>

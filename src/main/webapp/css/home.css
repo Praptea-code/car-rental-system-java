@@ -7,7 +7,7 @@
     position: relative;
     width: 100%;
     /* 1. Height remains 70% of the screen */
-    height: 74vh; 
+    height: 76vh; 
     display: flex;
     align-items: center;
     /* 2. Important: Pushes content to the left */
@@ -259,8 +259,51 @@
 .buy-price   { font-size: 15px; font-weight: 500; color: #1a1a1a; ; padding: 12px 16px; border-radius: 6px; }
 .follow-link { font-size: 14px; color: #888; text-decoration: underline; cursor: pointer; }
 
+
+/* ---- COLLECTION BAND ---- */
+.collection-band {
+    height: 650px; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.collection-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.collection-title { 
+    font-size: 48px; 
+    color: #ffffff; 
+    font-weight: 600; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.collection-sub   { font-size: 14px; color: #5a3035; }
+.collection-btn   {
+    background: #fff;
+    color: #1a1a1a;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-top: 8px;
+    display: inline-block;
+    transition: background .2s;
+}
+.collection-btn:hover { background: #f8f0f0; }
+
 /* ---- BENEFITS ---- */
-.benefits { padding: 4rem 3rem; background: #fff; }
+.benefits { padding: 6rem 3rem 6rem 3rem; background: #fff; }
 .benefits-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -288,18 +331,36 @@
 .benefit-desc  { font-size: 13px; color: #888; line-height: 1.7; }
 
 /* About split */
-.about-split { display: flex; align-items: center; gap: 3rem; padding-top: 2rem; }
-.about-img-wrap {
-    flex-shrink: 0;
-    width: 280px;
-    height: 320px;
-    background: #f8e0e4;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 100px;
+.about-split { 
+    display: flex; 
+    align-items: center; 
+    gap: 5rem; /* Increased gap between image and text */
+    
+    /* Adds a subtle top border and extra padding to clearly separate it */
+    padding-top: 6rem; 
 }
+.statement-box {/* Very soft pink */
+    padding: 3rem;
+    flex-direction: column;
+    text-align: center;
+}
+.quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    color: #e8536a;
+    line-height: 0;
+    margin-bottom: 2rem;
+    opacity: 0.3;
+}
+.statement-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-style: italic;
+    color: #2a1215;
+    line-height: 1.3;
+}
+
+
 .about-eyebrow { font-size: 11px; color: #e8536a; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
 .about-title   { font-size: 26px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
 .about-desc    { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 16px; }
@@ -311,80 +372,215 @@
 .ingr-desc       { font-size: 12px; color: #888; display: block; }
 
 
-/* ---- COLLECTION BAND ---- */
-.collection-band {
-    height: 280px;
-    background: #f2c8cc;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+
+
+/* ---- NEWSLETTER---- */
+/* ---- NEWSLETTER (LINEAR GRADIENT VERSION) ---- */
+.newsletter { 
+    padding: 8rem 0; 
+    background: #fff; 
 }
-.collection-overlay {
-    position: absolute;
-    inset: 0;
+
+.newsletter-inner {
+    /* Subtle linear flow from light pink to a crisp white */
+    background: linear-gradient(135deg, #fff0f3 0%, #ffffff 50%, #fff0f3 100%);
+    
+    border: 1px solid #f9ecee; /* Keeps the edges defined */
+    border-radius: 30px;
+    padding: 4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: rgba(242,200,204,.45);
+    text-align: center;
+    gap: 1.5rem;
+    max-width: 850px;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(232, 83, 106, 0.05); /* Very soft depth */
 }
-.collection-title { font-size: 36px; color: #2a1215; font-weight: 600; }
-.collection-sub   { font-size: 14px; color: #5a3035; }
-.collection-btn   {
+
+/* We'll use this to add a "shine" effect across the gradient */
+.newsletter-inner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.6) 50%, transparent 55%);
+    filter: blur(20px);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.nl-title { 
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px; 
+    font-weight: 500; 
+    color: #1a1a1a; 
+    letter-spacing: 0.5px;
+    z-index: 1;
+}
+
+.nl-sub { 
+    font-size: 15px; 
+    color: #666; 
+    max-width: 420px; 
+    z-index: 1;
+}
+
+.nl-form { 
+    display: flex; 
     background: #fff;
-    color: #1a1a1a;
+    padding: 6px;
+    border-radius: 50px;
+    border: 1px solid #f0c0c8;
+    width: 100%;
+    max-width: 460px;
+    z-index: 1;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+.nl-input { 
+    flex: 1;
+    padding: 12px 20px;
     border: none;
-    padding: 10px 24px;
-    border-radius: 20px;
-    font-size: 13px;
-    margin-top: 8px;
-    display: inline-block;
-    transition: background .2s;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
 }
-.collection-btn:hover { background: #f8f0f0; }
 
-/* ---- NEWSLETTER ---- */
-.newsletter { padding: 3rem; background: #fdf2f4; }
-.newsletter-inner {
-    background: #ffe0e8;
-    border-radius: 20px;
-    padding: 2.5rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+.nl-btn { 
+    background: #1a1a1a; 
+    color: #fff; 
+    border: none; 
+    padding: 12px 30px; 
+    border-radius: 50px; 
+    font-size: 13px; 
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
-.nl-title    { font-size: 26px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
-.nl-sub      { font-size: 13px; color: #666; line-height: 1.6; max-width: 260px; }
-.nl-form     { display: flex; gap: 10px; margin-top: 16px; }
-.nl-input    { padding: 10px 16px; border: 1px solid #f0c0c8; border-radius: 8px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; width: 220px; font-family: 'DM Sans', sans-serif; }
-.nl-btn      { background: #1a1a1a; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; }
-.nl-btn:hover { opacity: .88; }
-.newsletter-right { font-size: 80px; }
 
-/* ---- RESPONSIVE ---- */
-@media (max-width: 1024px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .spotlight     { flex-direction: column; align-items: flex-start; }
+.nl-btn:hover { 
+    background: #e8536a; 
+    transform: scale(1.03);
 }
+
+/* ============================================================
+   MOBILE & TABLET RESPONSIVE OVERRIDES
+   ============================================================ */
+
+@media (max-width: 1100px) {
+    /* Scale down the massive spotlight for small laptops/tablets */
+    .spotlight-img {
+        width: 500px;
+        height: 500px;
+    }
+    .spotlight-product-img {
+        width: 450px;
+    }
+}
+
+@media (max-width: 992px) {
+    /* FEATURED PRODUCTS: 2 columns */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* SPOTLIGHT: Stacked layout */
+    .spotlight {
+        flex-direction: column;
+        text-align: center;
+        padding: 4rem 2rem;
+        gap: 2rem;
+    }
+    .spotlight-img {
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+    }
+    .spotlight-product-img {
+        width: 380px;
+    }
+    .spotlight-actions {
+        justify-content: center;
+    }
+    .spotlight-side-labels {
+        display: none; /* Hide vertical text on mobile to save space */
+    }
+
+    /* ABOUT SECTION: Stacked */
+    .about-split {
+        flex-direction: column;
+        gap: 3rem;
+        padding-top: 4rem;
+    }
+    .statement-box {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
 @media (max-width: 768px) {
-    .hero          { flex-direction: column; padding: 2rem 1.5rem; min-height: auto; gap: 2rem; }
-    .hero-products { display: none; }
-    .featured,
-    .benefits,
-    .spotlight,
-    .newsletter    { padding: 2.5rem 1.5rem; }
-    .benefits-grid { grid-template-columns: 1fr; }
-    .about-split   { flex-direction: column; }
-    .features-section { flex-direction: column; }
-    .features-word { writing-mode: horizontal-tb; letter-spacing: 2px; font-size: 36px; }
-    .newsletter-inner { flex-direction: column; padding: 2rem; }
+    /* HERO: Adjust font sizes so they don't overflow */
+    .hero-title {
+        font-size: 48px;
+    }
+    .hero-sub {
+        font-size: 18px;
+    }
+
+    /* COLLECTION BAND: Reduce height */
+    .collection-band {
+        height: 400px;
+        background-attachment: scroll; /* Parallax is buggy on mobile */
+    }
+    .collection-title {
+        font-size: 32px;
+    }
+
+    /* BENEFITS: 1 column */
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* NEWSLETTER: Adjust padding and title */
+    .newsletter-inner {
+        padding: 2.5rem 1.5rem;
+        width: 90%;
+    }
+    .nl-title {
+        font-size: 28px;
+    }
+    .nl-form {
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    .nl-input {
+        background: #fff;
+        border: 1px solid #f0c0c8;
+        border-radius: 50px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
 }
+
 @media (max-width: 480px) {
-    .products-grid { grid-template-columns: 1fr; }
-    .nl-form       { flex-direction: column; }
-    .nl-input      { width: 100%; }
+    /* Small Phones */
+    .hero-title {
+        font-size: 36px;
+    }
+    .spotlight-product-img {
+        width: 100%;
+        height: auto;
+    }
+    .products-grid {
+        grid-template-columns: 1fr; /* Single column products */
+    }
+    .newsletter {
+        padding: 4rem 1rem;
+    }
 }

@@ -2,7 +2,7 @@
    products.css — Spra Products Page
    ============================================================ */
 
-.products-page { padding: 2rem 3rem 4rem; max-width: 1300px; margin: 0 auto; }
+.products-page { padding: 2rem 3rem 4rem; max-width: 100%; margin: 0 auto; }
 
 /* ---- Page header ---- */
 .pp-header       { text-align: center; margin-bottom: 2rem; }
@@ -11,8 +11,8 @@
 .pp-sub          { font-size: 14px; color: #888; margin-top: 4px; }
 
 /* ---- Search + sort row ---- */
-.pp-search-row   { display: flex; gap: 12px; margin-bottom: 2rem; align-items: center; }
-.pp-search-form  { display: flex; flex: 1; gap: 0; }
+.pp-search-row   { display: flex; gap: 12px; margin-bottom: 2rem; align-items: center;justify-content: center;}
+.pp-search-form  { display: flex; width: 100%;max-width: 500px;gap: 0; }
 .pp-search-input {
     flex: 1;
     padding: 10px 16px;
@@ -86,7 +86,7 @@
 /* Product card (inherits from style.css, extra tweaks) */
 .pp-card         { background: #f8f8f8; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform .2s; position: relative; }
 .pp-card:hover   { transform: translateY(-3px); }
-.pp-img          { height: 150px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; overflow: hidden; position: relative; }
+.pp-img          { height: 350px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; overflow: hidden; position: relative; }
 .pp-product-img  { width: 100%; height: 100%; object-fit: cover; }
 .pp-img-placeholder { font-size: 52px; }
 
@@ -102,9 +102,72 @@
     border-radius: 6px;
     white-space: nowrap;
 }
-.pp-card-body    { padding: 10px 12px 14px; }
+.pp-card-body    { padding: 20px; }
 
 /* ---- Responsive ---- */
 @media (max-width: 1100px) { .pp-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 @media (max-width: 900px)  { .pp-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } .pp-sidebar { display: none; } }
 @media (max-width: 600px)  { .pp-grid { grid-template-columns: 1fr; } .products-page { padding: 1.5rem; } }
+/* ---- 2. Large Desktops (Extra Wide) ---- */
+@media (min-width: 1600px) {
+    .pp-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 Columns only on huge screens */
+    }
+}
+
+/* ---- 3. Tablets & Small Laptops (Max 1100px) ---- */
+@media (max-width: 1100px) {
+    .pp-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* Drop to 2 columns to keep cards big */
+        gap: 20px;
+    }
+    .pp-img {
+        height: 280px; /* Scale down image height slightly */
+    }
+}
+
+/* ---- 4. Mobile Transition (Max 850px) ---- */
+@media (max-width: 850px) {
+    .pp-layout {
+        flex-direction: column; /* Stack sidebar on top of products */
+    }
+    .pp-sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 30px;
+    }
+    /* Turn category list into a horizontal scroll so it doesn't take up vertical space */
+    .pp-cat-list {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    .pp-cat-item {
+        flex: 0 0 auto;
+    }
+    .pp-sidebar-title, .pp-price-list {
+        display: none; /* Hide these to keep mobile clean */
+    }
+}
+
+/* ---- 5. Small Phones (Max 550px) ---- */
+@media (max-width: 550px) {
+    .pp-search-row {
+        flex-direction: column; /* Stack Search Bar and Sort dropdown */
+        align-items: stretch;
+    }
+    .pp-search-form, .pp-sort {
+        width: 100%;
+        max-width: 100%;
+    }
+    .pp-grid {
+        grid-template-columns: 1fr; /* Single column: cards become full-width */
+    }
+    .pp-img {
+        height: 350px; /* Return to tall height for a "boutique" look */
+    }
+    .products-page {
+        padding: 1.5rem 1rem; /* Tighten margins for more screen space */
+    }
+}

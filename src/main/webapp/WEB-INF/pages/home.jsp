@@ -170,6 +170,14 @@
 </section>
 </c:if>	
 
+<!-- ===== COLLECTION BAND (image placeholder) ===== -->
+<section class="collection-band" 
+         style="background-image: url('${pageContext.request.contextPath}/assets/images/collectionBand.jpg');">
+    <div class="collection-overlay">
+        
+    </div>
+</section>
+
 <!-- ===== BENEFITS + ABOUT US ===== -->
 <section class="benefits">
     <div class="section-head">
@@ -212,9 +220,10 @@
 
     <!-- About Us split -->
     <div class="about-split">
-        <div class="about-img-wrap">
-            <div class="about-splash-icon">&#127807;</div>
-        </div>
+        <div class="about-img-wrap statement-box">
+		    <span class="quote-mark">“</span>
+		    <p class="statement-text">Nature’s <em>essence</em>, bottled for your skin.</p>
+		</div>
         <div class="about-body">
             <p class="about-eyebrow">&#10022; About Us</p>
             <h2 class="about-title">Crafted with the highest quality natural ingredients</h2>
@@ -253,16 +262,6 @@
 </section>
 
 
-
-<!-- ===== COLLECTION BAND (image placeholder) ===== -->
-<section class="collection-band">
-    <div class="collection-overlay">
-        <h2 class="collection-title">The Spra Collection</h2>
-        <p class="collection-sub">Luxury skincare crafted with nature&apos;s finest</p>
-        <a href="<%= contextPath %>/products" class="collection-btn">Explore Now</a>
-    </div>
-</section>
-
 <!-- ===== NEWSLETTER ===== -->
 <section class="newsletter">
     <div class="newsletter-inner">
@@ -274,7 +273,7 @@
                 <button class="nl-btn">Subscribe</button>
             </div>
         </div>
-        <div class="newsletter-right">&#10024;</div>
+        
     </div>
 </section>
 

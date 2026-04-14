@@ -122,9 +122,9 @@
                     <p class="product-cat">${product.categoryName}</p>
                     <h3 class="product-name">${product.name}</h3>
                     <div class="product-price-row">
-                        <span class="product-price">$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
+                        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
                         <c:if test="${product.oldPrice > 0}">
-                            <span class="product-price-old">$<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
+                            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
                         </c:if>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
         <div class="spotlight-product">
             <c:choose>
                 <c:when test="${not empty bestseller.imagePath}">
-                    <img src="${pageContext.request.contextPath}/images/products/${bestseller.imagePath}"
+                    <img src="${pageContext.request.contextPath}/assets/images/bestSelling.jpg"
                          alt="${bestseller.name}" class="spotlight-product-img">
                 </c:when>
                 <c:otherwise>&#10024;</c:otherwise>
@@ -163,7 +163,7 @@
         <p class="spotlight-desc">${bestseller.description}</p>
         <div class="spotlight-actions">
             <button class="buy-btn">Buy Now</button>
-            <span class="buy-price">$<fmt:formatNumber value="${bestseller.price}" pattern="#,##0.00"/></span>
+            <span class="buy-price">RS <fmt:formatNumber value="${bestseller.price}" pattern="#,##0.00"/></span>
             <a href="#" class="follow-link">Follow Instagram</a>
         </div>
     </div>

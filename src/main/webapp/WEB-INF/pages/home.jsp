@@ -252,22 +252,7 @@
     </div>
 </section>
 
-<!-- ===== FEATURES (GRAY) ===== -->
-<section class="features-section">
-    <div class="features-word">Features</div>
-    <div class="features-center">
-        <div class="feature-point fp-tl">Brightening</div>
-        <div class="feature-point fp-tr">Soothing</div>
-        <div class="feature-point fp-tr2">Deep Hydration</div>
-        <div class="feature-point fp-bl">Anti-Aging</div>
-        <div class="features-oval"><div class="features-product">&#129511;</div></div>
-        <div class="features-badge">Up to 15% early beauty discount</div>
-    </div>
-    <div class="features-right">
-        <h3 class="features-right-title">Expertly formulated for every skin type</h3>
-        <p class="features-right-desc">Laboratory-tested, dermatologist approved. Each Spra product delivers visible results within 4 weeks of consistent use.</p>
-    </div>
-</section>
+
 
 <!-- ===== COLLECTION BAND (image placeholder) ===== -->
 <section class="collection-band">

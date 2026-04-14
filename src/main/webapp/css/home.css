@@ -166,19 +166,19 @@
 /* ---- SPOTLIGHT ---- */
 .spotlight {
     /* Increased vertical padding from 4rem */
-    padding: 8rem 4rem; 
-    background: #fafafa;
+    padding: 1rem 4rem; 
+    background: #fff;
     display: flex;
     align-items: center;
     gap: 5rem; /* Increased gap to match the larger scale */
-    min-height: 500px; /* Ensures a substantial vertical presence */
+    min-height: 200px; /* Ensures a substantial vertical presence */
 }
 
 .spotlight-img {
     flex-shrink: 0;
     /* We increase these to give the image more "territory" */
-    width: 500px; 
-    height: 500px; 
+    width: 700px; 
+    height: 700px; 
     background: transparent; /* Removes the pink square */
     display: flex;
     align-items: center;
@@ -209,12 +209,12 @@
     animation: floatUp 3s ease-in-out infinite;
 }
 @keyframes floatUp {
-    0%,100% { transform: translateY(0) rotate(-3deg); }
-    50%      { transform: translateY(-18px) rotate(3deg); }
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-18px) rotate(0deg); }
 }
 .spotlight-product-img {
-    width: 580px; /* Made the product itself slightly larger */
-    height: 580;
+    width: 680px; /* Made the product itself slightly larger */
+    height: 680;
     object-fit: contain;
     position: relative;
     z-index: 1;

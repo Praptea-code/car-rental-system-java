@@ -76,20 +76,23 @@
 
 <!-- ===== ABOUT HERO ===== -->
 <section class="about-hero">
-    <div class="ah-text">
-        <p class="ah-eyebrow">Since 2020</p>
-        <h1 class="ah-title">This is<br><em>Spra</em></h1>
-        <p class="ah-sub">Tiny, curious, and destined for the beauty world. By the time we launched, we had a whole vision running — and people noticed.</p>
+    <div class="ah-content">
+        <p class="ah-eyebrow">Established 2020</p>
+        <h1 class="ah-title">
+            This is <em>Spra</em>. <br>
+            Beauty, Reimagined.
+        </h1>
+        <div class="ah-divider"></div>
+        <p class="ah-sub">
+            Tiny, curious, and destined for the beauty world. 
+            We didn't just launch a brand; we started a conversation.
+        </p>
+        <p class="ah-manifesto">
+            "We believe beauty is a ritual of self-love a delicate 
+            balance between scientific efficacy and soulful aesthetics."
+        </p>
     </div>
-    <div class="ah-photo-grid">
-        <div class="ah-photo" style="background:#e8c0c8">&#127800;</div>
-        <div class="ah-photo short" style="background:#d8a8b0">&#10024;</div>
-        <div class="ah-photo short" style="background:#f0d0d4">&#127807;</div>
-        <div class="ah-photo" style="background:#e8b8c0">&#128132;</div>
-    </div>
-    <div class="ah-scribble">Hi. Since you&apos;re new here,<br>let me be your guide.<br><br>&mdash; The Spra Team</div>
 </section>
-
 <!-- ===== STORY SECTION ===== -->
 <section class="about-story">
     <div class="as-grid">

@@ -2,24 +2,73 @@
    about.css — Spra About Page
    ============================================================ */
 
-/* ---- About Hero ---- */
 .about-hero {
-    background: #f2e8e8;
-    padding: 4rem 3rem;
+    background: #f2e8e8; /* Warm neutral background */
+    padding: 8rem 2rem;   /* Increased vertical padding for airiness */
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 3rem;
+    text-align: center;
     position: relative;
     overflow: hidden;
 }
-.ah-eyebrow    { font-size: 11px; color: #e8536a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
-.ah-title      { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 400; line-height: 1; color: #1a1a1a; margin-bottom: 16px; }
-.ah-title em   { font-style: italic; color: #c0424e; }
-.ah-sub        { font-size: 15px; color: #666; line-height: 1.8; max-width: 380px; }
-.ah-photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 260px; flex-shrink: 0; }
+
+.ah-content {
+    max-width: 800px; /* Limits width for readability */
+    margin: 0 auto;
+}
+
+.ah-eyebrow { 
+    font-size: 12px; 
+    color: #e8536a; 
+    letter-spacing: 4px; 
+    text-transform: uppercase; 
+    margin-bottom: 20px; 
+}
+
+.ah-title { 
+    font-family: 'Cormorant Garamond', serif; 
+    font-size: clamp(48px, 8vw, 72px); /* Responsive font sizing */
+    font-weight: 300; 
+    line-height: 1.1; 
+    color: #1a1a1a; 
+    margin-bottom: 24px; 
+}
+
+.ah-title em { 
+    font-style: italic; 
+    color: #c0424e; 
+    font-weight: 400;
+}
+
+.ah-divider {
+    width: 60px;
+    height: 1px;
+    background: #e8536a;
+    margin: 30px auto;
+}
+
+.ah-sub { 
+    font-size: 18px; /* Slightly larger for emphasis */
+    color: #444; 
+    line-height: 1.8; 
+    margin-bottom: 20px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.ah-manifesto {
+    font-size: 15px;
+    color: #888;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Remove the old elements globally if they still exist in your code */
+.ah-photo-grid, .ah-scribble { display: none !important; }
+
 .ah-photo      { border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 36px; height: 130px; }
 .ah-photo.short { height: 90px; }
-.ah-scribble   { position: absolute; right: 3rem; top: 2rem; font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #c4a0a0; font-style: italic; text-align: right; line-height: 1.8; }
 
 /* ---- Story ---- */
 .about-story { padding: 3rem; background: #fff; }
@@ -69,4 +118,9 @@
     .team-grid   { grid-template-columns: 1fr; }
     .values-grid { grid-template-columns: 1fr; }
     .about-story, .about-team, .about-values { padding: 2rem 1.5rem; }
+}
+/* ---- Responsive Tweaks ---- */
+@media (max-width: 768px) {
+    .about-hero { padding: 5rem 1.5rem; }
+    .ah-sub { font-size: 16px; }
 }

@@ -78,9 +78,10 @@
 <!-- ===== HERO SECTION ===== -->
 <section class="hero">
     <div class="hero-video-bg">
-        <video autoplay muted loop playsinline poster="fallback-image.jpg">
-            <source src="your-video.mp4" type="video/mp4">
-        </video>
+        <video autoplay muted loop playsinline class="hero-video">
+		    <source src="<%= request.getContextPath() %>/assets/videos/hero-bg.mp4" type="video/mp4">
+		    Your browser does not support the video tag.
+		</video>
         <div class="video-overlay"></div>
     </div>
 
@@ -91,12 +92,6 @@
         <a href="<%= contextPath %>/products" class="hero-btn">Shop the Collection</a>
     </div>
 
-    <div class="hero-products">
-        <div class="hero-product-img sm">&#128138;</div>
-        <div class="hero-product-img tall">&#128138;</div>
-        <div class="hero-product-img">&#128138;</div>
-        <div class="hero-product-img sm">&#128138;</div>
-    </div>
 </section>
 
 <!-- ===== FEATURED PRODUCTS ===== -->

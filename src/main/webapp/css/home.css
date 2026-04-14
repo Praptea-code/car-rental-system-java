@@ -1,96 +1,144 @@
 /* ============================================================
    home.css — Spra Landing Page Styles
    ============================================================ */
-
 /* ---- HERO ---- */
+/* ---- HERO (Simplified & Aligned Left) ---- */
 .hero {
-    background: #f2c8cc;
-    min-height: 480px;
+    position: relative;
+    width: 100%;
+    /* 1. Height remains 70% of the screen */
+    height: 74vh; 
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 3rem 4rem;
-    position: relative;
+    /* 2. Important: Pushes content to the left */
+    justify-content: flex-start; 
+    
+    /* 3. Adds a standard margin from the very edge of the browser */
+    padding-left: 3%; 
+    padding-right: 3%; /* Adds padding for mobile centering fallback */
+    
     overflow: hidden;
+    background: #000; /* Fallback color */
 }
+
+/* 4. Background Video Setup */
 .hero-video-bg {
     position: absolute;
-    inset: 0;
-    background: #e8adb5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 0;
-}
-/* Replace .hero-video-bg content with a <video> tag when ready */
-.hero-video-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    z-index: 1; /* Lowest layer */
 }
-.video-label {
-    font-size: 12px;
-    color: #c4767f;
-    font-style: italic;
-    border: 1px dashed #c4767f;
-    padding: 6px 14px;
-    border-radius: 20px;
+
+.hero-video-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 5. A darker overlay keeps white text readable */
+    background: rgba(0, 0, 0, 0.3); 
+    z-index: 2; /* Middle layer */
+}
+
+/* 6. Content Alignment (Left) */
 .hero-content {
     position: relative;
-    z-index: 1;
-    max-width: 420px;
+    z-index: 3; /* Top layer */
+    text-align: left; /* Aligns individual text lines to the left */
+    color: #ffffff;
+    
+    /* 7. Limits how wide the text block gets */
+    max-width: 700px; 
+    margin-left: 0; /* Ensures it stays left */
 }
-.hero-eyebrow {
-    font-size: 12px;
-    color: #c0424e;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
-.hero-title {
-    font-size: 46px;
-    font-weight: 600;
-    color: #2a1215;
-    line-height: 1.1;
-    margin-bottom: 14px;
-}
-.hero-title em { font-style: italic; color: #c0424e; }
-.hero-sub  { color: #5a3035; font-size: 16px; line-height: 1.7; margin-bottom: 24px; }
-.hero-btn  {
-    display: inline-block;
-    background: transparent;
-    color: #2a1215;
-    border: 1.5px solid #2a1215;
-    padding: 12px 28px;
-    border-radius: 28px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    transition: background .2s, color .2s;
-}
-.hero-btn:hover { background: #2a1215; color: #fff; }
 
+.hero-eyebrow {
+    font-size: 14px;
+    color: #ffb5bc; /* Lighter pink to pop on dark video */
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.hero-title {
+    /* 8. Massive, bold title */
+    font-size: 80px; 
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.0; /* Tight line height for impact */
+    margin-bottom: 24px;
+    margin-left: -4px; /* Optical alignment trick */
+}
+
+.hero-title em { 
+    font-style: italic; 
+    color: #ffccd2; /* Lighter highlight color */
+}
+
+.hero-sub { 
+    color: #f0f0f0; 
+    font-size: 22px; 
+    line-height: 1.6; 
+    margin-bottom: 36px; 
+    max-width: 520px; /* Tighter max-width for easier reading */
+}
+
+.hero-btn {
+    display: inline-block;
+    background: #ffffff;
+    color: #2a1215;
+    border: none;
+    padding: 18px 44px;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.hero-btn:hover {
+    background: #fdf2f4;
+    transform: translateY(-2px);
+}
+
+/* 9. Ensure floating products are removed if they existed in CSS elsewhere */
 .hero-products {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    gap: 18px;
-    align-items: flex-end;
+    display: none !important;
 }
-.hero-product-img {
-    background: #e8a0aa;
-    border-radius: 16px;
-    width: 80px;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
+
+/* ---- MOBILE RESPONSIVE TWEAKS ---- */
+@media (max-width: 768px) {
+    .hero {
+        justify-content: center; /* Center text on mobile */
+        text-align: center;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        height: auto; /* Shrink height if needed on small screens */
+        min-height: 60vh;
+    }
+    
+    .hero-content {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-title {
+        font-size: 48px; /* Scale down title size */
+    }
+    
+    .hero-sub {
+        font-size: 18px;
+    }
 }
-.hero-product-img.tall { height: 200px; }
-.hero-product-img.sm   { height: 110px; }
 
 /* ---- FEATURED PRODUCTS ---- */
 .featured {

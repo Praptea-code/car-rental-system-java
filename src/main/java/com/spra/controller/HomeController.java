@@ -1,41 +1,38 @@
 package com.spra.controller;
 
+import com.spra.dao.CategoryDAO;
+import com.spra.dao.ProductDAO;
+import com.spra.model.CategoryModel;
+import com.spra.model.ProductModel;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-/**
- * Servlet implementation class HomeController
- */
-@WebServlet("/HomeController")
+@WebServlet(urlPatterns = {"/", "/home"}, asyncSupported = true)
 public class HomeController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
+    private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
+
     public HomeController() {
-        super();
-        // TODO Auto-generated constructor stub
+        this.productDAO = new ProductDAO();
+        this.categoryDAO = new CategoryDAO();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        List<ProductModel> featuredProducts = productDAO.getFeaturedProducts();
+        ProductModel bestseller = productDAO.getBestseller();
+        List<CategoryModel> categories = categoryDAO.getAllCategories();
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+        req.setAttribute("featuredProducts", featuredProducts);
+        req.setAttribute("bestseller", bestseller);
+        req.setAttribute("categories", categories);
+        req.getRequestDispatcher("/WEB-INF/pages/home.jsp").forward((ServletRequest) req, (ServletResponse) res);
+    }
 }

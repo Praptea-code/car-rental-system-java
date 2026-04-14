@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/", "/home"}, asyncSupported = true)
+@WebServlet(urlPatterns = { "/home"}, asyncSupported = true)
 public class HomeController extends HttpServlet {
 
     private final ProductDAO productDAO;

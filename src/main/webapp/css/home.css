@@ -255,8 +255,8 @@
 }
 .spotlight-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .buy-btn  { background: #1a1a1a; color: #fff; border: none; padding: 12px 26px; border-radius: 6px; font-size: 14px; }
-.buy-btn:hover { opacity: .88; }
-.buy-price   { font-size: 15px; font-weight: 500; color: #1a1a1a; border: 1.5px solid #1a1a1a; padding: 12px 16px; border-radius: 6px; }
+.buy-btn:hover { background:  #e8536a ; opacity: .88; }
+.buy-price   { font-size: 15px; font-weight: 500; color: #1a1a1a; ; padding: 12px 16px; border-radius: 6px; }
 .follow-link { font-size: 14px; color: #888; text-decoration: underline; cursor: pointer; }
 
 /* ---- BENEFITS ---- */
@@ -310,80 +310,6 @@
 .ingr-name       { font-size: 14px; font-weight: 500; color: #1a1a1a; display: block; }
 .ingr-desc       { font-size: 12px; color: #888; display: block; }
 
-/* ---- FEATURES GREY ---- */
-.features-section {
-    padding: 4rem 3rem;
-    background: #f5f5f3;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-.features-word {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: #1a1a1a;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    letter-spacing: 6px;
-}
-.features-center {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    min-height: 300px;
-}
-.features-oval {
-    width: 240px;
-    height: 280px;
-    background: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #e0e0e0;
-}
-.features-product { font-size: 90px; }
-.feature-point {
-    position: absolute;
-    font-size: 12px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-}
-.feature-point::before {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: #ccc;
-    display: block;
-}
-.fp-tl  { top: 30px;  left: 20px; }
-.fp-tr  { top: 30px;  right: 20px; flex-direction: row-reverse; }
-.fp-tr2 { top: 80px;  right: 10px; flex-direction: row-reverse; }
-.fp-bl  { bottom: 30px; left: 20px; }
-.features-badge {
-    position: absolute;
-    right: 20px;
-    bottom: 40px;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 9px;
-    color: #888;
-}
-.features-right        { max-width: 260px; }
-.features-right-title  { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
-.features-right-desc   { font-size: 13px; color: #888; line-height: 1.7; }
 
 /* ---- COLLECTION BAND ---- */
 .collection-band {

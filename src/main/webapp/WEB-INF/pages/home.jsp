@@ -78,10 +78,10 @@
 <!-- ===== HERO SECTION ===== -->
 <section class="hero">
     <div class="hero-video-bg">
-        <%-- Replace this div with <video autoplay muted loop> when ready --%>
-        <div class="hero-video-placeholder">
-            <span class="video-label">&#x25B6; Video background</span>
-        </div>
+        <video autoplay muted loop playsinline poster="fallback-image.jpg">
+            <source src="your-video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
     </div>
 
     <div class="hero-content">

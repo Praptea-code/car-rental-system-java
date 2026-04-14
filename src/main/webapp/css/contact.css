@@ -1,0 +1,103 @@
+/* ============================================================
+   contact.css — Spra Contact Page
+   ============================================================ */
+
+.contact-page   { background: #fff; }
+
+/* ---- Hero banner ---- */
+.contact-hero   { background: #1a1a1a; padding: 3rem; text-align: center; }
+.ch-title       { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 400; color: #fff; margin-bottom: 8px; }
+.ch-title em    { color: #e8536a; font-style: italic; }
+.ch-sub         { font-size: 14px; color: #888; }
+
+/* ---- Two-column body ---- */
+.contact-body   { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+
+/* ---- Form side ---- */
+.contact-form-side { padding: 3rem; }
+.cf-title       { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
+
+.contact-form   {}
+.form-textarea  { min-height: 130px; resize: vertical; }
+.submit-btn     {
+    width: 100%;
+    background: #e8536a;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    transition: opacity .2s;
+}
+.submit-btn:hover { opacity: .88; }
+
+/* ---- Info side ---- */
+.contact-info-side { background: #fdf2f4; padding: 3rem; }
+.ci-title          { font-size: 26px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
+
+.ci-item        { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+.ci-icon-wrap   { width: 40px; height: 40px; background: #ffe0e8; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ci-label       { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: block; }
+.ci-value       { font-size: 14px; color: #1a1a1a; font-weight: 500; }
+
+.ci-map         { background: #e8e0e0; border-radius: 12px; height: 160px; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem; font-size: 13px; color: #888; border: 1px solid #d8d0d0; }
+
+.ci-social      { margin-top: 1.5rem; }
+.social-row     { display: flex; gap: 10px; margin-top: 8px; }
+.social-btn     { width: 38px; height: 38px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: #fff; transition: background .2s; }
+.social-btn:hover { background: #e8536a; }
+
+/* ---- Profile page (profile.css shared here) ---- */
+.profile-page   { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+.profile-banner {
+    background: #2a1215;
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-radius: 0 0 16px 16px;
+    margin-bottom: 2rem;
+}
+.profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #e8536a;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: #fff;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+.profile-name  { font-size: 22px; font-weight: 600; color: #f5c8d0; }
+.profile-role  { font-size: 12px; color: #c8a0a8; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.profile-since { font-size: 12px; color: #8a6068; margin-top: 4px; }
+.profile-body  { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.profile-card  { background: #fff; border: 1px solid #f0e0e0; border-radius: 16px; padding: 24px; }
+.profile-card-title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
+.profile-form  {}
+.profile-save-btn {
+    background: #e8536a;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 4px;
+    transition: opacity .2s;
+}
+.profile-save-btn:hover { opacity: .88; }
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .contact-body  { grid-template-columns: 1fr; }
+    .profile-body  { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .contact-form-side,
+    .contact-info-side { padding: 2rem 1.5rem; }
+}

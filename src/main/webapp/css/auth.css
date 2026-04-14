@@ -1,0 +1,108 @@
+/* ============================================================
+   auth.css — Spra Login & Register Pages
+   ============================================================ */
+
+.auth-body { min-height: 100vh; display: flex; align-items: stretch; background: #fff; }
+
+.auth-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ---- Left decorative panel ---- */
+.auth-panel {
+    width: 380px;
+    flex-shrink: 0;
+    background: #2a1215;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+.auth-panel::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(232,83,106,.15);
+}
+.auth-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(232,83,106,.1);
+}
+.auth-panel-content { position: relative; z-index: 1; text-align: center; }
+
+.auth-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #f5c8d0;
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+}
+.auth-logo span { color: #e8536a; }
+
+.auth-panel-title {
+    font-size: 42px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 14px;
+}
+.auth-panel-title em { font-style: italic; color: #f4a0b0; }
+.auth-panel-sub { font-size: 14px; color: #c8a0a8; line-height: 1.7; }
+
+/* ---- Right form panel ---- */
+.auth-form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background: #fff;
+    overflow-y: auto;
+}
+.auth-form-panel--wide .auth-form-wrap { max-width: 560px; }
+.auth-form-wrap { width: 100%; max-width: 400px; }
+
+.auth-form-title { font-size: 30px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+.auth-form-sub   { font-size: 14px; color: #888; margin-bottom: 2rem; }
+.auth-link       { color: #e8536a; font-weight: 500; }
+.auth-link:hover { text-decoration: underline; }
+
+.auth-submit-btn {
+    width: 100%;
+    background: #e8536a;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .5px;
+    margin-top: 4px;
+    transition: opacity .2s;
+}
+.auth-submit-btn:hover { opacity: .88; }
+
+.auth-back       { text-align: center; margin-top: 1.5rem; font-size: 13px; color: #888; }
+.auth-back a     { color: #e8536a; }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .auth-panel  { display: none; }
+    .auth-form-panel { justify-content: flex-start; padding: 2rem 1.5rem; }
+    .auth-form-wrap { max-width: 100%; }
+}

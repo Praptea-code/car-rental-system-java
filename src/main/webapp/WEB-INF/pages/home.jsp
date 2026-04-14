@@ -145,7 +145,7 @@
         <div class="spotlight-product">
             <c:choose>
                 <c:when test="${not empty bestseller.imagePath}">
-                    <img src="${pageContext.request.contextPath}/assets/images/bestSelling.jpg"
+                    <img src="${pageContext.request.contextPath}/assets/images/bestSelling.png"
                          alt="${bestseller.name}" class="spotlight-product-img">
                 </c:when>
                 <c:otherwise>&#10024;</c:otherwise>
@@ -168,7 +168,7 @@
         </div>
     </div>
 </section>
-</c:if>
+</c:if>	
 
 <!-- ===== BENEFITS + ABOUT US ===== -->
 <section class="benefits">

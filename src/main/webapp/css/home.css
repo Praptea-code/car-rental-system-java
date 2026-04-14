@@ -165,32 +165,38 @@
 
 /* ---- SPOTLIGHT ---- */
 .spotlight {
-    padding: 4rem 3rem;
+    /* Increased vertical padding from 4rem */
+    padding: 8rem 4rem; 
     background: #fafafa;
     display: flex;
     align-items: center;
-    gap: 4rem;
+    gap: 5rem; /* Increased gap to match the larger scale */
+    min-height: 500px; /* Ensures a substantial vertical presence */
 }
+
 .spotlight-img {
     flex-shrink: 0;
-    width: 300px;
-    height: 340px;
-    background: #f0d8dc;
-    border-radius: 24px;
+    /* We increase these to give the image more "territory" */
+    width: 500px; 
+    height: 500px; 
+    background: transparent; /* Removes the pink square */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* Allows the glow to spread out */
 }
+
 .spotlight-glow {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 350px; /* Made it slightly larger for a soft aura effect */
+    height: 350px;
     background: #f4a0b0;
     border-radius: 50%;
-    opacity: .4;
-    animation: pulse 3s ease-in-out infinite;
+    /* Added a heavy blur to make it a soft glow instead of a circle */
+    filter: blur(60px); 
+    opacity: 0.3;
+    animation: pulse 4s ease-in-out infinite;
 }
 @keyframes pulse {
     0%,100% { transform: scale(1); opacity: .4; }
@@ -207,13 +213,17 @@
     50%      { transform: translateY(-18px) rotate(3deg); }
 }
 .spotlight-product-img {
-    width: 180px;
-    height: 220px;
+    width: 580px; /* Made the product itself slightly larger */
+    height: 580;
     object-fit: contain;
     position: relative;
     z-index: 1;
+    /* Keep that nice floating animation */
     animation: floatUp 3s ease-in-out infinite;
+    /* Optional: adds a soft shadow to the product itself for depth */
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
 }
+
 .spotlight-side-labels {
     position: absolute;
     left: 10px;
@@ -229,8 +239,20 @@
     writing-mode: vertical-rl;
 }
 .spotlight-tag   { font-size: 11px; color: #e8536a; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-.spotlight-title { font-size: 48px; font-weight: 600; color: #1a1a1a; line-height: 1.1; margin-bottom: 14px; }
-.spotlight-desc  { color: #666; font-size: 15px; line-height: 1.7; margin-bottom: 24px; max-width: 380px; }
+.spotlight-title {
+    font-size: 56px; /* Slightly bumped up the title to keep scale */
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.1;
+    margin-bottom: 18px;
+}
+.spotlight-desc {
+    color: #666;
+    font-size: 16px; /* Slightly larger text for the bigger section */
+    line-height: 1.8;
+    margin-bottom: 30px;
+    max-width: 450px; /* Allowed text to expand a bit more */
+}
 .spotlight-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .buy-btn  { background: #1a1a1a; color: #fff; border: none; padding: 12px 26px; border-radius: 6px; font-size: 14px; }
 .buy-btn:hover { opacity: .88; }

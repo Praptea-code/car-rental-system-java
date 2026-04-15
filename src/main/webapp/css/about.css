@@ -71,7 +71,7 @@
 .ah-photo.short { height: 90px; }
 
 /* ---- Story ---- */
-.about-story { padding: 3rem; background: #fff; }
+.about-story { padding: 0rem 0rem 3rem 3rem; background: #fff; }
 .as-grid     { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
 .as-title    { font-size: 32px; font-weight: 600; color: #1a1a1a; margin-bottom: 14px; }
 .as-text     { font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 12px; }
@@ -79,13 +79,67 @@
 .as-stat     { background: #fdf0f2; border-radius: 12px; padding: 16px; }
 .as-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; color: #e8536a; display: block; }
 .as-stat-lbl { font-size: 12px; color: #888; margin-top: 2px; display: block; }
-.as-image-wrap { background: #f8f0f2; border-radius: 20px; display: flex; align-items: center; justify-content: center; height: 280px; font-size: 100px; }
+.as-image-wrap { 
+    background: #f8f0f2; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    max-width: none; 
+    width: 100%;
+    margin: 0;
+    overflow: hidden; /* Ensures the img inside stays within the container */
+}
+
+.as-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the image fill the entire box perfectly */
+    display: block;
+}
+
+
 
 /* ---- Team ---- */
-.about-team  { padding: 3rem; background: #fafafa; }
-.team-grid   { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 2rem; }
-.team-card   { background: #fff; border: 1px solid #f0e0e0; border-radius: 16px; padding: 24px; text-align: center; }
-.team-avatar { font-size: 36px; margin-bottom: 12px; }
+.about-team { padding: 3rem; background: #fafafa; }
+
+.team-grid { 
+    display: flex;             /* Changed from grid to flex for easier centering */
+    justify-content: center;   /* Centers the cards horizontally */
+    gap: 24px; 
+    margin-top: 2rem; 
+    flex-wrap: wrap;           /* Allows cards to wrap if you add more later */
+}
+
+.team-card { 
+    background: #fff; 
+    border: 1px solid #f0e0e0; 
+    border-radius: 16px; 
+    padding: 24px; 
+    text-align: center; 
+    width: 100%;               /* Full width of container... */
+    max-width: 350px;          /* ...up to a maximum size so it stays a "card" */
+}
+
+.team-avatar { 
+    margin-bottom: 16px; 
+    width: 80px;               /* Set a size for your image container */
+    height: 80px; 
+    margin-left: auto;         /* Standard trick to center block elements */
+    margin-right: auto;
+    border-radius: 50%;        /* Makes it a circle */
+    overflow: hidden;          /* Keeps the image inside the circle */
+    background: #fdf0f2;       /* Optional: subtle bg color while image loads */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* Essential for keeping the photo from stretching */
+}
+
 .team-name   { font-size: 20px; font-weight: 600; color: #1a1a1a; }
 .team-role   { font-size: 12px; color: #e8536a; margin-top: 2px; margin-bottom: 10px; display: block; }
 .team-bio    { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 16px; }
@@ -123,4 +177,15 @@
 @media (max-width: 768px) {
     .about-hero { padding: 5rem 1.5rem; }
     .ah-sub { font-size: 16px; }
+}
+
+/* Ensure mobile still looks good */
+@media (max-width: 768px) {
+    .about-story { 
+        padding: 2rem 1.5rem; /* Revert to standard padding on small screens */
+    }
+    .as-image-wrap {
+        border-radius: 20px; /* Return all corners on mobile */
+        height: 300px;
+    }
 }

@@ -107,40 +107,23 @@
                 <div class="as-stat"><span class="as-stat-num">5&#9733;</span><span class="as-stat-lbl">Average rating</span></div>
             </div>
         </div>
-        <div class="as-image-wrap">&#129511;</div>
+        <div class="as-image-wrap"> <img src="${pageContext.request.contextPath}/assets/images/about.jpg" alt="Description of image" class="inner-img"> </div>
     </div>
 </section>
 
 <!-- ===== TEAM SECTION ===== -->
 <section class="about-team">
     <div class="section-head">
-        <h2 class="section-title">Skills &amp; Team</h2>
-        <p class="section-sub">The people behind your favourite products</p>
+        <h2 class="section-title">Our CEO</h2>
+        <p class="section-sub">The person behind your favourite products</p>
     </div>
     <div class="team-grid">
 
         <div class="team-card">
-            <div class="team-avatar">&#127800;</div>
-            <h3 class="team-name">Aria Santos</h3>
-            <p class="team-role">Founder &amp; Formulator</p>
-            <p class="team-bio">Passionate chemist turned entrepreneur. Creates every formula from scratch with love and science.</p>
-            <div class="skill-bars">
-                <div class="skill-bar-wrap">
-                    <div class="skill-bar-label"><span>Formulation</span><span>95%</span></div>
-                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:95%"></div></div>
-                </div>
-                <div class="skill-bar-wrap">
-                    <div class="skill-bar-label"><span>Branding</span><span>80%</span></div>
-                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:80%"></div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="team-card">
-            <div class="team-avatar">&#10024;</div>
-            <h3 class="team-name">Mei Lin</h3>
-            <p class="team-role">Creative Director</p>
-            <p class="team-bio">Visual storyteller with 7 years in luxury beauty. Every Spra campaign is her canvas.</p>
+            <div class="team-avatar"><img src="${pageContext.request.contextPath}/assets/images/prapti.jpg" alt="Prapti"></div>
+            <h3 class="team-name">Prapti Bhattarai</h3>
+            <p class="team-role">CEO</p>
+            <p class="team-bio">CEO with 7 years in luxury beauty. Every Spra campaign is her canvas.</p>
             <div class="skill-bars">
                 <div class="skill-bar-wrap">
                     <div class="skill-bar-label"><span>Art Direction</span><span>98%</span></div>
@@ -153,22 +136,6 @@
             </div>
         </div>
 
-        <div class="team-card">
-            <div class="team-avatar">&#127807;</div>
-            <h3 class="team-name">Sofia Reyes</h3>
-            <p class="team-role">Social &amp; Growth</p>
-            <p class="team-bio">Grew Spra&apos;s community from zero. Connects real people to real skincare results every day.</p>
-            <div class="skill-bars">
-                <div class="skill-bar-wrap">
-                    <div class="skill-bar-label"><span>Social Media</span><span>92%</span></div>
-                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:92%"></div></div>
-                </div>
-                <div class="skill-bar-wrap">
-                    <div class="skill-bar-label"><span>Copywriting</span><span>85%</span></div>
-                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%"></div></div>
-                </div>
-            </div>
-        </div>
     </div>
     <p class="team-wrap-line">and that&apos;s a wrap.</p>
 </section>

@@ -119,14 +119,14 @@
             <ul class="pp-price-list">
                 <li class="pp-price-item <c:if test='${empty priceRange}'>active</c:if>">
                     <a href="<%= contextPath %>/products">All Prices</a></li>
-                <li class="pp-price-item <c:if test='${priceRange == "under25"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=under25">Under $25</a></li>
-                <li class="pp-price-item <c:if test='${priceRange == "25to40"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=25to40">$25 &#8211; $40</a></li>
-                <li class="pp-price-item <c:if test='${priceRange == "40to60"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=40to60">$40 &#8211; $60</a></li>
-                <li class="pp-price-item <c:if test='${priceRange == "over60"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=over60">Over $60</a></li>
+                <li class="pp-price-item <c:if test='${priceRange == "under2500"}'>active</c:if>">
+                    <a href="<%= contextPath %>/products?price=under25">Under 2500</a></li>
+                <li class="pp-price-item <c:if test='${priceRange == "2500to4000"}'>active</c:if>">
+                    <a href="<%= contextPath %>/products?price=25to40">2500 &#8211; 4000</a></li>
+                <li class="pp-price-item <c:if test='${priceRange == "4000to6000"}'>active</c:if>">
+                    <a href="<%= contextPath %>/products?price=40to60">4000 &#8211; 6000</a></li>
+                <li class="pp-price-item <c:if test='${priceRange == "over6000"}'>active</c:if>">
+                    <a href="<%= contextPath %>/products?price=over60">Over 6000</a></li>
             </ul>
         </aside>
 

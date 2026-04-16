@@ -79,7 +79,7 @@
     <!-- Hero banner -->
     <div class="contact-hero">
         <h1 class="ch-title">Get in <em>Touch</em></h1>
-        <p class="ch-sub">We&apos;d love to hear from you &mdash; whether it&apos;s feedback, a question, or a collaboration idea.</p>
+        <p class="ch-sub">We&apos;d love to hear from you whether it&apos;s feedback, a question or a collaboration idea.</p>
     </div>
 
     <div class="contact-body">
@@ -102,13 +102,13 @@
                     <div class="form-group">
                         <label class="form-label" for="firstName">First Name</label>
                         <input type="text" id="firstName" name="firstName" class="form-input"
-                               placeholder="Aria"
+                               placeholder="Enter your first name"
                                value="<c:out value='${firstName}'/>" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="lastName">Last Name</label>
                         <input type="text" id="lastName" name="lastName" class="form-input"
-                               placeholder="Santos"
+                               placeholder="Enter your last name"
                                value="<c:out value='${lastName}'/>">
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                 </div>
                 <div>
                     <p class="ci-label">Address</p>
-                    <p class="ci-value">123 Beauty Lane, Paris, France</p>
+                    <p class="ci-value">Sinamangal, Kathmandu</p>
                 </div>
             </div>
 
@@ -178,7 +178,7 @@
                 </div>
                 <div>
                     <p class="ci-label">Phone</p>
-                    <p class="ci-value">+1 (555) 123-4567</p>
+                    <p class="ci-value">+977 9878670678</p>
                 </div>
             </div>
 
@@ -190,21 +190,12 @@
                 </div>
                 <div>
                     <p class="ci-label">Business Hours</p>
-                    <p class="ci-value">Mon&ndash;Fri, 9am &ndash; 6pm CET</p>
+                    <p class="ci-value">Sun&ndash;Fri, 9am &ndash; 6pm </p>
                 </div>
             </div>
 
-            <div class="ci-map">Map &mdash; embed Google Maps iframe here</div>
+            <div class="ci-map"><img src="${pageContext.request.contextPath}/assets/images/map.png"></div>
 
-            <div class="ci-social">
-                <p class="ci-label">Follow us</p>
-                <div class="social-row">
-                    <a href="#" class="social-btn">IG</a>
-                    <a href="#" class="social-btn">TK</a>
-                    <a href="#" class="social-btn">YT</a>
-                    <a href="#" class="social-btn">FB</a>
-                </div>
-            </div>
         </div>
     </div>
 </div>

@@ -44,14 +44,14 @@
                     <div class="form-group">
                         <label class="form-label" for="firstName">First Name</label>
                         <input type="text" id="firstName" name="firstName" class="form-input"
-                               placeholder="Aria"
+                               placeholder="First name"
                                value="<c:out value='${firstName}'/>" required>
                         <span class="field-hint">Letters only</span>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="lastName">Last Name</label>
                         <input type="text" id="lastName" name="lastName" class="form-input"
-                               placeholder="Santos"
+                               placeholder="Last name"
                                value="<c:out value='${lastName}'/>" required>
                         <span class="field-hint">Letters only</span>
                     </div>

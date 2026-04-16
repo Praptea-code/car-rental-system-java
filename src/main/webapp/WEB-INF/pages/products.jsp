@@ -179,9 +179,9 @@
                                     <p class="product-cat">${product.categoryName}</p>
                                     <h3 class="product-name">${product.name}</h3>
                                     <div class="product-price-row">
-                                        <span class="product-price">$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
+                                        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
                                         <c:if test="${product.oldPrice > 0}">
-                                            <span class="product-price-old">$<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
+                                            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
                                         </c:if>
                                     </div>
                                 </div>

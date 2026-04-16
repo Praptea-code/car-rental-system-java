@@ -1,0 +1,207 @@
+@charset "UTF-8";
+/* ============================================================
+   profile.css — Spra Profile Page
+   ============================================================ */
+
+/* ---- Hero banner ---- */
+.profile-hero {
+    background: #2a1215;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+.profile-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(232,83,106,.12);
+}
+.ph-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+}
+.ph-avatar {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8536a 0%, #c0424e 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(232,83,106,.35);
+}
+.ph-initials {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.ph-role-tag {
+    font-size: 10px;
+    color: #e8536a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+.ph-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 6px;
+}
+.ph-meta { font-size: 13px; color: #8a6068; }
+
+/* ---- Page layout ---- */
+.profile-page   { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 5rem; }
+.profile-layout { display: flex; gap: 2rem; align-items: flex-start; }
+
+/* ---- Left sidebar ---- */
+.profile-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 84px; }
+
+.profile-nav     { margin-bottom: 1.5rem; }
+.profile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #666;
+    border-radius: 10px;
+    margin-bottom: 2px;
+    transition: background .15s, color .15s;
+    position: relative;
+}
+.profile-nav-link:hover { background: #fdf0f2; color: #e8536a; }
+.profile-nav-link.active { background: #e8536a; color: #fff; }
+.profile-nav-link.active svg { stroke: #fff; }
+
+.profile-cart-count {
+    margin-left: auto;
+    background: #e8536a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+.profile-nav-link.active .profile-cart-count {
+    background: rgba(255,255,255,.3);
+}
+
+/* Mini info card */
+.profile-info-card {
+    background: #fdf8f8;
+    border: 1px solid #f0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+}
+.pic-label  { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+.pic-value  { font-size: 14px; color: #1a1a1a; font-weight: 500; display: block; }
+.pic-status { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #3B6D11; font-weight: 500; }
+.pic-dot    { width: 8px; height: 8px; border-radius: 50%; background: #3B9B3F; display: inline-block; }
+
+/* ---- Main content cards ---- */
+.profile-main   { flex: 1; min-width: 0; }
+.profile-card {
+    background: #fff;
+    border: 1px solid #f0e0e0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+.pc-head {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #f8f0f0;
+    background: #fdf8f8;
+}
+.pc-title   { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #1a1a1a; }
+.pc-sub     { font-size: 13px; color: #aaa; margin-top: 2px; }
+
+.profile-form   { padding: 1.8rem 2rem; }
+.pc-footer      { padding-top: 1rem; display: flex; justify-content: flex-end; }
+.profile-save-btn {
+    background: #e8536a;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity .2s;
+}
+.profile-save-btn:hover { opacity: .88; }
+
+/* Read-only input */
+.form-input--readonly { background: #f8f8f8; color: #aaa; cursor: not-allowed; }
+
+/* ---- Password strength ---- */
+.pwd-strength-wrap  { margin-top: 4px; margin-bottom: 12px; }
+.pwd-strength-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.pwd-strength-bar   { height: 4px; background: #f0e0e0; border-radius: 2px; overflow: hidden; margin-bottom: 5px; }
+.pwd-strength-fill  { height: 100%; width: 0; border-radius: 2px; transition: width .3s, background .3s; }
+.pwd-strength-hint  { font-size: 12px; color: #888; }
+
+/* ---- Security info ---- */
+.security-info { padding: 1.5rem 2rem; }
+.si-row { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+.si-icon { width: 36px; height: 36px; background: #fdf0f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.si-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.si-value { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+
+/* ---- Activity ---- */
+.activity-list      { padding: 1.5rem 2rem 0; }
+.activity-item      { display: flex; align-items: flex-start; gap: 14px; padding-bottom: 20px; position: relative; }
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 18px;
+    width: 2px;
+    height: calc(100% - 10px);
+    background: #f0e0e0;
+}
+.activity-item:last-child::before { display: none; }
+.ai-dot  { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+.ai-dot--pink  { background: #e8536a; }
+.ai-dot--green { background: #3B9B3F; }
+.ai-dot--gray  { background: #d0c0c0; }
+.ai-label  { font-size: 14px; color: #1a1a1a; margin-bottom: 2px; }
+.ai-time   { font-size: 12px; color: #aaa; }
+.activity-empty-note { padding: 0 2rem 1.5rem; font-size: 13px; color: #bbb; font-style: italic; }
+
+/* ---- Cart badge (nav) ---- */
+.cart-icon-btn { position: relative; }
+.cart-badge {
+    position: absolute; top: -6px; right: -6px;
+    background: #e8536a; color: #fff;
+    font-size: 10px; font-weight: 600;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .profile-layout { flex-direction: column; }
+    .profile-sidebar { width: 100%; position: static; }
+    .profile-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .profile-nav-link { flex: 0 0 auto; }
+    .profile-info-card { display: flex; gap: 24px; flex-wrap: wrap; }
+}
+@media (max-width: 600px) {
+    .profile-hero { padding: 2rem 1.5rem; }
+    .ph-inner { flex-direction: column; text-align: center; }
+    .ph-name { font-size: 28px; }
+    .profile-page { padding: 1.5rem; }
+    .profile-form { padding: 1.2rem; }
+    .pc-head { padding: 1.2rem; }
+}

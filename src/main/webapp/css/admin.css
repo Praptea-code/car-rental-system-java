@@ -163,6 +163,7 @@
 .admin-save-btn   { background: #e8536a; color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; }
 .admin-save-btn:hover { opacity: .88; }
 
+
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
     .admin-sidebar     { display: none; }

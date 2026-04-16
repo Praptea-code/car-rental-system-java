@@ -17,8 +17,19 @@
 .contact-form-side { padding: 3rem; }
 .cf-title       { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: #1a1a1a; margin-bottom: 1.5rem; }
 
-.contact-form   {}
-.form-textarea  { min-height: 130px; resize: vertical; }
+.form-textarea { 
+    /* Increase min-height from 130px */
+    min-height: 220px; 
+    
+    /* Adds internal breathing room for text */
+    padding: 1rem; 
+    
+    /* Smooths out the manual resizing handle if used */
+    resize: vertical; 
+    
+    /* Optional: Improves readability of the text being typed */
+    line-height: 1.6;
+}
 .submit-btn     {
     width: 100%;
     background: #e8536a;
@@ -43,8 +54,51 @@
 .ci-label       { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: block; }
 .ci-value       { font-size: 14px; color: #1a1a1a; font-weight: 500; }
 
-.ci-map         { background: #e8e0e0; border-radius: 12px; height: 160px; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem; font-size: 13px; color: #888; border: 1px solid #d8d0d0; }
+.ci-map { 
+    background: #e8e0e0; 
+    border-radius: 12px; 
+    /* Changed height to padding for a tighter fit */
+    padding: 1rem; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-top: 1.5rem; 
+    font-size: 13px; 
+    color: #888; 
+    border: 1px solid #d8d0d0; 
+}
 
+/* Ensure the image doesn't blow up the container */
+.ci-map img {
+    max-height: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.form-textarea {
+    width: 100%;            /* Forces it to fill the width of the container */
+    display: block;         /* Ensures it behaves as a block-level element */
+    box-sizing: border-box; /* Crucial: ensures padding doesn't push it past 100% */
+    min-height: 220px;
+    padding: 1rem;
+    border-radius: 8px;     /* Matches your button's aesthetic */
+    border: 1px solid #ddd; /* Adds definition */
+    resize: vertical;
+}
+
+/* Also ensure the form-group wrapper is helping */
+.form-group {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
 .ci-social      { margin-top: 1.5rem; }
 .social-row     { display: flex; gap: 10px; margin-top: 8px; }
 .social-btn     { width: 38px; height: 38px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: #fff; transition: background .2s; }

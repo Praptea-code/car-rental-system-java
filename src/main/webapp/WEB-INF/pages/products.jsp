@@ -12,6 +12,10 @@
         (com.spra.model.UserModel) session.getAttribute("loggedInUser");
     request.setAttribute("currentUser", currentUser);
     String contextPath = request.getContextPath();
+    
+    com.spra.model.CartModel cart =
+    	      (com.spra.model.CartModel) session.getAttribute("cart");
+    	  request.setAttribute("cart", cart);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,13 +49,16 @@
         </a>
 
         <!-- Cart icon -->
-        <a href="#" class="nav-icon-btn" title="Cart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
-        </a>
+        <a href="<%= contextPath %>/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
+		    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+		        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+		        <line x1="3" y1="6" x2="21" y2="6"/>
+		        <path d="M16 10a4 4 0 0 1-8 0"/>
+		    </svg>
+		    <c:if test="${not empty cart and cart.totalCount > 0}">
+		        <span class="cart-badge">${cart.totalCount}</span>
+		    </c:if>
+		</a>
 
         <c:choose>
             <c:when test="${not empty currentUser}">
@@ -176,15 +183,31 @@
                                 </div>
 
                                 <div class="pp-card-body">
-                                    <p class="product-cat">${product.categoryName}</p>
-                                    <h3 class="product-name">${product.name}</h3>
-                                    <div class="product-price-row">
-                                        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
-                                        <c:if test="${product.oldPrice > 0}">
-                                            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
-                                        </c:if>
-                                    </div>
-                                </div>
+								    <p class="product-cat">${product.categoryName}</p>
+								    <h3 class="product-name">${product.name}</h3>
+								    
+								    <div class="product-price-row">
+								        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
+								        <c:if test="${product.oldPrice > 0}">
+								            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
+								        </c:if>
+								    </div>
+								
+								    <form action="<%= contextPath %>/cart/add" method="post" style="margin-top:15px">
+								        <input type="hidden" name="productId" value="${product.productId}">
+								        <input type="hidden" name="qty" value="1">
+								        
+								        <button type="submit" class="add-to-cart-btn" 
+								                <c:if test="${product.outOfStock}">disabled</c:if>>
+								            <c:choose>
+								                <c:when test="${product.outOfStock}">Out of Stock</c:when>
+								                <c:otherwise>Add to Cart</c:otherwise>
+								            </c:choose>
+								        </button>
+								    </form>
+								</div>
+                                
+                                
                             </div>
                         </c:forEach>
                     </c:otherwise>

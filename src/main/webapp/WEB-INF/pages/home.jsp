@@ -30,7 +30,30 @@
 
 
 <body>
-
+<div id="spra-loader">
+  <div class="sl-ring"></div>
+  <div class="sl-ring"></div>
+  <div class="sl-ring"></div>
+  <div class="sl-ring"></div>
+  <div class="sl-drop-wrap">
+    <svg class="sl-drop" width="48" height="72" viewBox="0 0 48 72" fill="none">
+      <rect x="21" y="0" width="6" height="22" rx="3" fill="#e8536a" opacity=".7"/>
+      <path d="M24 18 C10 30 4 44 4 52 C4 63 13 70 24 70 C35 70 44 63 44 52 C44 44 38 30 24 18Z" fill="url(#dropGrad)" opacity=".92"/>
+      <ellipse cx="17" cy="44" rx="4" ry="7" fill="rgba(255,255,255,.25)" transform="rotate(-20,17,44)"/>
+      <defs>
+        <linearGradient id="dropGrad" x1="4" y1="18" x2="44" y2="70" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#f4a0b0"/>
+          <stop offset="100%" stop-color="#c0424e"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="sl-ripple"></div>
+  </div>
+  <div class="sl-logo">SΡRA<span>.</span></div>
+  <div class="sl-tagline">beauty begins with you</div>
+  <div class="sl-bar-wrap"><div class="sl-bar-fill"></div></div>
+  <p class="sl-dismiss-line">crafting your ritual…</p>
+</div>
 <!-- ===== NAVIGATION ===== -->
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>

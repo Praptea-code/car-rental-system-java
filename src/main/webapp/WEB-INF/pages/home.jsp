@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/<%= request.getAttribute("pageCSS") != null ? request.getAttribute("pageCSS") : "home" %>.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
+
+
 <body>
 
 <!-- ===== NAVIGATION ===== -->
@@ -326,7 +328,7 @@
                 <ul class="footer-links">
                     <li>123 Beauty Lane, Paris</li>
                     <li><a href="mailto:hello@spra.com">hello@spra.com</a></li>
-                    <li>+1 (555) 123-4567</li>
+                    <li>+977 9868706776</li>
                 </ul>
             </div>
         </div>

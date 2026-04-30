@@ -91,7 +91,7 @@
                                     <td>${p.productId}</td>
                                     <td>${p.name}</td>
                                     <td>${p.categoryName}</td>
-                                    <td>$<fmt:formatNumber value="${p.price}" pattern="#,##0.00"/></td>
+                                    <td>Rs<fmt:formatNumber value="${p.price}" pattern="#,##0.00"/></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${p.stock == 0}"><span class="badge badge-danger">Out</span></c:when>
@@ -206,7 +206,7 @@
                             <option value="${cat.categoryId}">${cat.name}</option>
                         </c:forEach>
                     </select>
-                </div>
+                </div>   
             </div>
             <div class="form-group">
                 <label class="form-label">Description</label>
@@ -215,7 +215,7 @@
             <div class="form-row-2">
                 <div class="form-group">
                     <label class="form-label">Price ($)</label>
-                    <input type="number" name="price" id="editPrice" class="form-input" step="0.01" min="0">
+                     <input type="number" name="price" id="editPrice" class="form-input" step="0.01" min="0">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Old Price ($)</label>
@@ -230,7 +230,7 @@
                 <div class="form-group">
                     <label class="form-label">Image filename</label>
                     <input type="text" name="imagePath" id="editImage" class="form-input">
-                </div>
+                </div>  
             </div>
             <div class="form-row-2">
                 <label class="form-check">

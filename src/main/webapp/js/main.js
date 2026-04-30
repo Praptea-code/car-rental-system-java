@@ -26,6 +26,8 @@ function togglePassword(fieldId, btn) {
  * Auto-dismiss alert messages after 5 seconds.
  */
 document.addEventListener('DOMContentLoaded', function () {
+	
+	
 
     // Auto-hide alerts
     var alerts = document.querySelectorAll('.alert');
@@ -60,5 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             link.classList.add('active');
         }
     });
+	
+	
 
 });

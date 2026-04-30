@@ -66,3 +66,17 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 
 });
+// ---- Beauty Ritual Loader ----
+	const SprLoader = {
+	  _el: document.getElementById('spra-loader'),
+	  dismiss() {
+	    if (!this._el) return;
+	    this._el.classList.add('dismissed');
+	    setTimeout(() => { if (this._el) this._el.remove(); }, 800);
+	  },
+	  dismissAfter(ms) { setTimeout(() => this.dismiss(), ms); }
+	};
+
+	// Dismiss after 2.8s, or replace with SprLoader.dismiss() inside window.onload
+	// if you want it to wait for your hero video/images to fully load first
+	document.addEventListener('DOMContentLoaded', () => SprLoader.dismissAfter(2800));

@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay) {
-                overlay.style.display = 'none';
+                overlay.style.display = 'none';  
             }
         });
     });

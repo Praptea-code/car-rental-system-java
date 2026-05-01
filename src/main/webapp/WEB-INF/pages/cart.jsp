@@ -490,7 +490,7 @@
                         <c:choose>
                             <c:when test="${not empty currentUser}">
                                 <button class="cs-checkout-btn"
-                                        onclick="alert('Checkout coming soon! Your order has been noted. &#10;Total: Rs <%= String.format(\"%.2f\", cart.getGrandTotal()) %>')">
+        							onclick="alert('Checkout coming soon! Your order has been noted.\nTotal: Rs ${cart.grandTotal}')">
                                     Proceed to Checkout
                                 </button>
                             </c:when>

@@ -24,11 +24,20 @@ public class ProfileController extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        UserModel user = SessionUtil.getLoggedInUser(req);
+        if (user == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
         req.getRequestDispatcher("/WEB-INF/pages/user/profile.jsp").forward((ServletRequest) req, (ServletResponse) res);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         UserModel currentUser = SessionUtil.getLoggedInUser(req);
+        if (currentUser == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
         String action = ValidationUtil.safeTrim(req.getParameter("action"));
 
         if ("updateProfile".equals(action)) {

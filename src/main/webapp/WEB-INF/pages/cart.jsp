@@ -2,20 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-    /* ── Cart page ──
-       BUG FIX: cart was fetched from session but never set as request attribute
-       when the page was forwarded from CartController doGet.
-       We also ensure a non-null cart is always available. */
     com.spra.model.UserModel currentUser =
         (com.spra.model.UserModel) session.getAttribute("loggedInUser");
     request.setAttribute("currentUser", currentUser);
 
     com.spra.model.CartModel cart =
         (com.spra.model.CartModel) session.getAttribute("cart");
-    if (cart == null) {
-        cart = new com.spra.model.CartModel();
-        session.setAttribute("cart", cart);   // persist empty cart so badge works
-    }
     request.setAttribute("cart", cart);
     String contextPath = request.getContextPath();
 %>

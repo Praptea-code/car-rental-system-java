@@ -2,21 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-    com.spra.model.UserModel currentUser =
-        (com.spra.model.UserModel) session.getAttribute("loggedInUser");
-    if (currentUser == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
-    request.setAttribute("currentUser", currentUser);
-    String contextPath = request.getContextPath();
-
-    com.spra.model.CartModel cart =
-        (com.spra.model.CartModel) session.getAttribute("cart");
-    if (cart == null) {
-        cart = new com.spra.model.CartModel();
-    }
-    request.setAttribute("cart", cart);
+	com.spra.model.UserModel currentUser =
+	(com.spra.model.UserModel) session.getAttribute("loggedInUser");
+	request.setAttribute("currentUser", currentUser);
+	String contextPath = request.getContextPath();
 %>
 <!DOCTYPE html>
 <html lang="en">

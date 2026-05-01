@@ -4,12 +4,14 @@
 <%
     com.spra.model.UserModel currentUser =
         (com.spra.model.UserModel) session.getAttribute("loggedInUser");
-    request.setAttribute("currentUser", currentUser);
 
     com.spra.model.CartModel cart =
         (com.spra.model.CartModel) session.getAttribute("cart");
-    request.setAttribute("cart", cart);
+
     String contextPath = request.getContextPath();
+
+    request.setAttribute("currentUser", currentUser);
+    request.setAttribute("cart", cart);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -289,7 +291,7 @@
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            <c:if test="${cart.totalCount > 0}">
+            <c:if test="${not empty cart and cart.totalCount > 0}">
                 <span class="cart-badge">${cart.totalCount}</span>
             </c:if>
         </a>
@@ -334,7 +336,7 @@
         <h1 class="cart-title">Your <em>Cart</em></h1>
         <p class="cart-subtitle">
             <c:choose>
-                <c:when test="${cart.totalCount == 0}">Your cart is empty</c:when>
+                <c:when test="${empty cart.items}">">Your cart is empty</c:when>
                 <c:otherwise>
                     ${cart.totalCount} item<c:if test="${cart.totalCount != 1}">s</c:if> waiting for you
                 </c:otherwise>
@@ -344,7 +346,7 @@
 
     <c:choose>
         <%-- ═══ EMPTY STATE ═══ --%>
-        <c:when test="${cart.isEmpty}">
+        <c:when test="${empty cart.items}">
             <div class="cart-empty">
                 <div class="cart-empty-ring">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e8d8da" stroke-width="1.2">
@@ -565,7 +567,7 @@
 function adjustQty(btn, delta) {
     var form  = btn.closest('.ci-qty-form');
     var input = form.querySelector('.qty-input');
-    var val   = Math.max(0, parseInt(input.value || 0) + delta);
+    var val   = Math.max(1, parseInt(input.value || 1) + delta);
     input.value = val;
     form.submit();
 }

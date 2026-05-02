@@ -3,6 +3,8 @@ package com.spra.controller;
 import com.spra.dao.CategoryDAO;
 import com.spra.dao.ProductDAO;
 import com.spra.dao.ReviewDAO;
+import com.spra.dao.WishlistDAO;
+import com.spra.model.CartModel;
 import com.spra.model.CategoryModel;
 import com.spra.model.ProductModel;
 import com.spra.model.ReviewModel;
@@ -10,8 +12,6 @@ import com.spra.model.UserModel;
 import com.spra.util.SessionUtil;
 import com.spra.util.ValidationUtil;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +26,7 @@ public class ProductDetailController extends HttpServlet {
     private final ProductDAO  productDAO  = new ProductDAO();
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final ReviewDAO   reviewDAO   = new ReviewDAO();
+    private final WishlistDAO wishlistDAO = new WishlistDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -66,20 +67,22 @@ public class ProductDetailController extends HttpServlet {
         List<ReviewModel> reviews    = reviewDAO.getReviewsByProduct(productId);
         double            avgRating  = reviewDAO.getAverageRating(productId);
         int               reviewCount = reviewDAO.getReviewCount(productId);
-        int[]             ratingDist = reviewDAO.getRatingDistribution(productId);
+        int[]             ratingDist  = reviewDAO.getRatingDistribution(productId);
 
-        // Has the logged-in user already reviewed this product?
-        UserModel currentUser = SessionUtil.getLoggedInUser(req);
+        // Current user info
+        UserModel currentUser    = SessionUtil.getLoggedInUser(req);
         boolean   alreadyReviewed = false;
+        boolean   isWishlisted    = false;
+
         if (currentUser != null) {
             alreadyReviewed = reviewDAO.hasUserReviewed(productId, currentUser.getUserId());
+            isWishlisted    = wishlistDAO.isWishlisted(currentUser.getUserId(), productId);
         }
 
         // Cart for nav badge
-        com.spra.model.CartModel cart =
-            (com.spra.model.CartModel) req.getSession(true).getAttribute("cart");
+        CartModel cart = (CartModel) req.getSession(true).getAttribute("cart");
         if (cart == null) {
-            cart = new com.spra.model.CartModel();
+            cart = new CartModel();
             req.getSession().setAttribute("cart", cart);
         }
 
@@ -92,10 +95,10 @@ public class ProductDetailController extends HttpServlet {
         req.setAttribute("reviewCount",     reviewCount);
         req.setAttribute("ratingDist",      ratingDist);
         req.setAttribute("alreadyReviewed", alreadyReviewed);
+        req.setAttribute("isWishlisted",    isWishlisted);
         req.setAttribute("currentUser",     currentUser);
         req.setAttribute("cart",            cart);
 
-        req.getRequestDispatcher("/WEB-INF/pages/productDetail.jsp")
-           .forward(req, res);
+        req.getRequestDispatcher("/WEB-INF/pages/productDetail.jsp").forward(req, res);
     }
 }

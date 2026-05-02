@@ -502,9 +502,9 @@
                         </c:choose>
 
                         <div class="cs-badges">
-                            <span class="cs-badge">&#128274; Secure checkout</span>
-                            <span class="cs-badge">&#9989; Free returns</span>
-                            <span class="cs-badge">&#128666; Free shipping</span>
+                            <span class="cs-badge"> Secure checkout</span>
+                            <span class="cs-badge"> Free returns</span>
+                            <span class="cs-badge"> Free shipping</span>
                         </div>
                     </div>
                 </div>

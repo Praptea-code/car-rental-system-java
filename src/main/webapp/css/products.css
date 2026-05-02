@@ -50,6 +50,65 @@
 .pp-layout       { display: flex; gap: 28px; align-items: flex-start; }
 
 /* ---- Sidebar ---- */
+
+/* ── Active filter chips ── */
+.pp-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: -8px 0 20px;
+    padding: 0 0 4px;
+}
+.pp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fdf0f2;
+    border: 1px solid #f4a0b0;
+    color: #c0424e;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+.pp-chip-x {
+    color: #e8536a;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .15s;
+}
+.pp-chip-x:hover { color: #c0424e; }
+.pp-clear-all {
+    font-size: 12px;
+    color: #aaa;
+    text-decoration: underline;
+    margin-left: 4px;
+    transition: color .15s;
+}
+.pp-clear-all:hover { color: #e8536a; }
+
+/* ── Empty state ── */
+.pp-empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+.pp-empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: .25; }
+.pp-empty      { font-size: 15px; color: #888; margin-bottom: 14px; }
+.pp-empty-reset {
+    display: inline-block;
+    background: #e8536a;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity .2s;
+}
+.pp-empty-reset:hover { opacity: .88; color: #fff; }
 .pp-sidebar      { width: 200px; flex-shrink: 0; position: sticky; top: 80px; }
 .pp-sidebar-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 10px; margin-top: 20px; }
 .pp-sidebar-title:first-child { margin-top: 0; }
@@ -141,6 +200,8 @@
     color: #999;
     cursor: not-allowed;
 }
+
+
 
 
 /* ---- Responsive ---- */

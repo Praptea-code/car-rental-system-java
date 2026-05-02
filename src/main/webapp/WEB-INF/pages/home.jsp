@@ -169,36 +169,50 @@
         }
 
         /* ============================================================
-           FEATURED PRODUCT CARD — Add to Cart overlay button
+           FEATURED PRODUCT CARD — matches products page style
            ============================================================ */
-        .product-card { position: relative; }
-
-        .product-img-area { position: relative; overflow: hidden; }
-
-        .product-cart-overlay {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(26,26,26,.82);
+        .feat-card {
+            background: #f8f8f8;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform .2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .feat-card:hover { transform: translateY(-3px); }
+        .feat-card-link { display: block; text-decoration: none; color: inherit; cursor: pointer; }
+        .feat-img {
+            height: 300px;
             display: flex; align-items: center; justify-content: center;
-            padding: 14px;
-            transform: translateY(100%);
-            transition: transform .28s cubic-bezier(.22,1,.36,1);
+            background: #f0f0f0; overflow: hidden;
         }
-        .product-card:hover .product-cart-overlay { transform: translateY(0); }
+        .feat-img img { width: 100%; height: 100%; object-fit: cover; }
+        .feat-img-ph  { font-size: 52px; }
+        .feat-card-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+        .feat-atc-btn {
+            width: 100%; padding: 12px; margin-top: 14px;
+            background: #1a1a1a; color: #fff; border: none;
+            border-radius: 6px; font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 500; text-transform: uppercase;
+            letter-spacing: 1px; cursor: pointer; transition: background .25s;
+        }
+        .feat-atc-btn:hover:not(:disabled) { background: #e8536a; }
+        .feat-atc-btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+        .feat-atc-btn.adding  { background: #3B9B3F !important; }
 
-        .product-atc-btn {
-            background: #fff; color: #1a1a1a;
-            border: none; padding: 10px 24px;
-            border-radius: 24px; font-size: .78rem; font-weight: 700;
-            letter-spacing: .08em; text-transform: uppercase;
-            font-family: 'DM Sans', sans-serif;
-            transition: background .2s, color .2s;
-            cursor: pointer; width: 100%;
+        /* bottom toast notification */
+        .feat-toast {
+            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+            background: #1a1a1a; color: #fff;
+            padding: 12px 28px; border-radius: 30px;
+            font-size: .82rem; font-weight: 500;
+            box-shadow: 0 8px 28px rgba(0,0,0,.18);
+            z-index: 9500; opacity: 0; pointer-events: none;
+            transition: opacity .25s; white-space: nowrap;
+            border-left: 4px solid #e8536a;
         }
-        .product-atc-btn:hover { background: #e8536a; color: #fff; }
-        .product-atc-btn:disabled {
-            background: #555; color: #aaa; cursor: not-allowed;
-        }
+        .feat-toast.show { opacity: 1; }
     </style>
 </head>
 
@@ -376,48 +390,54 @@
         <p class="section-sub">Discover our most loved beauty essentials, curated just for you.</p>
     </div>
 
+    <%-- Invisible toast that pops up when item is added --%>
+    <div class="feat-toast" id="featToast"></div>
+
     <div class="products-grid">
         <c:forEach var="product" items="${featuredProducts}">
-            <div class="product-card">
+            <div class="feat-card">
                 <c:if test="${product.discountPercent > 0}">
                     <span class="discount-badge">-${product.discountPercent}%</span>
                 </c:if>
-                <div class="product-img-area">
-                    <c:choose>
-                        <c:when test="${not empty product.imagePath}">
-                            <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
-                                 alt="${product.name}" class="product-img">
-                        </c:when>
-                        <c:otherwise>
-                            <div class="product-img-placeholder">&#128138;</div>
-                        </c:otherwise>
-                    </c:choose>
 
-                    <%-- Add to Cart overlay — slides up on card hover --%>
-                    <div class="product-cart-overlay">
+                <%-- Clicking the image/name goes to the products page filtered by search --%>
+                <a href="<%= contextPath %>/products?search=${product.name}" class="feat-card-link">
+                    <div class="feat-img">
                         <c:choose>
-                            <c:when test="${product.outOfStock}">
-                                <button class="product-atc-btn" disabled>Out of Stock</button>
+                            <c:when test="${not empty product.imagePath}">
+                                <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
+                                     alt="${product.name}">
                             </c:when>
                             <c:otherwise>
-                                <form action="<%= contextPath %>/cart/add" method="post" style="width:100%;margin:0;">
-                                    <input type="hidden" name="productId" value="${product.productId}">
-                                    <input type="hidden" name="qty" value="1">
-                                    <button type="submit" class="product-atc-btn">+ Add to Cart</button>
-                                </form>
+                                <div class="feat-img-ph">&#128138;</div>
                             </c:otherwise>
                         </c:choose>
                     </div>
-                </div>
-                <div class="product-info">
-                    <p class="product-cat">${product.categoryName}</p>
-                    <h3 class="product-name">${product.name}</h3>
-                    <div class="product-price-row">
-                        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
-                        <c:if test="${product.oldPrice > 0}">
-                            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
-                        </c:if>
+                    <div class="feat-card-body">
+                        <p class="product-cat">${product.categoryName}</p>
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price-row">
+                            <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
+                            <c:if test="${product.oldPrice > 0}">
+                                <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
+                            </c:if>
+                        </div>
                     </div>
+                </a>
+
+                <%-- Add to Cart — AJAX, no page refresh --%>
+                <div style="padding: 0 16px 16px;">
+                    <c:choose>
+                        <c:when test="${product.outOfStock}">
+                            <button class="feat-atc-btn" disabled>Out of Stock</button>
+                        </c:when>
+                        <c:otherwise>
+                            <button class="feat-atc-btn"
+                                    onclick="addToCart(this, ${product.productId}, '${product.name}')">
+                                Add to Cart
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </c:forEach>
@@ -629,8 +649,72 @@
 
 <script>
 /* ============================================================
-   LOGIN POPUP — session-aware dismiss
+   AJAX Add to Cart — no page refresh
    ============================================================ */
+function addToCart(btn, productId, productName) {
+    btn.disabled = true;
+    btn.textContent = 'Adding…';
+    btn.classList.add('adding');
+
+    var formData = new FormData();
+    formData.append('productId', productId);
+    formData.append('qty', 1);
+
+    fetch('<%= contextPath %>/cart/add', {
+        method: 'POST',
+        body: formData,
+        redirect: 'manual'          // stop the server redirect from navigating away
+    })
+    .then(function () {
+        // Update button momentarily
+        btn.textContent = '✓ Added!';
+        setTimeout(function () {
+            btn.textContent = 'Add to Cart';
+            btn.disabled = false;
+            btn.classList.remove('adding');
+        }, 1600);
+
+        // Show bottom toast
+        var toast = document.getElementById('featToast');
+        if (toast) {
+            toast.textContent = '✓ ' + productName + ' added to cart';
+            toast.classList.add('show');
+            setTimeout(function () { toast.classList.remove('show'); }, 2800);
+        }
+
+        // Bump the nav cart badge without a full reload
+        updateCartBadge();
+    })
+    .catch(function () {
+        btn.textContent = 'Add to Cart';
+        btn.disabled = false;
+        btn.classList.remove('adding');
+    });
+}
+
+/* Fetch the cart page silently just to read the updated badge count */
+function updateCartBadge() {
+    fetch('<%= contextPath %>/cart', { method: 'GET' })
+    .then(function(r){ return r.text(); })
+    .then(function(html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var newBadge = doc.querySelector('.cart-badge');
+        var allBadges = document.querySelectorAll('.cart-badge');
+
+        allBadges.forEach(function(b){ b.remove(); });
+
+        if (newBadge) {
+            document.querySelectorAll('.cart-icon-btn').forEach(function(iconBtn) {
+                var clone = newBadge.cloneNode(true);
+                iconBtn.appendChild(clone);
+            });
+        }
+    })
+    .catch(function(){});   // silently ignore network errors
+}
+
+
 (function () {
     var popup = document.getElementById('loginPopup');
     if (!popup) return; // user is logged in, nothing to do

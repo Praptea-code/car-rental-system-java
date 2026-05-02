@@ -20,23 +20,7 @@
 </head>
 <body>
 
-<!-- ============================================================
-     BEAUTY RITUAL LOADER
-     ============================================================ -->
-<div id="spra-loader">
-    <div class="sl-ring"></div><div class="sl-ring"></div>
-    <div class="sl-ring"></div><div class="sl-ring"></div>
-    <div class="sl-drop-wrap">
-        <div class="sl-drop" style="animation-delay:.1s">
-            <svg width="32" height="40" viewBox="0 0 32 40"><path d="M16 0 C16 0 0 18 0 26 a16 16 0 0 0 32 0 C32 18 16 0 16 0Z" fill="#e8536a" opacity=".9"/></svg>
-        </div>
-        <div class="sl-ripple"></div>
-    </div>
-    <div class="sl-logo">SPR<span>A</span></div>
-    <div class="sl-tagline">beauty, redefined</div>
-    <div class="sl-bar-wrap"><div class="sl-bar-fill"></div></div>
-    <div class="sl-dismiss-line">LOADING COLLECTION</div>
-</div>
+
 
 <!-- ============================================================
      NAVIGATION
@@ -121,11 +105,8 @@
         <div class="pd-image-panel" id="imagePanel">
             <c:choose>
                 <c:when test="${not empty product.imagePath}">
-                    <img src="${pageContext.request.contextPath}/${product.imagePath}"
-                         alt="${product.name}"
-                         class="pd-img-main"
-                         id="mainProductImg"
-                         onerror="this.style.display='none'; document.getElementById('imgFallback').style.display='flex'"/>
+                    <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}" alt="${product.name}"
+     					class="pd-img-main"/>
                     <div class="pd-img-placeholder" id="imgFallback" style="display:none;">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e0c8c8" stroke-width="1">
                             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -295,13 +276,13 @@
                 <c:if test="${product.featured}">
                     <div class="pd-meta-row">
                         <span class="pd-meta-key">Featured</span>
-                        <span class="pd-meta-value" style="color:#e8536a;">⭐ Featured Product</span>
+                        <span class="pd-meta-value" style="color:#e8536a;"> Featured Product</span>
                     </div>
                 </c:if>
                 <c:if test="${product.bestseller}">
                     <div class="pd-meta-row">
                         <span class="pd-meta-key">Status</span>
-                        <span class="pd-meta-value" style="color:#e8536a;">🏆 Bestseller</span>
+                        <span class="pd-meta-value" style="color:#e8536a;"> Bestseller</span>
                     </div>
                 </c:if>
                 <div class="pd-meta-row">
@@ -316,9 +297,10 @@
     <!-- ── TABS ── -->
     <div class="pd-tabs">
         <div class="pd-tab-nav">
-            <button class="pd-tab-btn active" onclick="switchTab(event, 'tab-desc')">Description</button>
-            <button class="pd-tab-btn" onclick="switchTab(event, 'tab-shipping')">Shipping &amp; Returns</button>
-            <button class="pd-tab-btn" onclick="switchTab(event, 'tab-reviews')">Reviews</button>
+        	<button class="pd-tab-btn active" onclick="switchTab(event, 'tab-desc')">Description</button>
+        	<button class="pd-tab-btn" onclick="switchTab(event, 'tab-reviews')">Reviews</button>
+            
+            
         </div>
 
         <!-- Description Tab -->
@@ -377,26 +359,6 @@
             </div>
         </div>
 
-        <!-- Shipping Tab -->
-        <div id="tab-shipping" class="pd-tab-pane">
-            <div class="pd-shipping-grid">
-                <div class="pd-shipping-card">
-                    <div class="pd-shipping-icon">🚚</div>
-                    <div class="pd-shipping-title">Free Shipping</div>
-                    <div class="pd-shipping-desc">On all orders above Rs. 1,500. Standard delivery in 3–5 business days.</div>
-                </div>
-                <div class="pd-shipping-card">
-                    <div class="pd-shipping-icon">↩️</div>
-                    <div class="pd-shipping-title">Easy Returns</div>
-                    <div class="pd-shipping-desc">Not satisfied? Return within 7 days of delivery for a full refund or exchange.</div>
-                </div>
-                <div class="pd-shipping-card">
-                    <div class="pd-shipping-icon">🔒</div>
-                    <div class="pd-shipping-title">Secure Packaging</div>
-                    <div class="pd-shipping-desc">Every item is carefully packed to ensure it arrives in perfect condition.</div>
-                </div>
-            </div>
-        </div>
 
         <!-- Reviews Tab -->
         <div id="tab-reviews" class="pd-tab-pane">
@@ -427,9 +389,8 @@
                         <div class="product-img-area" style="position:relative;">
                             <c:choose>
                                 <c:when test="${not empty rp.imagePath}">
-                                    <img src="${pageContext.request.contextPath}/${rp.imagePath}"
-                                         alt="${rp.name}" class="product-img"
-                                         onerror="this.style.display='none'"/>
+                                    <img src="${pageContext.request.contextPath}/assets/images/products/${rp.imagePath}"
+     									alt="${rp.name}" class="product-img">
                                 </c:when>
                                 <c:otherwise>
                                     <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#fdf8f8;color:#ddd;font-size:12px;">

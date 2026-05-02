@@ -116,7 +116,7 @@
                     <a href="<%= contextPath %>/products">All</a>
                 </li>
                 <c:forEach var="cat" items="${categories}">
-                    <li class="pp-cat-item <c:if test='${categoryId == cat.categoryId}'>active</c:if>">
+                    <li class="pp-cat-item <c:if test="${categoryId != null and categoryId == cat.categoryId}"></c:if>">
                         <a href="<%= contextPath %>/products?category=${cat.categoryId}">${cat.name}</a>
                     </li>
                 </c:forEach>
@@ -126,14 +126,16 @@
             <ul class="pp-price-list">
                 <li class="pp-price-item <c:if test='${empty priceRange}'>active</c:if>">
                     <a href="<%= contextPath %>/products">All Prices</a></li>
+           
                 <li class="pp-price-item <c:if test='${priceRange == "under2500"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=under25">Under 2500</a></li>
+                
+                    <a href="<%= contextPath %>/products?price=under2500">Under 2500</a></li>
                 <li class="pp-price-item <c:if test='${priceRange == "2500to4000"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=25to40">2500 &#8211; 4000</a></li>
+                    <a href="<%= contextPath %>/products?price=2500to4000">2500 &#8211; 4000</a></li>
                 <li class="pp-price-item <c:if test='${priceRange == "4000to6000"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=40to60">4000 &#8211; 6000</a></li>
+                    <a href="<%= contextPath %>/products?price=4000to6000">4000 &#8211; 6000</a></li>
                 <li class="pp-price-item <c:if test='${priceRange == "over6000"}'>active</c:if>">
-                    <a href="<%= contextPath %>/products?price=over60">Over 6000</a></li>
+                    <a href="<%= contextPath %>/products?price=over6000">Over 6000</a></li>
             </ul>
         </aside>
 

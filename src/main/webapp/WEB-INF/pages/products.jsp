@@ -158,57 +158,56 @@
                     </c:when>
                     <c:otherwise>
                         <c:forEach var="product" items="${products}">
-                            <div class="pp-card"
-                                 data-price="${product.price}"
-                                 data-name="${product.name}">
-
-                                <c:if test="${product.discountPercent > 0}">
-                                    <span class="discount-badge">-${product.discountPercent}%</span>
-                                </c:if>
-
-                                <div class="pp-img">
-                                    <c:choose>
-                                        <c:when test="${not empty product.imagePath}">
-                                            <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
-                                                 alt="${product.name}" class="pp-product-img">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="pp-img-placeholder">&#128138;</div>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                                    <c:if test="${product.outOfStock}">
-                                        <div class="out-of-stock-badge">Out of Stock</div>
-                                    </c:if>
-                                </div>
-
-                                <div class="pp-card-body">
-								    <p class="product-cat">${product.categoryName}</p>
-								    <h3 class="product-name">${product.name}</h3>
-								    
-								    <div class="product-price-row">
-								        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
-								        <c:if test="${product.oldPrice > 0}">
-								            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
-								        </c:if>
-								    </div>
-								
-								    <form action="<%= contextPath %>/cart/add" method="post" style="margin-top:15px">
-								        <input type="hidden" name="productId" value="${product.productId}">
-								        <input type="hidden" name="qty" value="1">
-								        
-								        <button type="submit" class="add-to-cart-btn" 
-								                <c:if test="${product.outOfStock}">disabled</c:if>>
-								            <c:choose>
-								                <c:when test="${product.outOfStock}">Out of Stock</c:when>
-								                <c:otherwise>Add to Cart</c:otherwise>
-								            </c:choose>
-								        </button>
-								    </form>
-								</div>
-                                
-                                
-                            </div>
+                        	<a href="<%= contextPath %>/productDetail?id=${product.productId}" style="text-decoration:none; color:inherit;">
+	                            <div class="pp-card" data-price="${product.price}" data-name="${product.name}">
+	
+	                                <c:if test="${product.discountPercent > 0}">
+	                                    <span class="discount-badge">-${product.discountPercent}%</span>
+	                                </c:if>
+	
+	                                <div class="pp-img">
+	                                    <c:choose>
+	                                        <c:when test="${not empty product.imagePath}">
+	                                            <img src="${pageContext.request.contextPath}/assets/images/products/${product.imagePath}"
+	                                                 alt="${product.name}" class="pp-product-img">
+	                                        </c:when>
+	                                        <c:otherwise>
+	                                            <div class="pp-img-placeholder">&#128138;</div>
+	                                        </c:otherwise>
+	                                    </c:choose>
+	
+	                                    <c:if test="${product.outOfStock}">
+	                                        <div class="out-of-stock-badge">Out of Stock</div>
+	                                    </c:if>
+	                                </div>
+	
+	                                <div class="pp-card-body">
+									    <p class="product-cat">${product.categoryName}</p>
+									    <h3 class="product-name">${product.name}</h3>
+									    
+									    <div class="product-price-row">
+									        <span class="product-price">Rs<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
+									        <c:if test="${product.oldPrice > 0}">
+									            <span class="product-price-old">Rs<fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
+									        </c:if>
+									    </div>
+									
+									    <form action="<%= contextPath %>/cart/add" method="post" style="margin-top:15px">
+									        <input type="hidden" name="productId" value="${product.productId}">
+									        <input type="hidden" name="qty" value="1">
+									        
+									        <button type="submit" class="add-to-cart-btn" 
+									        onclick="event.stopPropagation();"
+									                <c:if test="${product.outOfStock}">disabled</c:if>>
+									            <c:choose>
+									                <c:when test="${product.outOfStock}">Out of Stock</c:when>
+									                <c:otherwise>Add to Cart</c:otherwise>
+									            </c:choose>
+									        </button>
+									    </form>
+									</div>
+                            	</div>
+                            </a>
                         </c:forEach>
                     </c:otherwise>
                 </c:choose>

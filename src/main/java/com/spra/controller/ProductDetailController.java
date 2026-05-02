@@ -16,16 +16,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet(urlPatterns = {"/product"}, asyncSupported = true)
+@WebServlet(urlPatterns = {"/productDetail"}, asyncSupported = true)
 public class ProductDetailController extends HttpServlet {
 
-    private final ProductDAO productDAO;
-    private final CategoryDAO categoryDAO;
-
-    public ProductDetailController() {
-        this.productDAO = new ProductDAO();
-        this.categoryDAO = new CategoryDAO();
-    }
+    private final ProductDAO productDAO = new ProductDAO();
+    private final CategoryDAO categoryDAO = new CategoryDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -33,7 +28,7 @@ public class ProductDetailController extends HttpServlet {
 
         String idParam = ValidationUtil.safeTrim(req.getParameter("id"));
 
-        if (idParam.isEmpty()) {
+        if (idParam == null || idParam.isEmpty()) {
             res.sendRedirect(req.getContextPath() + "/products");
             return;
         }
@@ -53,24 +48,21 @@ public class ProductDetailController extends HttpServlet {
             return;
         }
 
-        // Fetch related products: same category, excluding current product, limit 4
-        List<ProductModel> allProducts = product.getCategoryId() > 0
-                ? productDAO.getByCategory(product.getCategoryId())
-                : productDAO.getAllProducts();
+        List<ProductModel> relatedProducts = List.of();
 
-        List<ProductModel> relatedProducts = allProducts.stream()
-                .filter(p -> p.getProductId() != productId)
-                .limit(4)
-                .collect(Collectors.toList());
-
-        // Fetch all categories for potential sidebar/navigation use
-        List<CategoryModel> categories = categoryDAO.getAllCategories();
+        if (product.getCategoryId() > 0) {
+            relatedProducts = productDAO.getByCategory(product.getCategoryId())
+                    .stream()
+                    .filter(p -> p.getProductId() != productId)
+                    .limit(4)
+                    .collect(Collectors.toList());
+        }
 
         req.setAttribute("product", product);
         req.setAttribute("relatedProducts", relatedProducts);
-        req.setAttribute("categories", categories);
+        req.setAttribute("categories", categoryDAO.getAllCategories());
 
-        req.getRequestDispatcher("/WEB-INF/pages/product-detail.jsp")
-           .forward((ServletRequest) req, (ServletResponse) res);
+        req.getRequestDispatcher("/WEB-INF/pages/productDetail.jsp")
+           .forward(req, res);
     }
 }

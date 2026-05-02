@@ -26,10 +26,249 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <link rel="stylesheet" href="<%= contextPath %>/css/<%= request.getAttribute("pageCSS") != null ? request.getAttribute("pageCSS") : "home" %>.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           LOGIN WELCOME POPUP
+           ============================================================ */
+        .login-popup-overlay {
+            position: fixed; inset: 0; z-index: 9000;
+            background: rgba(10,4,6,.72);
+            backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            animation: lpFadeIn .4s ease;
+        }
+        @keyframes lpFadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .login-popup-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 3rem 3.2rem 2.6rem;
+            max-width: 500px;
+            width: calc(100% - 2.4rem);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 32px 80px rgba(0,0,0,.28);
+            animation: lpSlideUp .45s cubic-bezier(.22,1,.36,1);
+            text-align: center;
+        }
+        @keyframes lpSlideUp {
+            from { opacity:0; transform: translateY(40px) scale(.97); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+
+        /* decorative pink glow blob top-right */
+        .login-popup-glow {
+            position: absolute;
+            width: 360px; height: 360px; border-radius: 50%;
+            background: radial-gradient(circle, #fdf0f2 0%, transparent 68%);
+            top: -110px; right: -90px;
+            pointer-events: none;
+        }
+        /* soft bottom accent */
+        .login-popup-glow2 {
+            position: absolute;
+            width: 260px; height: 260px; border-radius: 50%;
+            background: radial-gradient(circle, #fdf8e8 0%, transparent 70%);
+            bottom: -80px; left: -60px;
+            pointer-events: none;
+        }
+
+        .login-popup-close {
+            position: absolute; top: 16px; right: 18px;
+            background: #f8f0f2; border: none; border-radius: 50%;
+            width: 34px; height: 34px; font-size: 20px; line-height: 1;
+            color: #999; display: flex; align-items: center; justify-content: center;
+            transition: background .2s, color .2s; cursor: pointer; z-index: 2;
+        }
+        .login-popup-close:hover { background: #e8536a; color: #fff; }
+
+        .login-popup-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; letter-spacing: 6px; font-weight: 600;
+            color: #1a1a1a; margin-bottom: 1.8rem; position: relative; z-index: 1;
+        }
+        .login-popup-brand span { color: #e8536a; }
+
+        .login-popup-divider-row {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin-bottom: 12px; position: relative; z-index: 1;
+        }
+        .login-popup-divider-row::before,
+        .login-popup-divider-row::after {
+            content: ''; flex: 1; max-width: 48px; height: 1px; background: #e8d8da;
+        }
+        .login-popup-eyebrow {
+            font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+            color: #e8536a; font-weight: 700;
+        }
+
+        .login-popup-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 300;
+            color: #1a1a1a; line-height: 1.1; margin-bottom: 16px; position: relative; z-index: 1;
+        }
+        .login-popup-title em { font-style: italic; color: #e8536a; font-weight: 400; }
+
+        .login-popup-sub {
+            font-size: .84rem; color: #888; line-height: 1.8;
+            max-width: 360px; margin: 0 auto 2rem; position: relative; z-index: 1;
+        }
+
+        .login-popup-actions {
+            display: flex; gap: 10px; margin-bottom: 1.2rem; position: relative; z-index: 1;
+        }
+        .lp-btn-primary {
+            flex: 1; background: #1a1a1a; color: #fff;
+            padding: 15px 20px; border-radius: 10px;
+            font-size: .85rem; font-weight: 600; letter-spacing: .04em;
+            transition: background .22s, transform .15s;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .lp-btn-primary:hover { background: #e8536a; color: #fff; transform: translateY(-2px); }
+
+        .lp-btn-secondary {
+            flex: 1; background: #fdf0f2; color: #e8536a;
+            padding: 15px 20px; border-radius: 10px;
+            font-size: .85rem; font-weight: 600;
+            border: 1.5px solid #f4a0b0;
+            transition: background .22s, border-color .22s, transform .15s;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .lp-btn-secondary:hover { background: #e8536a; color: #fff; border-color: #e8536a; transform: translateY(-2px); }
+
+        .lp-skip {
+            background: none; border: none; font-size: .72rem;
+            color: #bbb; cursor: pointer; font-family: 'DM Sans', sans-serif;
+            transition: color .2s; position: relative; z-index: 1;
+            letter-spacing: .04em;
+        }
+        .lp-skip:hover { color: #888; }
+
+        /* trust badges row */
+        .lp-badges {
+            display: flex; justify-content: center; gap: 20px;
+            margin-top: 1.6rem; margin-bottom: .8rem;
+            position: relative; z-index: 1;
+        }
+        .lp-badge {
+            font-size: .6rem; color: #bbb; display: flex;
+            flex-direction: column; align-items: center; gap: 4px;
+        }
+        .lp-badge-icon {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #f8f0f2; border: 1px solid #f0e0e0;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        @media (max-width: 520px) {
+            .login-popup-box { padding: 2.4rem 1.8rem 2rem; border-radius: 18px; }
+            .login-popup-actions { flex-direction: column; }
+        }
+
+        /* ============================================================
+           FEATURED PRODUCT CARD — Add to Cart overlay button
+           ============================================================ */
+        .product-card { position: relative; }
+
+        .product-img-area { position: relative; overflow: hidden; }
+
+        .product-cart-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(26,26,26,.82);
+            display: flex; align-items: center; justify-content: center;
+            padding: 14px;
+            transform: translateY(100%);
+            transition: transform .28s cubic-bezier(.22,1,.36,1);
+        }
+        .product-card:hover .product-cart-overlay { transform: translateY(0); }
+
+        .product-atc-btn {
+            background: #fff; color: #1a1a1a;
+            border: none; padding: 10px 24px;
+            border-radius: 24px; font-size: .78rem; font-weight: 700;
+            letter-spacing: .08em; text-transform: uppercase;
+            font-family: 'DM Sans', sans-serif;
+            transition: background .2s, color .2s;
+            cursor: pointer; width: 100%;
+        }
+        .product-atc-btn:hover { background: #e8536a; color: #fff; }
+        .product-atc-btn:disabled {
+            background: #555; color: #aaa; cursor: not-allowed;
+        }
+    </style>
 </head>
 
 
 <body>
+
+<!-- ===== LOGIN WELCOME POPUP (only for guests) ===== -->
+<c:if test="${empty currentUser}">
+<div id="loginPopup" class="login-popup-overlay">
+    <div class="login-popup-box">
+        <div class="login-popup-glow"></div>
+        <div class="login-popup-glow2"></div>
+
+        <button class="login-popup-close" onclick="dismissPopup()" aria-label="Close">&times;</button>
+
+        <div class="login-popup-brand">SΡRA<span>.</span></div>
+
+        <div class="login-popup-divider-row">
+            <span class="login-popup-eyebrow">Welcome to the ritual</span>
+        </div>
+
+        <h2 class="login-popup-title">
+            Beauty begins<br><em>with you.</em>
+        </h2>
+
+        <p class="login-popup-sub">
+            Sign in to unlock your wishlist, save your cart, and enjoy a
+            personalised experience crafted just for you.
+        </p>
+
+        <div class="login-popup-actions">
+            <a href="<%= contextPath %>/login" class="lp-btn-primary">Sign In</a>
+            <a href="<%= contextPath %>/register" class="lp-btn-secondary">Create Account</a>
+        </div>
+
+        <div class="lp-badges">
+            <div class="lp-badge">
+                <div class="lp-badge-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e8536a" stroke-width="1.8">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                Secure
+            </div>
+            <div class="lp-badge">
+                <div class="lp-badge-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e8536a" stroke-width="1.8">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                Free Returns
+            </div>
+            <div class="lp-badge">
+                <div class="lp-badge-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e8536a" stroke-width="1.8">
+                        <rect x="1" y="3" width="15" height="13" rx="2"/>
+                        <path d="M16 8h4l3 5v3h-7V8z"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                </div>
+                Free Ship
+            </div>
+        </div>
+
+        <button class="lp-skip" onclick="dismissPopup()">Continue browsing &rarr;</button>
+    </div>
+</div>
+</c:if>
+
 <c:if test="${sessionScope.showLoader}">
   <div id="spra-loader">
   <div class="sl-ring"></div>
@@ -153,6 +392,22 @@
                             <div class="product-img-placeholder">&#128138;</div>
                         </c:otherwise>
                     </c:choose>
+
+                    <%-- Add to Cart overlay — slides up on card hover --%>
+                    <div class="product-cart-overlay">
+                        <c:choose>
+                            <c:when test="${product.outOfStock}">
+                                <button class="product-atc-btn" disabled>Out of Stock</button>
+                            </c:when>
+                            <c:otherwise>
+                                <form action="<%= contextPath %>/cart/add" method="post" style="width:100%;margin:0;">
+                                    <input type="hidden" name="productId" value="${product.productId}">
+                                    <input type="hidden" name="qty" value="1">
+                                    <button type="submit" class="product-atc-btn">+ Add to Cart</button>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
                 <div class="product-info">
                     <p class="product-cat">${product.categoryName}</p>
@@ -257,8 +512,8 @@
     <!-- About Us split -->
     <div class="about-split">
         <div class="about-img-wrap statement-box">
-		    <span class="quote-mark">“</span>
-		    <p class="statement-text">Nature’s <em>essence</em>, bottled for your skin.</p>
+		    <span class="quote-mark">"</span>
+		    <p class="statement-text">Nature's <em>essence</em>, bottled for your skin.</p>
 		</div>
         <div class="about-body">
             <p class="about-eyebrow">&#10022; About Us</p>
@@ -371,7 +626,54 @@
 </footer>
 
 <script src="<%= contextPath %>/js/main.js"></script>
+
+<script>
+/* ============================================================
+   LOGIN POPUP — session-aware dismiss
+   ============================================================ */
+(function () {
+    var popup = document.getElementById('loginPopup');
+    if (!popup) return; // user is logged in, nothing to do
+
+    // Show only once per browser session
+    try {
+        if (sessionStorage.getItem('spra_popup_seen') === '1') {
+            popup.style.display = 'none';
+            return;
+        }
+    } catch (e) {}
+
+    // Slight delay so the page has a moment to render first
+    popup.style.opacity = '0';
+    setTimeout(function () {
+        popup.style.transition = 'opacity .4s ease';
+        popup.style.opacity = '1';
+    }, 600);
+}());
+
+function dismissPopup() {
+    var popup = document.getElementById('loginPopup');
+    if (!popup) return;
+    popup.style.transition = 'opacity .3s ease';
+    popup.style.opacity = '0';
+    setTimeout(function () { popup.style.display = 'none'; }, 320);
+    try { sessionStorage.setItem('spra_popup_seen', '1'); } catch (e) {}
+}
+
+// Escape key closes popup
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') dismissPopup();
+});
+
+// Click outside the box closes popup
+var popupOverlay = document.getElementById('loginPopup');
+if (popupOverlay) {
+    popupOverlay.addEventListener('click', function (e) {
+        if (e.target === popupOverlay) dismissPopup();
+    });
+}
+</script>
+
 </body>
 </html>
 <!-- ===== END FOOTER ===== -->
-

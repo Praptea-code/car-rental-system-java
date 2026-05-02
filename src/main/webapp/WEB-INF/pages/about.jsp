@@ -214,8 +214,8 @@
                 <h4 class="footer-col-title">Contact Info</h4>
                 <ul class="footer-links">
                     <li>123 Beauty Lane, Paris</li>
-                    <li><a href="mailto:hello@spra.com">hello@spra.com</a></li>
-                    <li>+1 (555) 123-4567</li>
+                    <li><a href="hello@spra.com">hello@spra.com</a></li>
+                    <li>+977 9878670678</li>
                 </ul>
             </div>
         </div>

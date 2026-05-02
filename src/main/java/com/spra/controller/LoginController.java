@@ -42,6 +42,7 @@ public class LoginController extends HttpServlet {
         if (result == 0) {
             UserModel user = loginService.getUserByUsername(username);
             SessionUtil.loginUser(req, user);
+            req.getSession().setAttribute("showLoader", true);
             CookieUtil.addCookie(res, "spra_user", user.getUsername(), 604800);
             if ("ADMIN".equalsIgnoreCase(user.getRole())) {
                 res.sendRedirect(req.getContextPath() + "/admin/dashboard");

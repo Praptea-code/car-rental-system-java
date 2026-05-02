@@ -94,7 +94,7 @@ public class ProfileController extends HttpServlet {
 
         boolean updated = userDAO.updateProfile(currentUser);
         if (updated) {
-            SessionUtil.loginUser(req, currentUser);
+            req.getSession().setAttribute("loggedInUser", currentUser);
             req.setAttribute("successMessage", "Profile updated successfully.");
         } else {
             req.setAttribute("errorMessage", "Could not update profile. Please try again.");
@@ -125,7 +125,7 @@ public class ProfileController extends HttpServlet {
         boolean changed = userDAO.updatePassword(currentUser.getUserId(), hashed);
         if (changed) {
             currentUser.setPassword(hashed);
-            SessionUtil.loginUser(req, currentUser);
+            req.getSession().setAttribute("loggedInUser", currentUser);
             req.setAttribute("successMessage", "Password changed successfully.");
         } else {
             req.setAttribute("errorMessage", "Password change failed. Please try again.");

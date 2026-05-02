@@ -1,19 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%
-	com.spra.model.UserModel currentUser =
-	(com.spra.model.UserModel) session.getAttribute("loggedInUser");
-	request.setAttribute("currentUser", currentUser);
-	String contextPath = request.getContextPath();
-%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="currentUser" value="${sessionScope.loggedInUser}" />
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spra. – My Profile</title>
-    <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
+    <link rel="stylesheet" href="${contextPath}/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -242,34 +240,39 @@
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>
     <ul class="nav-links">
-        <li><a href="<%= contextPath %>/home">Home</a></li>
-        <li><a href="<%= contextPath %>/products">Products</a></li>
-        <li><a href="<%= contextPath %>/about">About</a></li>
-        <li><a href="<%= contextPath %>/contact">Contact</a></li>
+        <li><a href="${contextPath}/home">Home</a></li>
+        <li><a href="${contextPath}/products">Products</a></li>
+        <li><a href="${contextPath}/about">About</a></li>
+        <li><a href="${contextPath}/contact">Contact</a></li>
     </ul>
     <div class="nav-right">
-        <a href="<%= contextPath %>/products" class="nav-icon-btn" title="Search">
+        <a href="${contextPath}/products" class="nav-icon-btn" title="Search">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
         </a>
-        <a href="<%= contextPath %>/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
+        <a href="${contextPath}/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             <c:if test="${not empty cart and cart.totalCount > 0}">
-                <span class="cart-badge">${cart.totalCount}</span>
+                <span class="cart-badge">
+                <c:choose>
+				    <c:when test="${empty cart}">0</c:when>
+				    <c:otherwise>${cart.totalCount}</c:otherwise>
+				</c:choose>
+                </span>
             </c:if>
         </a>
         <div class="nav-user-wrap">
             <span class="nav-username">Hi, ${currentUser.firstName}</span>
             <c:if test="${currentUser.role == 'ADMIN'}">
-                <a href="<%= contextPath %>/admin/dashboard" class="nav-admin-btn">Dashboard</a>
+                <a href="${contextPath}/admin/dashboard" class="nav-admin-btn">Dashboard</a>
             </c:if>
-            <a href="<%= contextPath %>/user/profile" class="nav-profile-btn">Profile</a>
-            <form action="<%= contextPath %>/logout" method="post" style="display:inline">
+            <a href="${contextPath}/user/profile" class="nav-profile-btn">Profile</a>
+            <form action="${contextPath}/logout" method="post" style="display:inline">
                 <button type="submit" class="nav-logout-btn">Logout</button>
             </form>
         </div>
@@ -283,7 +286,7 @@
         <div class="profile-hero-inner">
             <div class="ph-avatar-wrap">
                 <span class="ph-initials">
-                    <%= currentUser.getFirstName().charAt(0) %><%= currentUser.getLastName().charAt(0) %>
+                    ${fn:substring(currentUser.firstName,0,1)}${fn:substring(currentUser.lastName,0,1)}
                 </span>
             </div>
             <div class="ph-info">
@@ -299,8 +302,8 @@
                 <div class="ph-stat">
                     <div class="ph-stat-num">
                         <c:choose>
-                            <c:when test="${empty cart or cart.isEmpty}">0</c:when>
-                            <c:otherwise>${cart.items.size()}</c:otherwise>
+                            <c:when test="${empty cart or empty cart.items}">0</c:when>
+                            <c:otherwise>${fn:length(cart.items)}</c:otherwise>
                         </c:choose>
                     </div>
                     <div class="ph-stat-lbl">Products</div>
@@ -330,7 +333,7 @@
             <button class="pnav-btn" onclick="switchTab('cart',this)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 My Cart
-                <c:if test="${cart.totalCount > 0}">
+                <c:if test="${not empty cart and cart.totalCount > 0}">
                     <span class="pnav-badge">${cart.totalCount}</span>
                 </c:if>
             </button>
@@ -343,10 +346,10 @@
                 Security
             </button>
             <hr class="pnav-divider">
-            <button class="pnav-link" onclick="location.href='<%= contextPath %>/products'">
+            <button class="pnav-link" onclick="location.href='${contextPath}/products'">
                 &#8592; Continue Shopping
             </button>
-            <button class="pnav-link" onclick="location.href='<%= contextPath %>/contact'">
+            <button class="pnav-link" onclick="location.href='${contextPath}/contact'">
                 &#9993; Contact Support
             </button>
         </aside>
@@ -379,7 +382,7 @@
                         <div class="info-grid">
                             <div class="info-tile">
                                 <div class="info-lbl">Full Name</div>
-                                <div class="info-val">${currentUser.fullName}</div>
+                                <div class="info-val">${currentUser.firstName} ${currentUser.lastName}</div>
                             </div>
                             <div class="info-tile">
                                 <div class="info-lbl">Username</div>
@@ -424,9 +427,9 @@
                             <button class="pbtn" style="width:auto;padding:11px 24px;" onclick="switchTab('edit',document.querySelectorAll('.pnav-btn')[2])">
                                 Edit Profile &rarr;
                             </button>
-                            <a href="<%= contextPath %>/cart" style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;transition:border-color .18s;" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <a href="${contextPath}/cart" style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;transition:border-color .18s;" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
                                 View Cart
-                                <c:if test="${cart.totalCount > 0}">
+                                <c:if test="${not empty cart and cart.totalCount > 0}">
                                     <span style="background:var(--pink);color:#fff;font-size:.58rem;padding:2px 7px;border-radius:10px;font-weight:700;">${cart.totalCount}</span>
                                 </c:if>
                             </a>
@@ -438,7 +441,7 @@
             <!-- ═══ TAB: CART ═══ -->
             <div id="tab-cart" class="ptab">
                 <c:choose>
-                    <c:when test="${empty cart or cart.isEmpty}">
+                    <c:when test="${empty cart or empty cart.items}">
                         <div class="pcard">
                             <div class="pcard-head">
                                 <div class="pcard-title">My Cart</div>
@@ -454,7 +457,7 @@
                                         </svg>
                                     </div>
                                     <div class="cart-empty-txt">Nothing in your cart yet</div>
-                                    <a href="<%= contextPath %>/products" class="cart-empty-btn">Browse Products &rarr;</a>
+                                    <a href="${contextPath}/products" class="cart-empty-btn">Browse Products &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -497,12 +500,12 @@
                                         </c:forEach>
                                     </div>
                                     <div style="margin-top:16px;display:flex;gap:10px;">
-                                        <a href="<%= contextPath %>/cart"
+                                        <a href="${contextPath}/cart"
                                            style="flex:1;display:flex;align-items:center;justify-content:center;background:var(--pink);color:#fff;padding:12px;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:opacity .2s;"
                                            onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
                                             Go to Cart &rarr;
                                         </a>
-                                        <a href="<%= contextPath %>/products"
+                                        <a href="${contextPath}/products"
                                            style="display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);color:var(--dark);padding:12px 20px;border-radius:8px;font-size:.78rem;font-weight:600;transition:border-color .18s;"
                                            onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
                                             + Add More
@@ -531,7 +534,7 @@
                                         Rs <fmt:formatNumber value="${cart.grandTotal}" pattern="#,##0.00"/>
                                     </span>
                                 </div>
-                                <a href="<%= contextPath %>/cart" class="sum-cta">Proceed to Checkout</a>
+                                <a href="${contextPath}/cart" class="sum-cta">Proceed to Checkout</a>
                                 <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
                                     <span style="font-size:.65rem;color:var(--muted);">&#128274; Secure checkout</span>
                                     <span style="font-size:.65rem;color:var(--muted);">&#9989; Free returns</span>
@@ -550,7 +553,7 @@
                         <div class="pcard-sub">Update your personal information</div>
                     </div>
                     <div class="pcard-body">
-                        <form action="<%= contextPath %>/user/profile" method="post">
+                        <form action="${contextPath}/user/profile" method="post">
                             <input type="hidden" name="action" value="updateProfile">
                             <div class="pf-row">
                                 <div>
@@ -599,7 +602,7 @@
                         <div class="pcard-sub">Keep your account safe with a strong password</div>
                     </div>
                     <div class="pcard-body">
-                        <form action="<%= contextPath %>/user/profile" method="post">
+                        <form action="${contextPath}/user/profile" method="post">
                             <input type="hidden" name="action" value="changePassword">
                             <div class="pf-grp">
                                 <label class="pf-lbl" for="sf-cur">Current Password</label>
@@ -693,18 +696,18 @@
             <div class="footer-col">
                 <h4 class="footer-col-title">Quick Links</h4>
                 <ul class="footer-links">
-                    <li><a href="<%= contextPath %>/home">Home</a></li>
-                    <li><a href="<%= contextPath %>/products">Products</a></li>
-                    <li><a href="<%= contextPath %>/about">About</a></li>
-                    <li><a href="<%= contextPath %>/contact">Contact</a></li>
+                    <li><a href="${contextPath}/home">Home</a></li>
+                    <li><a href="${contextPath}/products">Products</a></li>
+                    <li><a href="${contextPath}/about">About</a></li>
+                    <li><a href="${contextPath}/contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4 class="footer-col-title">Categories</h4>
                 <ul class="footer-links">
-                    <li><a href="<%= contextPath %>/products?category=1">Skincare</a></li>
-                    <li><a href="<%= contextPath %>/products?category=2">Makeup</a></li>
-                    <li><a href="<%= contextPath %>/products?category=3">Fragrance</a></li>
+                    <li><a href="${contextPath}/products?category=1">Skincare</a></li>
+                    <li><a href="${contextPath}/products?category=2">Makeup</a></li>
+                    <li><a href="${contextPath}/products?category=3">Fragrance</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -761,9 +764,9 @@ function checkStrength(v) {
         var el = document.getElementById('req-' + k);
         if (checks[k]) {
             score++;
-            if (el) { el.classList.add('ok'); el.textContent = '&#10003; ' + labels[k]; el.innerHTML = '&#10003; ' + labels[k]; }
+            if (el) { el.classList.add('ok'); el.innerHTML = '✓ ' + labels[k];+ labels[k]; }
         } else {
-            if (el) { el.classList.remove('ok'); el.innerHTML = '&#9675; ' + labels[k]; }
+            if (el) { el.classList.remove('ok'); el.innerHTML = '○ ' + labels[k]; }
         }
     });
     var pct = (score / 4) * 100;

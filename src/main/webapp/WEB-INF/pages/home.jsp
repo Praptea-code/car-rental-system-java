@@ -30,7 +30,8 @@
 
 
 <body>
-<div id="spra-loader">
+<c:if test="${sessionScope.showLoader}">
+  <div id="spra-loader">
   <div class="sl-ring"></div>
   <div class="sl-ring"></div>
   <div class="sl-ring"></div>
@@ -54,6 +55,8 @@
   <div class="sl-bar-wrap"><div class="sl-bar-fill"></div></div>
   <p class="sl-dismiss-line">crafting your ritual…</p>
 </div>
+</c:if>
+<c:remove var="showLoader" scope="session"/>
 <!-- ===== NAVIGATION ===== -->
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>
@@ -105,6 +108,7 @@
             </c:otherwise>
         </c:choose>
     </div>
+    
 </nav>
 
 <!-- ===== HERO SECTION ===== -->

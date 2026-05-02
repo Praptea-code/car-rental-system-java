@@ -300,6 +300,10 @@
                     <div class="ph-stat-lbl">Cart Items</div>
                 </div>
                 <div class="ph-stat">
+				    <div class="ph-stat-num">${wishlistCount}</div>
+				    <div class="ph-stat-lbl">Wishlist</div>
+				</div>
+                <div class="ph-stat">
                     <div class="ph-stat-num">
                         <c:choose>
                             <c:when test="${empty cart or empty cart.items}">0</c:when>
@@ -337,6 +341,15 @@
                     <span class="pnav-badge">${cart.totalCount}</span>
                 </c:if>
             </button>
+            <button class="pnav-btn" onclick="switchTab('wishlist',this)">
+			    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+			        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+			    </svg>
+			    My Wishlist
+			    <c:if test="${wishlistCount > 0}">
+			        <span class="pnav-badge">${wishlistCount}</span>
+			    </c:if>
+			</button>
             <button class="pnav-btn" onclick="switchTab('edit',this)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
                 Edit Profile
@@ -429,6 +442,15 @@
                             </button>
                             <a href="${contextPath}/cart" style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;transition:border-color .18s;" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
                                 View Cart
+                                <button class="pbtn" style="width:auto;padding:11px 24px;"
+								        onclick="switchTab('wishlist', document.querySelectorAll('.pnav-btn')[2])">
+								    ♡ View Wishlist
+								    <c:if test="${wishlistCount > 0}">
+								        <span style="background:rgba(255,255,255,.25);padding:1px 8px;border-radius:10px;font-size:.7rem;margin-left:4px;">
+								            ${wishlistCount}
+								        </span>
+								    </c:if>
+								</button>
                                 <c:if test="${not empty cart and cart.totalCount > 0}">
                                     <span style="background:var(--pink);color:#fff;font-size:.58rem;padding:2px 7px;border-radius:10px;font-weight:700;">${cart.totalCount}</span>
                                 </c:if>
@@ -544,6 +566,81 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+            
+            <!-- ═══ TAB: WISHLIST ═══ -->
+			<div id="tab-wishlist" class="ptab">
+			    <c:choose>
+			        <c:when test="${empty wishlist}">
+			            <div class="pcard">
+			                <div class="pcard-head">
+			                    <div class="pcard-title">My Wishlist</div>
+			                    <div class="pcard-sub">Products you've saved for later</div>
+			                </div>
+			                <div class="pcard-body">
+			                    <div class="cart-empty">
+			                        <div class="cart-empty-icon">♡</div>
+			                        <div class="cart-empty-txt">Nothing saved yet</div>
+			                        <a href="${contextPath}/products" class="cart-empty-btn">Explore Products →</a>
+			                    </div>
+			                </div>
+			            </div>
+			        </c:when>
+			
+			        <c:otherwise>
+			            <div class="pcard">
+			                <div class="pcard-head">
+			                    <div class="pcard-title">
+			                        My Wishlist (${wishlistCount})
+			                    </div>
+			                </div>
+			
+			                <div class="pcard-body">
+			                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+			                        <c:forEach var="wItem" items="${wishlist}">
+			                            
+			                            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
+			                                
+			                                <!-- Image -->
+			                                <a href="${contextPath}/productDetail?id=${wItem.productId}">
+			                                    <img src="${contextPath}/assets/images/products/${wItem.productImagePath}"
+			                                         style="width:100%;height:150px;object-fit:cover;">
+			                                </a>
+			
+			                                <!-- Info -->
+			                                <div style="padding:12px;">
+			                                    <div style="font-weight:600;">${wItem.productName}</div>
+			
+			                                    <div style="font-size:.8rem;color:var(--pink);margin:6px 0;">
+			                                        Rs <fmt:formatNumber value="${wItem.productPrice}" pattern="#,##0.00"/>
+			                                    </div>
+			
+			                                    <!-- Add to Cart -->
+			                                    <form action="${contextPath}/cart/add" method="post">
+			                                        <input type="hidden" name="productId" value="${wItem.productId}">
+			                                        <input type="hidden" name="qty" value="1">
+			                                        <button class="pbtn" style="padding:8px;font-size:.75rem;">
+			                                            Add to Cart
+			                                        </button>
+			                                    </form>
+			
+			                                    <!-- Remove -->
+			                                    <form action="${contextPath}/wishlist/remove" method="post">
+			                                        <input type="hidden" name="productId" value="${wItem.productId}">
+			                                        <button style="margin-top:6px;width:100%;background:none;border:1px solid var(--border);padding:6px;border-radius:6px;font-size:.7rem;">
+			                                            Remove
+			                                        </button>
+			                                    </form>
+			
+			                                </div>
+			                            </div>
+			
+			                        </c:forEach>
+			                    </div>
+			                </div>
+			            </div>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
 
             <!-- ═══ TAB: EDIT PROFILE ═══ -->
             <div id="tab-edit" class="ptab">

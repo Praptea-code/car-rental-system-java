@@ -357,10 +357,15 @@
         <div class="alert alert-success">${sessionScope.successMessage}</div>
         <c:remove var="successMessage" scope="session"/>
     </c:if>
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="alert alert-error">${sessionScope.errorMessage}</div>
-        <c:remove var="errorMessage" scope="session"/>
-    </c:if>
+    <c:if test="${not empty sessionScope.wishlistToast}">
+	    <div class="alert alert-success">${sessionScope.wishlistToast}</div>
+	    <c:remove var="wishlistToast" scope="session"/>
+	</c:if>
+	
+	<c:if test="${not empty sessionScope.errorMessage}">
+	    <div class="alert alert-error">${sessionScope.errorMessage}</div>
+	    <c:remove var="errorMessage" scope="session"/>
+	</c:if>
 
     <!-- ── PRODUCT MAIN ── -->
     <div class="pd-main">
@@ -494,13 +499,39 @@
                                     <c:otherwise>Add to Cart</c:otherwise>
                                 </c:choose>
                             </button>
-                            <button type="button" class="pd-btn-wishlist" title="Wishlist" onclick="toggleWishlist(this)">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                </svg>
-                            </button>
+                            
                         </div>
+                        
                     </form>
+                    <c:choose>
+							    <c:when test="${not empty currentUser}">
+							        <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+							              method="post" style="display:inline">
+							            <input type="hidden" name="productId" value="${product.productId}"/>
+							            <button type="submit" class="pd-btn-wishlist"
+							                    title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
+							                    style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
+							                <svg width="20" height="20" viewBox="0 0 24 24"
+							                     fill="${isWishlisted ? '#e8536a' : 'none'}"
+							                     stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+							                     stroke-width="1.8">
+							                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+							                </svg>
+							            </button>
+							        </form>
+							    </c:when>
+							
+							    <c:otherwise>
+							        <a href="${pageContext.request.contextPath}/login"
+							           class="pd-btn-wishlist" title="Login to wishlist"
+							           style="display:flex;align-items:center;justify-content:center;">
+							            <svg width="20" height="20" viewBox="0 0 24 24"
+							                 fill="none" stroke="currentColor" stroke-width="1.8">
+							                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+							            </svg>
+							        </a>
+							    </c:otherwise>
+							</c:choose>
                 </c:when>
                 <c:otherwise>
                     <div style="margin-bottom:20px;">
@@ -872,19 +903,7 @@ function validateReview() {
     return true;
 }
 
-/* ── Wishlist toggle (UI only) ── */
-function toggleWishlist(btn) {
-    var svg = btn.querySelector('svg');
-    if (svg.getAttribute('fill') === 'none') {
-        svg.setAttribute('fill', '#e8536a');
-        svg.setAttribute('stroke', '#e8536a');
-        btn.title = 'Remove from wishlist';
-    } else {
-        svg.setAttribute('fill', 'none');
-        svg.setAttribute('stroke', 'currentColor');
-        btn.title = 'Add to wishlist';
-    }
-}
+
 
 /* ── Image zoom ── */
 (function() {

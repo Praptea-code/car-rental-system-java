@@ -245,12 +245,12 @@
 
             <!-- Contact Info -->
             <div class="footer-col">
-                <h4 class="footer-col-title">Contact Info</h4>
-                <ul class="footer-links">
-                    <li>123 Beauty Lane, Paris</li>
+                 <h4 class="footer-col-title">Contact Info</h4>
+                	<ul class="footer-links">
+                    <li>Sinamangal, Kathmandu</li>
                     <li><a href="mailto:hello@spra.com">hello@spra.com</a></li>
-                    <li>+1 (555) 123-4567</li>
-                </ul>
+                    <li>+977 9878670678</li>
+                    </ul>
             </div>
         </div>
 

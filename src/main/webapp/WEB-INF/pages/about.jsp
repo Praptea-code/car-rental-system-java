@@ -213,7 +213,7 @@
             <div class="footer-col">
                 <h4 class="footer-col-title">Contact Info</h4>
                 <ul class="footer-links">
-                    <li>123 Beauty Lane, Paris</li>
+                    <li>Sinamangal,Kathmandu</li>
                     <li><a href="hello@spra.com">hello@spra.com</a></li>
                     <li>+977 9878670678</li>
                 </ul>

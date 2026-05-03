@@ -329,6 +329,23 @@
     <c:remove var="cartToast" scope="session"/>
 </c:if>
 
+<c:if test="${not empty sessionScope.orderSuccess}">
+    <div class="cart-toast" style="border-left:4px solid green;">
+        <div class="toast-icon">
+            ✔
+        </div>
+        <div>
+            <div class="toast-label">Order Placed Successfully!</div>
+            <div class="toast-sub">
+                Your order has been confirmed (COD). 🎉
+                <br>
+                <a href="<%= contextPath %>/products">Continue Shopping →</a>
+            </div>
+        </div>
+    </div>
+    <c:remove var="orderSuccess" scope="session"/>
+</c:if>
+
 <!-- ═══ CART PAGE ═══ -->
 <div class="cart-page">
 
@@ -336,7 +353,7 @@
         <h1 class="cart-title">Your <em>Cart</em></h1>
         <p class="cart-subtitle">
             <c:choose>
-                <c:when test="${empty cart.items}">">Your cart is empty</c:when>
+                <c:when test="${empty cart.items}">Your cart is empty</c:when>
                 <c:otherwise>
                     ${cart.totalCount} item<c:if test="${cart.totalCount != 1}">s</c:if> waiting for you
                 </c:otherwise>
@@ -444,7 +461,7 @@
                         <a href="<%= contextPath %>/products" class="cart-continue-btn">
                             &larr; Continue Shopping
                         </a>
-                        <form action="<%= contextPath %>/cart/clear" method="post">
+                        <form id="orderForm" action="<%= contextPath %>/order/place" method="post" onsubmit="return validateOrderForm()">
                             <button type="submit" class="cart-clear-btn"
                                     onclick="return confirm('Clear your entire cart?')">
                                 Clear Cart
@@ -479,20 +496,40 @@
                                 Rs <fmt:formatNumber value="${cart.grandTotal}" pattern="#,##0.00"/>
                             </span>
                         </div>
+                        
+                        <hr class="cs-divider">
+
+						<h3 style="font-size:1rem; margin-bottom:10px;">Delivery Details</h3>
+						
+						<form id="orderForm" action="<%= contextPath %>/order/place" method="post">
+						
+						    <input type="text" name="fullName" placeholder="Full Name"
+						           required style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
+						
+						    <input type="text" name="phone" placeholder="Phone Number"
+						           required style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
+						
+						    <input type="text" name="address" placeholder="Address"
+						           required style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
+						
+						    <input type="text" name="city" placeholder="City"
+						           required style="width:100%; padding:10px; margin-bottom:8px; border:1px solid #ddd; border-radius:6px;">
+						
+						    <input type="hidden" name="totalAmount" value="${cart.grandTotal}">
+
 
                         <%-- Checkout: requires login --%>
                         <c:choose>
                             <c:when test="${not empty currentUser}">
-                                <button class="cs-checkout-btn"
-        							onclick="alert('Checkout coming soon! Your order has been noted.\nTotal: Rs ${cart.grandTotal}')">
-                                    Proceed to Checkout
-                                </button>
+                                <button type="submit" class="cs-checkout-btn">
+								    Place Order (Cash on Delivery)
+								</button>
                             </c:when>
                             <c:otherwise>
-                                <button class="cs-checkout-btn"
-                                        onclick="location.href='<%= contextPath %>/login'">
-                                    Login to Checkout
-                                </button>
+                                <button type="button" class="cs-checkout-btn"
+								        onclick="location.href='<%= contextPath %>/login'">
+								    Login to Checkout
+								</button>
                                 <p class="cs-login-note">
                                     <a href="<%= contextPath %>/login">Sign in</a> or
                                     <a href="<%= contextPath %>/register">create an account</a>
@@ -500,6 +537,7 @@
                                 </p>
                             </c:otherwise>
                         </c:choose>
+                        </form>
 
                         <div class="cs-badges">
                             <span class="cs-badge"> Secure checkout</span>
@@ -583,6 +621,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3500);
     }
 });
+
+function validateOrderForm() {
+    const inputs = document.querySelectorAll('#orderForm input[required]');
+    for (let input of inputs) {
+        if (!input.value.trim()) {
+            alert("Please fill all delivery details");
+            return false;
+        }
+    }
+    return true;
+}
 </script>
 
 </body>

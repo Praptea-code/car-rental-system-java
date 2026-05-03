@@ -142,12 +142,23 @@
         .pf-inp:focus { border-color:var(--pink); }
         .pf-inp[readonly] { background:#f8f8f8; color:#aaa; cursor:not-allowed; }
         .pf-hint { font-size:.65rem; color:var(--muted); margin-top:4px; display:block; }
-        .pbtn {
-            background:var(--pink); color:#fff; border:none; padding:12px 28px;
-            border-radius:8px; font-size:.82rem; font-weight:600; cursor:pointer;
-            width:100%; margin-top:8px; transition:opacity .2s; font-family:'DM Sans',sans-serif;
+
+        /* ── Consistent action buttons ── */
+        .p-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 22px; border-radius: 8px;
+            font-size: .82rem; font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: all .18s;
+            text-decoration: none; white-space: nowrap; border: 1.5px solid transparent;
         }
-        .pbtn:hover { opacity:.88; }
+        .p-btn-primary { background: var(--pink); color: #fff; border-color: var(--pink); }
+        .p-btn-primary:hover { opacity: .88; color: #fff; }
+        .p-btn-outline { background: #fff; color: var(--dark); border-color: var(--border); }
+        .p-btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+        /* Full-width variant for form submits */
+        .p-btn-full { width: 100%; justify-content: center; margin-top: 8px; }
+
         .password-wrap { position:relative; }
         .password-wrap .pf-inp { padding-right:56px; }
         .toggle-pass {
@@ -179,7 +190,6 @@
         .ci-cat { font-size:.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
         .ci-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .ci-price { font-size:.8rem; font-weight:600; color:var(--pink); }
-        .ci-qty-badge { font-size:.75rem; color:var(--muted); }
         .ci-sub { font-size:.88rem; font-weight:700; color:var(--dark); flex-shrink:0; }
 
         /* Summary card */
@@ -191,7 +201,7 @@
         .sum-cta { width:100%; background:var(--pink); color:#fff; border:none; padding:13px; border-radius:8px; font-size:.82rem; font-weight:600; cursor:pointer; margin-top:14px; transition:opacity .2s; font-family:'DM Sans',sans-serif; display:block; text-align:center; }
         .sum-cta:hover { opacity:.88; color:#fff; }
 
-        /* Empty cart */
+        /* Empty state */
         .cart-empty { text-align:center; padding:48px 20px; }
         .cart-empty-icon { font-size:3rem; margin-bottom:12px; opacity:.25; }
         .cart-empty-txt { font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--muted); margin-bottom:16px; }
@@ -210,6 +220,15 @@
         .req-item { font-size:.72rem; color:#bbb; display:flex; align-items:center; gap:6px; margin-bottom:5px; transition:color .2s; }
         .req-item.ok { color:#3B9B3F; }
 
+        /* Badge pill inside buttons */
+        .btn-badge {
+            background: rgba(255,255,255,.25); color: #fff;
+            font-size: .58rem; padding: 2px 7px; border-radius: 10px;
+        }
+        .p-btn-outline .btn-badge {
+            background: var(--pink); color: #fff;
+        }
+
         /* Responsive */
         @media (max-width:900px) {
             .profile-layout { grid-template-columns:1fr; padding:24px; }
@@ -225,7 +244,6 @@
             .pf-row { grid-template-columns:1fr; }
         }
 
-        /* Cart badge (from style.css - ensure it's here too) */
         .cart-icon-btn { position:relative; }
         .cart-badge {
             position:absolute; top:-6px; right:-6px;
@@ -259,28 +277,7 @@
                 <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             <c:if test="${not empty cart and cart.totalCount > 0}">
-                <span class="cart-badge">
-                <c:choose>
-				    <c:when test="${empty cart}">0</c:when>
-				    <c:otherwise>
-					    <c:choose>
-						    <c:when test="${empty cart}">0</c:when>
-						    <c:otherwise>
-						    <c:choose>
-							    <c:when test="${empty cart}">0</c:when>
-							    <c:otherwise><c:choose>
-								    <c:when test="${empty cart}">0</c:when>
-								    <c:otherwise><c:choose>
-									    <c:when test="${empty cart}">0</c:when>
-									    <c:otherwise>${cart.totalCount}</c:otherwise>
-									</c:choose></c:otherwise>
-								</c:choose></c:otherwise>
-							</c:choose>
-						    </c:otherwise>
-						</c:choose>
-					</c:otherwise>
-				</c:choose>
-                </span>
+                <span class="cart-badge">${cart.totalCount}</span>
             </c:if>
         </a>
         <div class="nav-user-wrap">
@@ -314,28 +311,17 @@
             <div class="ph-stats">
                 <div class="ph-stat">
                     <div class="ph-stat-num">
-                    	<c:choose>
-						    <c:when test="${empty cart}">0</c:when>
-						    <c:otherwise>
-						    <c:choose>
-							    <c:when test="${empty cart}">0</c:when>
-							    <c:otherwise><c:choose>
-								    <c:when test="${empty cart}">0</c:when>
-								    <c:otherwise><c:choose>
-									    <c:when test="${empty cart}">0</c:when>
-									    <c:otherwise>${cart.totalCount}</c:otherwise>
-									</c:choose></c:otherwise>
-								</c:choose></c:otherwise>
-							</c:choose>
-						    </c:otherwise>
-						</c:choose>
+                        <c:choose>
+                            <c:when test="${empty cart}">0</c:when>
+                            <c:otherwise>${cart.totalCount}</c:otherwise>
+                        </c:choose>
                     </div>
                     <div class="ph-stat-lbl">Cart Items</div>
                 </div>
                 <div class="ph-stat">
-				    <div class="ph-stat-num">${wishlistCount}</div>
-				    <div class="ph-stat-lbl">Wishlist</div>
-				</div>
+                    <div class="ph-stat-num">${wishlistCount}</div>
+                    <div class="ph-stat-lbl">Wishlist</div>
+                </div>
                 <div class="ph-stat">
                     <div class="ph-stat-num">
                         <c:choose>
@@ -371,31 +357,18 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 My Cart
                 <c:if test="${not empty cart and cart.totalCount > 0}">
-                    <span class="pnav-badge">
-                    <c:choose>
-					    <c:when test="${empty cart}">0</c:when>
-					    <c:otherwise>
-					    <c:choose>
-						    <c:when test="${empty cart}">0</c:when>
-						    <c:otherwise><c:choose>
-							    <c:when test="${empty cart}">0</c:when>
-							    <c:otherwise>${cart.totalCount}</c:otherwise>
-							</c:choose></c:otherwise>
-						</c:choose>
-						</c:otherwise>
-					</c:choose>
-                    </span>
+                    <span class="pnav-badge">${cart.totalCount}</span>
                 </c:if>
             </button>
             <button class="pnav-btn" onclick="switchTab('wishlist',this)">
-			    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-			        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-			    </svg>
-			    My Wishlist
-			    <c:if test="${wishlistCount > 0}">
-			        <span class="pnav-badge">${wishlistCount}</span>
-			    </c:if>
-			</button>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                My Wishlist
+                <c:if test="${wishlistCount > 0}">
+                    <span class="pnav-badge">${wishlistCount}</span>
+                </c:if>
+            </button>
             <button class="pnav-btn" onclick="switchTab('edit',this)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
                 Edit Profile
@@ -422,11 +395,6 @@
             </c:if>
             <c:if test="${not empty errorMessage}">
                 <div class="p-alert p-alert-err" id="flash-msg">${errorMessage}</div>
-            </c:if>
-
-            <%-- Decide which tab to open based on action feedback --%>
-            <c:if test="${not empty successMessage or not empty errorMessage}">
-                <%-- If action param is in request, pick tab; after redirect it won't be --%>
             </c:if>
 
             <!-- ═══ TAB: ACCOUNT INFO ═══ -->
@@ -481,46 +449,31 @@
                                 <div class="info-val" style="font-size:.82rem;">${currentUser.createdAt}</div>
                             </div>
                         </div>
-                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    
-						    <!-- Edit -->
-						    <button class="pbtn"
-						            style="width:auto;padding:11px 24px;"
-						            onclick="switchTab('edit',document.querySelectorAll('.pnav-btn')[3])">
-						        Edit Profile →
-						    </button>
-						
-						    <!-- View Cart -->
-						    <a href="${contextPath}/cart"
-						       style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;">
-						        View Cart
-						        <c:if test="${not empty cart and cart.totalCount > 0}">
-						            <span style="background:var(--pink);color:#fff;font-size:.58rem;padding:2px 7px;border-radius:10px;">
-						                <c:choose>
-										    <c:when test="${empty cart}">0</c:when>
-										    <c:otherwise><c:choose>
-											    <c:when test="${empty cart}">0</c:when>
-											    <c:otherwise><c:choose>
-												    <c:when test="${empty cart}">0</c:when>
-												    <c:otherwise>${cart.totalCount}</c:otherwise>
-												</c:choose></c:otherwise>
-											</c:choose></c:otherwise>
-										</c:choose>
-						            </span>
-						        </c:if>
-						    </a>
-						
-						    <!-- Wishlist -->
-						    <button class="pbtn"
-						            style="width:auto;padding:11px 24px;"
-						            onclick="switchTab('wishlist',document.querySelectorAll('.pnav-btn')[2])">
-						        ♡ View Wishlist
-						        <c:if test="${wishlistCount > 0}">
-						            <span style="margin-left:6px;">(${wishlistCount})</span>
-						        </c:if>
-						    </button>
-						
-						</div>
+
+                        <%-- ── Consistent action buttons ── --%>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+
+                            <button class="p-btn p-btn-primary"
+                                    onclick="switchTab('edit',document.querySelectorAll('.pnav-btn')[3])">
+                                Edit Profile →
+                            </button>
+
+                            <a href="${contextPath}/cart" class="p-btn p-btn-outline">
+                                View Cart
+                                <c:if test="${not empty cart and cart.totalCount > 0}">
+                                    <span class="btn-badge">${cart.totalCount}</span>
+                                </c:if>
+                            </a>
+
+                            <button class="p-btn p-btn-outline"
+                                    onclick="switchTab('wishlist',document.querySelectorAll('.pnav-btn')[2])">
+                                ♡ Wishlist
+                                <c:if test="${wishlistCount > 0}">
+                                    <span class="btn-badge">${wishlistCount}</span>
+                                </c:if>
+                            </button>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -551,7 +504,6 @@
                     </c:when>
                     <c:otherwise>
                         <div class="cart-panel-grid">
-                            <!-- Items list -->
                             <div class="pcard" style="margin-bottom:0;">
                                 <div class="pcard-head">
                                     <div class="pcard-title">My Cart
@@ -587,21 +539,16 @@
                                         </c:forEach>
                                     </div>
                                     <div style="margin-top:16px;display:flex;gap:10px;">
-                                        <a href="${contextPath}/cart"
-                                           style="flex:1;display:flex;align-items:center;justify-content:center;background:var(--pink);color:#fff;padding:12px;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:opacity .2s;"
-                                           onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+                                        <a href="${contextPath}/cart" class="p-btn p-btn-primary" style="flex:1;justify-content:center;">
                                             Go to Cart &rarr;
                                         </a>
-                                        <a href="${contextPath}/products"
-                                           style="display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);color:var(--dark);padding:12px 20px;border-radius:8px;font-size:.78rem;font-weight:600;transition:border-color .18s;"
-                                           onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
+                                        <a href="${contextPath}/products" class="p-btn p-btn-outline">
                                             + Add More
                                         </a>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Summary -->
                             <div class="sum-card">
                                 <div class="sum-title">Order Summary</div>
                                 <c:forEach var="item" items="${cart.items}">
@@ -631,81 +578,65 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            
+
             <!-- ═══ TAB: WISHLIST ═══ -->
-			<div id="tab-wishlist" class="ptab ${openTab == 'wishlist' ? 'active' : ''}">
-			    <c:choose>
-			        <c:when test="${empty wishlist}">
-			            <div class="pcard">
-			                <div class="pcard-head">
-			                    <div class="pcard-title">My Wishlist</div>
-			                    <div class="pcard-sub">Products you've saved for later</div>
-			                </div>
-			                <div class="pcard-body">
-			                    <div class="cart-empty">
-			                        <div class="cart-empty-icon">♡</div>
-			                        <div class="cart-empty-txt">Nothing saved yet</div>
-			                        <a href="${contextPath}/products" class="cart-empty-btn">Explore Products →</a>
-			                    </div>
-			                </div>
-			            </div>
-			        </c:when>
-			
-			        <c:otherwise>
-			            <div class="pcard">
-			                <div class="pcard-head">
-			                    <div class="pcard-title">
-			                        My Wishlist (${wishlistCount})
-			                    </div>
-			                </div>
-			
-			                <div class="pcard-body">
-			                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
-			                        <c:forEach var="wItem" items="${wishlist}">
-			                            
-			                            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
-			                                
-			                                <!-- Image -->
-			                                <a href="${contextPath}/productDetail?id=${wItem.productId}">
-			                                    <img src="${contextPath}/assets/images/products/${wItem.productImagePath}"
-			                                         style="width:100%;height:150px;object-fit:cover;">
-			                                </a>
-			
-			                                <!-- Info -->
-			                                <div style="padding:12px;">
-			                                    <div style="font-weight:600;">${wItem.productName}</div>
-			
-			                                    <div style="font-size:.8rem;color:var(--pink);margin:6px 0;">
-			                                        Rs <fmt:formatNumber value="${wItem.productPrice}" pattern="#,##0.00"/>
-			                                    </div>
-			
-			                                    <!-- Add to Cart -->
-			                                    <form action="${contextPath}/cart/add" method="post">
-			                                        <input type="hidden" name="productId" value="${wItem.productId}">
-			                                        <input type="hidden" name="qty" value="1">
-			                                        <button class="pbtn" style="padding:8px;font-size:.75rem;">
-			                                            Add to Cart
-			                                        </button>
-			                                    </form>
-			
-			                                    <!-- Remove -->
-			                                    <form action="${contextPath}/wishlist/remove" method="post">
-			                                        <input type="hidden" name="productId" value="${wItem.productId}">
-			                                        <button style="margin-top:6px;width:100%;background:none;border:1px solid var(--border);padding:6px;border-radius:6px;font-size:.7rem;">
-			                                            Remove
-			                                        </button>
-			                                    </form>
-			
-			                                </div>
-			                            </div>
-			
-			                        </c:forEach>
-			                    </div>
-			                </div>
-			            </div>
-			        </c:otherwise>
-			    </c:choose>
-			</div>
+            <div id="tab-wishlist" class="ptab ${openTab == 'wishlist' ? 'active' : ''}">
+                <c:choose>
+                    <c:when test="${empty wishlist}">
+                        <div class="pcard">
+                            <div class="pcard-head">
+                                <div class="pcard-title">My Wishlist</div>
+                                <div class="pcard-sub">Products you've saved for later</div>
+                            </div>
+                            <div class="pcard-body">
+                                <div class="cart-empty">
+                                    <div class="cart-empty-icon">♡</div>
+                                    <div class="cart-empty-txt">Nothing saved yet</div>
+                                    <a href="${contextPath}/products" class="cart-empty-btn">Explore Products →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="pcard">
+                            <div class="pcard-head">
+                                <div class="pcard-title">My Wishlist (${wishlistCount})</div>
+                            </div>
+                            <div class="pcard-body">
+                                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">
+                                    <c:forEach var="wItem" items="${wishlist}">
+                                        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;">
+                                            <a href="${contextPath}/productDetail?id=${wItem.productId}">
+                                                <img src="${contextPath}/assets/images/products/${wItem.productImagePath}"
+                                                     style="width:100%;height:150px;object-fit:cover;">
+                                            </a>
+                                            <div style="padding:12px;">
+                                                <div style="font-weight:600;margin-bottom:4px;">${wItem.productName}</div>
+                                                <div style="font-size:.8rem;color:var(--pink);margin-bottom:10px;">
+                                                    Rs <fmt:formatNumber value="${wItem.productPrice}" pattern="#,##0.00"/>
+                                                </div>
+                                                <form action="${contextPath}/cart/add" method="post">
+                                                    <input type="hidden" name="productId" value="${wItem.productId}">
+                                                    <input type="hidden" name="qty" value="1">
+                                                    <button type="submit" class="p-btn p-btn-primary p-btn-full">
+                                                        Add to Cart
+                                                    </button>
+                                                </form>
+                                                <form action="${contextPath}/wishlist/remove" method="post">
+                                                    <input type="hidden" name="productId" value="${wItem.productId}">
+                                                    <button type="submit" class="p-btn p-btn-outline p-btn-full">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
             <!-- ═══ TAB: EDIT PROFILE ═══ -->
             <div id="tab-edit" class="ptab ${openTab == 'edit' ? 'active' : ''}">
@@ -750,7 +681,7 @@
                                        placeholder="+97798XXXXXXXXX">
                                 <span class="pf-hint">Must start with + and be exactly 14 characters</span>
                             </div>
-                            <button type="submit" class="pbtn">Save Changes</button>
+                            <button type="submit" class="p-btn p-btn-primary p-btn-full">Save Changes</button>
                         </form>
                     </div>
                 </div>
@@ -804,7 +735,7 @@
                                 <div class="req-item" id="req-digit">&#9675; At least one number</div>
                                 <div class="req-item" id="req-special">&#9675; At least one special character</div>
                             </div>
-                            <button type="submit" class="pbtn">Update Password</button>
+                            <button type="submit" class="p-btn p-btn-primary p-btn-full">Update Password</button>
                         </form>
                     </div>
                 </div>
@@ -897,8 +828,6 @@ function switchTab(id, btn) {
     if (btn) btn.classList.add('active');
 }
 
-
-
 function togglePwd(id, btn) {
     var f = document.getElementById(id);
     if (!f) return;
@@ -951,26 +880,14 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() { if (msg.parentNode) msg.parentNode.removeChild(msg); }, 500);
         }, 5000);
     }
-});
 
-document.addEventListener('DOMContentLoaded', function() {
     var openTab = '${openTab}';
-
     var btns = document.querySelectorAll('.pnav-btn');
-
-    var map = {
-        account: 0,
-        cart: 1,
-        wishlist: 2,
-        edit: 3,
-        security: 4
-    };
-
+    var map = { account:0, cart:1, wishlist:2, edit:3, security:4 };
     if (map[openTab] !== undefined) {
         switchTab(openTab, btns[map[openTab]]);
     }
 });
-
 </script>
 </body>
 </html>

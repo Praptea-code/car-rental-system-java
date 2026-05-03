@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="openTab" value="${param.tab != null ? param.tab : 'account'}"/>
 <c:set var="currentUser" value="${sessionScope.loggedInUser}" />
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
@@ -261,7 +262,23 @@
                 <span class="cart-badge">
                 <c:choose>
 				    <c:when test="${empty cart}">0</c:when>
-				    <c:otherwise>${cart.totalCount}</c:otherwise>
+				    <c:otherwise>
+					    <c:choose>
+						    <c:when test="${empty cart}">0</c:when>
+						    <c:otherwise>
+						    <c:choose>
+							    <c:when test="${empty cart}">0</c:when>
+							    <c:otherwise><c:choose>
+								    <c:when test="${empty cart}">0</c:when>
+								    <c:otherwise><c:choose>
+									    <c:when test="${empty cart}">0</c:when>
+									    <c:otherwise>${cart.totalCount}</c:otherwise>
+									</c:choose></c:otherwise>
+								</c:choose></c:otherwise>
+							</c:choose>
+						    </c:otherwise>
+						</c:choose>
+					</c:otherwise>
 				</c:choose>
                 </span>
             </c:if>
@@ -296,7 +313,23 @@
             </div>
             <div class="ph-stats">
                 <div class="ph-stat">
-                    <div class="ph-stat-num">${cart.totalCount}</div>
+                    <div class="ph-stat-num">
+                    	<c:choose>
+						    <c:when test="${empty cart}">0</c:when>
+						    <c:otherwise>
+						    <c:choose>
+							    <c:when test="${empty cart}">0</c:when>
+							    <c:otherwise><c:choose>
+								    <c:when test="${empty cart}">0</c:when>
+								    <c:otherwise><c:choose>
+									    <c:when test="${empty cart}">0</c:when>
+									    <c:otherwise>${cart.totalCount}</c:otherwise>
+									</c:choose></c:otherwise>
+								</c:choose></c:otherwise>
+							</c:choose>
+						    </c:otherwise>
+						</c:choose>
+                    </div>
                     <div class="ph-stat-lbl">Cart Items</div>
                 </div>
                 <div class="ph-stat">
@@ -338,7 +371,20 @@
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 My Cart
                 <c:if test="${not empty cart and cart.totalCount > 0}">
-                    <span class="pnav-badge">${cart.totalCount}</span>
+                    <span class="pnav-badge">
+                    <c:choose>
+					    <c:when test="${empty cart}">0</c:when>
+					    <c:otherwise>
+					    <c:choose>
+						    <c:when test="${empty cart}">0</c:when>
+						    <c:otherwise><c:choose>
+							    <c:when test="${empty cart}">0</c:when>
+							    <c:otherwise>${cart.totalCount}</c:otherwise>
+							</c:choose></c:otherwise>
+						</c:choose>
+						</c:otherwise>
+					</c:choose>
+                    </span>
                 </c:if>
             </button>
             <button class="pnav-btn" onclick="switchTab('wishlist',this)">
@@ -379,13 +425,12 @@
             </c:if>
 
             <%-- Decide which tab to open based on action feedback --%>
-            <c:set var="openTab" value="account"/>
             <c:if test="${not empty successMessage or not empty errorMessage}">
                 <%-- If action param is in request, pick tab; after redirect it won't be --%>
             </c:if>
 
             <!-- ═══ TAB: ACCOUNT INFO ═══ -->
-            <div id="tab-account" class="ptab active">
+            <div id="tab-account" class="ptab ${openTab == 'account' ? 'active' : ''}">
                 <div class="pcard">
                     <div class="pcard-head">
                         <div class="pcard-title">Account Overview</div>
@@ -437,25 +482,45 @@
                             </div>
                         </div>
                         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                            <button class="pbtn" style="width:auto;padding:11px 24px;" onclick="switchTab('edit',document.querySelectorAll('.pnav-btn')[2])">
-                                Edit Profile &rarr;
-                            </button>
-                            <a href="${contextPath}/cart" style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;transition:border-color .18s;" onmouseover="this.style.borderColor='var(--pink)'" onmouseout="this.style.borderColor='var(--border)'">
-                                View Cart
-                                <button class="pbtn" style="width:auto;padding:11px 24px;"
-								        onclick="switchTab('wishlist', document.querySelectorAll('.pnav-btn')[2])">
-								    ♡ View Wishlist
-								    <c:if test="${wishlistCount > 0}">
-								        <span style="background:rgba(255,255,255,.25);padding:1px 8px;border-radius:10px;font-size:.7rem;margin-left:4px;">
-								            ${wishlistCount}
-								        </span>
-								    </c:if>
-								</button>
-                                <c:if test="${not empty cart and cart.totalCount > 0}">
-                                    <span style="background:var(--pink);color:#fff;font-size:.58rem;padding:2px 7px;border-radius:10px;font-weight:700;">${cart.totalCount}</span>
-                                </c:if>
-                            </a>
-                        </div>
+    
+						    <!-- Edit -->
+						    <button class="pbtn"
+						            style="width:auto;padding:11px 24px;"
+						            onclick="switchTab('edit',document.querySelectorAll('.pnav-btn')[3])">
+						        Edit Profile →
+						    </button>
+						
+						    <!-- View Cart -->
+						    <a href="${contextPath}/cart"
+						       style="display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);color:var(--dark);padding:11px 22px;border-radius:8px;font-size:.82rem;font-weight:600;">
+						        View Cart
+						        <c:if test="${not empty cart and cart.totalCount > 0}">
+						            <span style="background:var(--pink);color:#fff;font-size:.58rem;padding:2px 7px;border-radius:10px;">
+						                <c:choose>
+										    <c:when test="${empty cart}">0</c:when>
+										    <c:otherwise><c:choose>
+											    <c:when test="${empty cart}">0</c:when>
+											    <c:otherwise><c:choose>
+												    <c:when test="${empty cart}">0</c:when>
+												    <c:otherwise>${cart.totalCount}</c:otherwise>
+												</c:choose></c:otherwise>
+											</c:choose></c:otherwise>
+										</c:choose>
+						            </span>
+						        </c:if>
+						    </a>
+						
+						    <!-- Wishlist -->
+						    <button class="pbtn"
+						            style="width:auto;padding:11px 24px;"
+						            onclick="switchTab('wishlist',document.querySelectorAll('.pnav-btn')[2])">
+						        ♡ View Wishlist
+						        <c:if test="${wishlistCount > 0}">
+						            <span style="margin-left:6px;">(${wishlistCount})</span>
+						        </c:if>
+						    </button>
+						
+						</div>
                     </div>
                 </div>
             </div>
@@ -568,7 +633,7 @@
             </div>
             
             <!-- ═══ TAB: WISHLIST ═══ -->
-			<div id="tab-wishlist" class="ptab">
+			<div id="tab-wishlist" class="ptab ${openTab == 'wishlist' ? 'active' : ''}">
 			    <c:choose>
 			        <c:when test="${empty wishlist}">
 			            <div class="pcard">
@@ -643,7 +708,7 @@
 			</div>
 
             <!-- ═══ TAB: EDIT PROFILE ═══ -->
-            <div id="tab-edit" class="ptab">
+            <div id="tab-edit" class="ptab ${openTab == 'edit' ? 'active' : ''}">
                 <div class="pcard">
                     <div class="pcard-head">
                         <div class="pcard-title">Edit Profile</div>
@@ -692,7 +757,7 @@
             </div>
 
             <!-- ═══ TAB: SECURITY ═══ -->
-            <div id="tab-security" class="ptab">
+            <div id="tab-security" class="ptab ${openTab == 'security' ? 'active' : ''}">
                 <div class="pcard">
                     <div class="pcard-head">
                         <div class="pcard-title">Change Password</div>
@@ -832,6 +897,8 @@ function switchTab(id, btn) {
     if (btn) btn.classList.add('active');
 }
 
+
+
 function togglePwd(id, btn) {
     var f = document.getElementById(id);
     if (!f) return;
@@ -861,7 +928,7 @@ function checkStrength(v) {
         var el = document.getElementById('req-' + k);
         if (checks[k]) {
             score++;
-            if (el) { el.classList.add('ok'); el.innerHTML = '✓ ' + labels[k];+ labels[k]; }
+            if (el) { el.classList.add('ok'); el.innerHTML = '✓ ' + labels[k]; }
         } else {
             if (el) { el.classList.remove('ok'); el.innerHTML = '○ ' + labels[k]; }
         }
@@ -885,6 +952,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var openTab = '${openTab}';
+
+    var btns = document.querySelectorAll('.pnav-btn');
+
+    var map = {
+        account: 0,
+        cart: 1,
+        wishlist: 2,
+        edit: 3,
+        security: 4
+    };
+
+    if (map[openTab] !== undefined) {
+        switchTab(openTab, btns[map[openTab]]);
+    }
+});
+
 </script>
 </body>
 </html>

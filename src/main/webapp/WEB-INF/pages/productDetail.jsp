@@ -358,14 +358,13 @@
         <c:remove var="successMessage" scope="session"/>
     </c:if>
     <c:if test="${not empty sessionScope.wishlistToast}">
-	    <div class="alert alert-success">${sessionScope.wishlistToast}</div>
-	    <c:remove var="wishlistToast" scope="session"/>
-	</c:if>
-	
-	<c:if test="${not empty sessionScope.errorMessage}">
-	    <div class="alert alert-error">${sessionScope.errorMessage}</div>
-	    <c:remove var="errorMessage" scope="session"/>
-	</c:if>
+        <div class="alert alert-success">${sessionScope.wishlistToast}</div>
+        <c:remove var="wishlistToast" scope="session"/>
+    </c:if>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <div class="alert alert-error">${sessionScope.errorMessage}</div>
+        <c:remove var="errorMessage" scope="session"/>
+    </c:if>
 
     <!-- ── PRODUCT MAIN ── -->
     <div class="pd-main">
@@ -472,7 +471,7 @@
 
             <div class="pd-divider"></div>
 
-            <!-- Add to cart -->
+            <!-- ── ADD TO CART + WISHLIST ── -->
             <c:choose>
                 <c:when test="${not empty currentUser}">
                     <form action="${pageContext.request.contextPath}/cart/add" method="post" id="addToCartForm">
@@ -487,7 +486,11 @@
                                 <button type="button" class="pd-qty-btn" onclick="changeQty(1)" ${product.outOfStock ? 'disabled' : ''}>+</button>
                             </div>
                         </div>
+
+                        <%-- pd-actions: Add to Cart + Wishlist side by side --%>
                         <div class="pd-actions">
+
+                            <%-- Add to Cart button (submits the parent form) --%>
                             <button type="submit" class="pd-btn-cart" ${product.outOfStock ? 'disabled' : ''}>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -499,41 +502,29 @@
                                     <c:otherwise>Add to Cart</c:otherwise>
                                 </c:choose>
                             </button>
-                            
-                        </div>
-                        
+
+                            <%-- Wishlist button — display:contents makes the <form> invisible
+                                 to flex so the button sits directly alongside Add to Cart --%>
+                            <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+                                  method="post" style="display:contents">
+                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                <button type="submit" class="pd-btn-wishlist"
+                                        title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
+                                        style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
+                                    <svg width="20" height="20" viewBox="0 0 24 24"
+                                         fill="${isWishlisted ? '#e8536a' : 'none'}"
+                                         stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+                                         stroke-width="1.8">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                        </div><%-- /pd-actions --%>
                     </form>
-                    <c:choose>
-							    <c:when test="${not empty currentUser}">
-							        <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
-							              method="post" style="display:inline">
-							            <input type="hidden" name="productId" value="${product.productId}"/>
-							            <button type="submit" class="pd-btn-wishlist"
-							                    title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
-							                    style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
-							                <svg width="20" height="20" viewBox="0 0 24 24"
-							                     fill="${isWishlisted ? '#e8536a' : 'none'}"
-							                     stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
-							                     stroke-width="1.8">
-							                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-							                </svg>
-							            </button>
-							        </form>
-							    </c:when>
-							
-							    <c:otherwise>
-							        <a href="${pageContext.request.contextPath}/login"
-							           class="pd-btn-wishlist" title="Login to wishlist"
-							           style="display:flex;align-items:center;justify-content:center;">
-							            <svg width="20" height="20" viewBox="0 0 24 24"
-							                 fill="none" stroke="currentColor" stroke-width="1.8">
-							                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-							            </svg>
-							        </a>
-							    </c:otherwise>
-							</c:choose>
                 </c:when>
                 <c:otherwise>
+                    <%-- Not logged in: show login prompt --%>
                     <div style="margin-bottom:20px;">
                         <a href="${pageContext.request.contextPath}/login"
                            style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#1a1a1a;color:#fff;border:none;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .2s;"
@@ -576,8 +567,8 @@
                 </div>
             </div>
 
-        </div>
-    </div>
+        </div><%-- /pd-info-panel --%>
+    </div><%-- /pd-main --%>
 
     <!-- ── TABS ── -->
     <div class="pd-tabs" id="pdTabs">
@@ -642,7 +633,6 @@
                         <div class="rv-total-lbl">${reviewCount} review<c:if test="${reviewCount != 1}">s</c:if></div>
                     </div>
                     <div class="rv-bars">
-                        <%-- 5 down to 1 --%>
                         <c:forEach begin="0" end="4" var="i">
                             <c:set var="starNum" value="${5 - i}"/>
                             <c:set var="cnt" value="${ratingDist[starNum - 1]}"/>
@@ -902,8 +892,6 @@ function validateReview() {
     }
     return true;
 }
-
-
 
 /* ── Image zoom ── */
 (function() {

@@ -614,7 +614,7 @@ function adjustQty(btn, delta) {
 document.addEventListener('DOMContentLoaded', function () {
     var toast = document.getElementById('cartToast');
     if (toast) {
-        setTimeout(function () {
+        setTimeout(function () { 
             toast.style.transition = 'opacity .5s';
             toast.style.opacity = '0';
             setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 500);

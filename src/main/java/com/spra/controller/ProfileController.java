@@ -1,8 +1,10 @@
 package com.spra.controller;
 
+import com.spra.dao.OrderDAO;
 import com.spra.dao.UserDAO;
 import com.spra.dao.WishlistDAO;
 import com.spra.model.CartModel;
+import com.spra.model.OrderModel;
 import com.spra.model.UserModel;
 import com.spra.model.WishlistModel;
 import com.spra.util.PasswordUtil;
@@ -22,6 +24,7 @@ public class ProfileController extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
     private final WishlistDAO wishlistDAO = new WishlistDAO();
+    private final OrderDAO orderDAO = new OrderDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -46,10 +49,14 @@ public class ProfileController extends HttpServlet {
         List<WishlistModel> wishlist = wishlistDAO.getWishlistByUser(user.getUserId());
         int wishlistCount = wishlist.size();
 
+        // Orders
+        List<OrderModel> orders = orderDAO.getOrdersByUser(user.getUserId());
+
         req.setAttribute("currentUser",   user);
         req.setAttribute("cart",          cart);
         req.setAttribute("wishlist",      wishlist);
         req.setAttribute("wishlistCount", wishlistCount);
+        req.setAttribute("orders",        orders);
 
         req.getRequestDispatcher("/WEB-INF/pages/user/profile.jsp").forward(req, res);
     }

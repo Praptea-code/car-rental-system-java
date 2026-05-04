@@ -2,10 +2,12 @@ package com.spra.controller;
 
 import com.spra.dao.CategoryDAO;
 import com.spra.dao.ContactDAO;
+import com.spra.dao.OrderDAO;
 import com.spra.dao.ProductDAO;
 import com.spra.dao.UserDAO;
 import com.spra.model.CategoryModel;
 import com.spra.model.ContactModel;
+import com.spra.model.OrderModel;
 import com.spra.model.ProductModel;
 import com.spra.util.ValidationUtil;
 import jakarta.servlet.ServletException;
@@ -25,7 +27,8 @@ import java.util.List;
         "/admin/products/edit",
         "/admin/products/delete",
         "/admin/users",
-        "/admin/messages"
+        "/admin/messages",
+        "/admin/orders"
 }, asyncSupported = true)
 public class AdminController extends HttpServlet {
 
@@ -33,12 +36,14 @@ public class AdminController extends HttpServlet {
     private final CategoryDAO categoryDAO;
     private final UserDAO userDAO;
     private final ContactDAO contactDAO;
+    private final OrderDAO orderDAO;
 
     public AdminController() {
         this.productDAO = new ProductDAO();
         this.categoryDAO = new CategoryDAO();
         this.userDAO = new UserDAO();
         this.contactDAO = new ContactDAO();
+        this.orderDAO = new OrderDAO();
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -51,6 +56,8 @@ public class AdminController extends HttpServlet {
             showUsers(req, res);
         } else if (uri.endsWith("/messages")) {
             showMessages(req, res);
+        } else if (uri.endsWith("/orders")) {
+            showOrders(req, res);
         } else {
             res.sendRedirect(req.getContextPath() + "/admin/dashboard");
         }
@@ -70,9 +77,11 @@ public class AdminController extends HttpServlet {
     }
 
     private void showDashboard(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        List<OrderModel> allOrders = orderDAO.getAllOrders();
         req.setAttribute("totalProducts", productDAO.getAllProducts().size());
         req.setAttribute("totalCategories", categoryDAO.getAllCategories().size());
         req.setAttribute("recentMessages", contactDAO.getAllMessages());
+        req.setAttribute("totalOrders", allOrders.size());
         req.getRequestDispatcher("/WEB-INF/pages/admin/dashboard.jsp").forward((ServletRequest) req, (ServletResponse) res);
     }
 
@@ -92,6 +101,12 @@ public class AdminController extends HttpServlet {
         List<ContactModel> messages = contactDAO.getAllMessages();
         req.setAttribute("messages", messages);
         req.getRequestDispatcher("/WEB-INF/pages/admin/messages.jsp").forward((ServletRequest) req, (ServletResponse) res);
+    }
+
+    private void showOrders(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        List<OrderModel> orders = orderDAO.getAllOrders();
+        req.setAttribute("orders", orders);
+        req.getRequestDispatcher("/WEB-INF/pages/admin/orders.jsp").forward((ServletRequest) req, (ServletResponse) res);
     }
 
     private void handleAddProduct(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -142,26 +157,10 @@ public class AdminController extends HttpServlet {
         p.setName(ValidationUtil.safeTrim(req.getParameter("name")));
         p.setDescription(ValidationUtil.safeTrim(req.getParameter("description")));
         p.setImagePath(ValidationUtil.safeTrim(req.getParameter("imagePath")));
-        try {
-            p.setPrice(Double.parseDouble(req.getParameter("price")));
-        } catch (NumberFormatException e) {
-            p.setPrice(0.0);
-        }
-        try {
-            p.setOldPrice(Double.parseDouble(req.getParameter("oldPrice")));
-        } catch (NumberFormatException e) {
-            p.setOldPrice(0.0);
-        }
-        try {
-            p.setStock(Integer.parseInt(req.getParameter("stock")));
-        } catch (NumberFormatException e) {
-            p.setStock(0);
-        }
-        try {
-            p.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
-        } catch (NumberFormatException e) {
-            p.setCategoryId(0);
-        }
+        try { p.setPrice(Double.parseDouble(req.getParameter("price"))); } catch (NumberFormatException e) { p.setPrice(0.0); }
+        try { p.setOldPrice(Double.parseDouble(req.getParameter("oldPrice"))); } catch (NumberFormatException e) { p.setOldPrice(0.0); }
+        try { p.setStock(Integer.parseInt(req.getParameter("stock"))); } catch (NumberFormatException e) { p.setStock(0); }
+        try { p.setCategoryId(Integer.parseInt(req.getParameter("categoryId"))); } catch (NumberFormatException e) { p.setCategoryId(0); }
         p.setFeatured("on".equals(req.getParameter("isFeatured")));
         p.setBestseller("on".equals(req.getParameter("isBestseller")));
         return p;

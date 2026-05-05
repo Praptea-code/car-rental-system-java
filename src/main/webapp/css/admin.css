@@ -43,17 +43,29 @@
    SIDEBAR
    ═══════════════════════════════════ */
 .admin-sidebar {
-    width: var(--sidebar-w);
-    flex-shrink: 0;
-    background: var(--a-surface);
-    border-right: 1px solid var(--a-border);
-    display: flex;
-    flex-direction: column;
-    padding: 0;
+    width: 80px; /* Slimmer, icon-focused width */
+    height: calc(100vh - 40px);
+    margin: 20px;
+    border-radius: 24px;
+    background: rgba(22, 22, 26, 0.6) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
+    top: 20px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expand on hover for a premium feel */
+.admin-sidebar:hover {
+    width: var(--sidebar-w);
+}
+
+/* Hide text labels when sidebar is collapsed */
+.admin-sidebar:not(:hover) .admin-nav-link span, 
+.admin-sidebar:not(:hover) .admin-nav-section,
+.admin-sidebar:not(:hover) .admin-welcome {
+    display: none;
 }
 
 /* Sidebar top brand area */
@@ -84,6 +96,30 @@
 }
 
 /* Nav section labels */
+/* Ensure labels are hidden by default and animate in */
+.nav-label {
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-10px); /* Subtle slide-in effect */
+}
+
+/* Show labels on sidebar hover */
+.admin-sidebar:hover .nav-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Handle Nav Sections (Main, Store) visibility */
+.admin-nav-section {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.admin-sidebar:hover .admin-nav-section {
+    opacity: 1;
+}
 .admin-nav {
     display: flex;
     flex-direction: column;
@@ -124,12 +160,15 @@
     border-color: var(--a-border);
 }
 .admin-nav-link.active {
-    background: var(--a-pink-soft);
-    color: var(--a-pink);
-    border-color: rgba(232,83,106,.2);
-    font-weight: 500;
+    background: rgba(232, 83, 106, 0.15);
+    color: #fff;
+    border: 1px solid rgba(232, 83, 106, 0.3);
+    box-shadow: 0 0 15px rgba(232, 83, 106, 0.1);
 }
-.admin-nav-link.active svg { color: var(--a-pink); }
+
+.admin-nav-link svg {
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.1));
+}
 
 .admin-nav-link .nav-badge {
     margin-left: auto;
@@ -237,14 +276,17 @@
     margin-bottom: 28px;
 }
 
-.admin-stat-card {
-    background: var(--a-surface);
-    border: 1px solid var(--a-border);
-    border-radius: 14px;
-    padding: 20px 22px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color .2s;
+.admin-stat-card, .admin-section {
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0) 100%
+    ), var(--a-surface) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05); /* The "Glossy" edge */
+    border-radius: 20px;
 }
 .admin-stat-card:hover { border-color: var(--a-border2); }
 .admin-stat-card::before {
@@ -290,13 +332,7 @@
 /* ═══════════════════════════════════
    SECTION / TABLE CARD
    ═══════════════════════════════════ */
-.admin-section {
-    background: var(--a-surface);
-    border: 1px solid var(--a-border);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
+
 
 .admin-section-head {
     display: flex;

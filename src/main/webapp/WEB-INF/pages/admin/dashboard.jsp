@@ -27,40 +27,56 @@
         </div>
 
         <nav class="admin-nav">
-		    <!-- MAIN SECTION -->
-		    <div class="admin-nav-section">Main</div>
-		    
-		    <a href="<%= contextPath %>/admin/dashboard" class="admin-nav-link active">
-		        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-		        <span class="nav-label">Dashboard</span>
-		    </a>
-		
-		    <a href="<%= contextPath %>/admin/products" class="admin-nav-link">
-		        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
-		        <span class="nav-label">Products</span>
-		    </a>
-		
-		    <a href="<%= contextPath %>/admin/orders" class="admin-nav-link">
-		        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 12 2 2 4-4"/></svg>
-		        <span class="nav-label">Orders</span>
-		    </a>
-		
-		    <a href="<%= contextPath %>/admin/messages" class="admin-nav-link">
-		        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-		        <span class="nav-label">Messages</span>
-		        <c:if test="${not empty recentMessages and recentMessages.size() > 0}">
-		            <span class="nav-badge">${recentMessages.size()}</span>
-		        </c:if>
-		    </a>
-		
-		    <!-- STORE SECTION -->
-		    <div class="admin-nav-section">Store</div>
-		    
-		    <a href="<%= contextPath %>/home" class="admin-nav-link">
-		        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-		        <span class="nav-label">View Site</span>
-		    </a>
-		</nav>
+ 
+			    <div class="admin-nav-section">Main</div>
+			 
+			    <a href="<%= contextPath %>/admin/dashboard" class="admin-nav-link">
+			        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+			            <rect x="3" y="3" width="7" height="7" rx="1"/>
+			            <rect x="14" y="3" width="7" height="7" rx="1"/>
+			            <rect x="3" y="14" width="7" height="7" rx="1"/>
+			            <rect x="14" y="14" width="7" height="7" rx="1"/>
+			        </svg>
+			        Dashboard
+			    </a>
+			 
+			    <a href="<%= contextPath %>/admin/products" class="admin-nav-link">
+			        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+			            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+			            <line x1="3" y1="6" x2="21" y2="6"/>
+			        </svg>
+			        Products
+			    </a>
+			 
+			    <a href="<%= contextPath %>/admin/orders" class="admin-nav-link">
+			        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+			            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+			            <rect x="9" y="3" width="6" height="4" rx="1"/>
+			            <path d="m9 12 2 2 4-4"/>
+			        </svg>
+			        Orders
+			    </a>
+			 
+			    <a href="<%= contextPath %>/admin/messages" class="admin-nav-link">
+			        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+			            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+			            <polyline points="22,6 12,13 2,6"/>
+			        </svg>
+			        Messages
+			        <%-- badge: only shown when there are messages --%>
+			        <%-- <c:if test="${not empty messages}"><span class="nav-badge">${messages.size()}</span></c:if> --%>
+			    </a>
+			 
+			    <div class="admin-nav-section">Store</div>
+			 
+			    <a href="<%= contextPath %>/home" class="admin-nav-link">
+			        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+			            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+			        </svg>
+			        View Site
+			    </a>
+			 
+			</nav>
 
         <div class="admin-sidebar-bottom">
             <form action="<%= contextPath %>/logout" method="post">

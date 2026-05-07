@@ -210,7 +210,7 @@
     </div>
 </div>
 
-<script>
+<script> 
 function openEditModal(id,name,price,oldPrice,stock,catId,image,featured,bestseller,desc){
     document.getElementById('editProductId').value   = id;
     document.getElementById('editName').value        = name;

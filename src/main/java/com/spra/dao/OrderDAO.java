@@ -1,6 +1,7 @@
 package com.spra.dao;
 
 import com.spra.config.DbConfig;
+import com.spra.model.CartItem;
 import com.spra.model.OrderModel;
 
 import java.sql.*;
@@ -31,6 +32,57 @@ public class OrderDAO {
             DbConfig.closeConnection(conn);
         }
         return -1;
+    }
+
+    /**
+     * Saves cart items into order_items for a given order.
+     * Call this right after placeOrder() succeeds.
+     */
+    public boolean saveOrderItems(int orderId, List<CartItem> items) {
+        String sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            for (CartItem item : items) {
+                ps.setInt(1, orderId);
+                ps.setInt(2, item.getProductId());
+                ps.setInt(3, item.getQuantity());
+                ps.setDouble(4, item.getPrice());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("[OrderDAO.saveOrderItems] " + e.getMessage());
+            return false;
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+    }
+
+    /**
+     * Decrements stock for all products in the given order.
+     * Call this when status changes to SHIPPED.
+     * Uses MAX(0, stock - qty) to avoid going negative.
+     */
+    public boolean decrementStockForOrder(int orderId) {
+        String sql = "UPDATE products p " +
+                     "JOIN order_items oi ON p.product_id = oi.product_id " +
+                     "SET p.stock = GREATEST(0, p.stock - oi.quantity) " +
+                     "WHERE oi.order_id = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[OrderDAO.decrementStockForOrder] " + e.getMessage());
+            return false;
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
     }
 
     public List<OrderModel> getAllOrders() {
@@ -69,6 +121,9 @@ public class OrderDAO {
         return list;
     }
 
+    /**
+     * Updates the order status. If changing to SHIPPED, also decrements product stock.
+     */
     public boolean updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
         Connection conn = null;
@@ -77,7 +132,14 @@ public class OrderDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, status);
             ps.setInt(2, orderId);
-            return ps.executeUpdate() > 0;
+            boolean updated = ps.executeUpdate() > 0;
+
+            // Decrement stock when order ships
+            if (updated && "SHIPPED".equalsIgnoreCase(status)) {
+                decrementStockForOrder(orderId);
+            }
+
+            return updated;
         } catch (SQLException e) {
             System.err.println("[OrderDAO.updateStatus] " + e.getMessage());
             return false;

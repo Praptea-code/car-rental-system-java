@@ -67,6 +67,9 @@ public class OrderController extends HttpServlet {
 
         int orderId = orderDAO.placeOrder(order);
         if (orderId > 0) {
+            // Save the individual cart items so we can decrement stock later
+            orderDAO.saveOrderItems(orderId, cart.getItems());
+
             cart.clear();
             req.getSession().setAttribute("cart", cart);
             req.getSession().setAttribute("orderSuccess", true);
@@ -85,6 +88,7 @@ public class OrderController extends HttpServlet {
 
         try {
             int orderId = Integer.parseInt(idParam);
+            // updateStatus now handles stock decrement internally when SHIPPED
             boolean updated = orderDAO.updateStatus(orderId, status);
             req.getSession().setAttribute(
                 updated ? "successMessage" : "errorMessage",

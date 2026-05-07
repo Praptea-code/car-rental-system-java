@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/productDetail.css"/>
     <style>
-        /* ── Review section styles ── */
         :root {
             --pink: #e8536a;
             --pink-light: #fdf2f4;
@@ -33,7 +32,6 @@
             --border: #e8d8da;
         }
 
-        /* Rating summary bar */
         .rv-summary {
             display: flex;
             gap: 2.5rem;
@@ -44,257 +42,144 @@
             padding: 1.8rem 2rem;
             margin-bottom: 2rem;
         }
-        .rv-big-score {
-            text-align: center;
-            flex-shrink: 0;
-        }
+        .rv-big-score { text-align: center; flex-shrink: 0; }
         .rv-big-num {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 4rem;
-            font-weight: 600;
-            color: var(--dark);
-            line-height: 1;
+            font-size: 4rem; font-weight: 600; color: var(--dark); line-height: 1;
         }
-        .rv-stars-row {
-            display: flex;
-            gap: 3px;
-            justify-content: center;
-            margin: 6px 0 4px;
-        }
+        .rv-stars-row { display: flex; gap: 3px; justify-content: center; margin: 6px 0 4px; }
         .rv-star { font-size: 16px; color: #e0d8d8; }
         .rv-star.filled { color: #f5a623; }
-        .rv-star.half   { color: #f5a623; }
-        .rv-total-lbl {
-            font-size: 12px;
-            color: var(--muted);
-        }
+        .rv-total-lbl { font-size: 12px; color: var(--muted); }
         .rv-bars { flex: 1; display: flex; flex-direction: column; gap: 7px; }
-        .rv-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: var(--muted);
-        }
+        .rv-bar-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
         .rv-bar-label { min-width: 38px; text-align: right; }
-        .rv-bar-track {
-            flex: 1;
-            height: 6px;
-            background: #f0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .rv-bar-fill {
-            height: 100%;
-            background: #f5a623;
-            border-radius: 3px;
-            transition: width .4s ease;
-        }
+        .rv-bar-track { flex: 1; height: 6px; background: #f0e0e0; border-radius: 3px; overflow: hidden; }
+        .rv-bar-fill { height: 100%; background: #f5a623; border-radius: 3px; transition: width .4s ease; }
         .rv-bar-count { min-width: 24px; }
 
-        /* Write review form */
         .rv-form-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.8rem 2rem;
-            margin-bottom: 2rem;
+            background: #fff; border: 1px solid var(--border);
+            border-radius: 14px; padding: 1.8rem 2rem; margin-bottom: 2rem;
         }
         .rv-form-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 1.2rem;
+            font-size: 1.4rem; font-weight: 600; color: var(--dark); margin-bottom: 1.2rem;
         }
-        .rv-star-picker {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 14px;
-        }
+        .rv-star-picker { display: flex; gap: 6px; margin-bottom: 14px; }
         .rv-star-btn {
-            font-size: 28px;
-            color: #e0d8d8;
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: color .15s, transform .15s;
-            padding: 2px;
-            line-height: 1;
+            font-size: 28px; color: #e0d8d8; background: none; border: none;
+            cursor: pointer; transition: color .15s, transform .15s; padding: 2px; line-height: 1;
         }
-        .rv-star-btn:hover,
-        .rv-star-btn.selected { color: #f5a623; transform: scale(1.15); }
-        .rv-star-hint {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 14px;
-        }
+        .rv-star-btn:hover, .rv-star-btn.selected { color: #f5a623; transform: scale(1.15); }
+        .rv-star-hint { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
         .rv-inp {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: var(--dark);
-            outline: none;
-            transition: border-color .18s;
-            margin-bottom: 12px;
-            display: block;
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+            border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+            color: var(--dark); outline: none; transition: border-color .18s;
+            margin-bottom: 12px; display: block;
         }
         .rv-inp:focus { border-color: var(--pink); }
         textarea.rv-inp { min-height: 110px; resize: vertical; }
         .rv-submit-btn {
-            background: var(--pink);
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            transition: opacity .2s;
+            background: var(--pink); color: #fff; border: none;
+            padding: 12px 28px; border-radius: 8px; font-size: 14px;
+            font-weight: 600; font-family: 'DM Sans', sans-serif; transition: opacity .2s;
         }
         .rv-submit-btn:hover { opacity: .88; }
 
-        /* Individual review cards */
         .rv-list { display: flex; flex-direction: column; gap: 16px; }
-        .rv-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.4rem 1.6rem;
-        }
-        .rv-card-head {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            margin-bottom: 10px;
-        }
+        .rv-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; }
+        .rv-card-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
         .rv-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
+            width: 42px; height: 42px; border-radius: 50%;
             background: linear-gradient(135deg, #e8536a, #c0424e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            flex-shrink: 0;
-            letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif; font-size: 15px;
+            font-weight: 600; color: #fff; flex-shrink: 0; letter-spacing: 1px;
         }
         .rv-meta { flex: 1; }
         .rv-name { font-size: 14px; font-weight: 600; color: var(--dark); }
         .rv-date { font-size: 11px; color: var(--muted); margin-top: 1px; }
-        .rv-rating-stars {
-            display: flex;
-            gap: 2px;
-            margin-left: auto;
-            flex-shrink: 0;
-        }
+        .rv-rating-stars { display: flex; gap: 2px; margin-left: auto; flex-shrink: 0; }
         .rv-rating-stars .rv-star { font-size: 13px; }
         .rv-card-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 5px;
+            font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 5px;
         }
-        .rv-card-body {
-            font-size: 13.5px;
-            color: var(--mid);
-            line-height: 1.75;
-        }
+        .rv-card-body { font-size: 13.5px; color: var(--mid); line-height: 1.75; }
 
-        /* Empty / login prompts */
-        .rv-empty {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--muted);
-        }
-        .rv-empty-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            opacity: .3;
-        }
+        .rv-empty { text-align: center; padding: 3rem 2rem; color: var(--muted); }
+        .rv-empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: .3; }
         .rv-empty-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            color: var(--dark);
-            margin-bottom: 6px;
+            font-size: 1.4rem; color: var(--dark); margin-bottom: 6px;
         }
         .rv-login-nudge {
-            background: var(--pink-light);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1rem 1.4rem;
-            font-size: 13px;
-            color: var(--mid);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
+            background: var(--pink-light); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1rem 1.4rem; font-size: 13px;
+            color: var(--mid); margin-bottom: 2rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
         }
         .rv-login-nudge a {
-            background: var(--pink);
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: opacity .2s;
+            background: var(--pink); color: #fff; padding: 8px 18px;
+            border-radius: 6px; font-size: 13px; font-weight: 600;
+            white-space: nowrap; transition: opacity .2s;
         }
         .rv-login-nudge a:hover { opacity: .88; }
-
-        /* already-reviewed notice */
         .rv-already {
-            background: #eaf3de;
-            border: 1px solid #c0dd97;
-            color: #3B6D11;
-            border-radius: 10px;
-            padding: 1rem 1.4rem;
-            font-size: 13px;
-            margin-bottom: 2rem;
+            background: #eaf3de; border: 1px solid #c0dd97; color: #3B6D11;
+            border-radius: 10px; padding: 1rem 1.4rem; font-size: 13px; margin-bottom: 2rem;
         }
 
-        /* cart badge */
+        /* ── Cart badge ── */
         .cart-icon-btn { position: relative; }
         .cart-badge {
             position: absolute; top: -6px; right: -6px;
-            background: var(--pink); color: #fff;
-            font-size: 10px; font-weight: 600;
+            background: var(--pink); color: #fff; font-size: 10px; font-weight: 600;
             width: 18px; height: 18px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; line-height: 1;
         }
+
+        /* ── pd-actions flex fix ── */
+        .pd-actions { display: flex; gap: 12px; margin-bottom: 20px; align-items: stretch; }
+        .pd-actions form { display: contents; }
+        .pd-btn-cart {
+            flex: 1;
+            background: #1a1a1a; color: #fff; border: none;
+            padding: 14px 20px; border-radius: 10px;
+            font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: background .2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .pd-btn-cart:hover:not(:disabled) { background: #e8536a; }
+        .pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+        .pd-btn-wishlist {
+            width: 48px; height: 48px; border: 1.5px solid #e8d8da;
+            background: #fff; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: border-color .2s, background .2s; color: #aaa; flex-shrink: 0;
+        }
+        .pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
     </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     NAVIGATION — matches all other pages
-     ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ NAVIGATION ═══ -->
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>
-
     <ul class="nav-links">
         <li><a href="<%= contextPath %>/home">Home</a></li>
         <li><a href="<%= contextPath %>/products" class="active">Products</a></li>
         <li><a href="<%= contextPath %>/about">About</a></li>
         <li><a href="<%= contextPath %>/contact">Contact</a></li>
     </ul>
-
     <div class="nav-right">
         <a href="<%= contextPath %>/products" class="nav-icon-btn" title="Search">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
         </a>
-
         <a href="<%= contextPath %>/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -305,7 +190,6 @@
                 <span class="cart-badge">${cart.totalCount}</span>
             </c:if>
         </a>
-
         <c:choose>
             <c:when test="${not empty currentUser}">
                 <div class="nav-user-wrap">
@@ -326,9 +210,7 @@
     </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN CONTENT
-     ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ MAIN CONTENT ═══ -->
 <main class="pd-page">
 
     <!-- Breadcrumb -->
@@ -344,7 +226,7 @@
         <span class="pd-breadcrumb-current">${product.name}</span>
     </nav>
 
-    <!-- Flash messages from review submission -->
+    <!-- Flash messages -->
     <c:if test="${not empty sessionScope.reviewSuccess}">
         <div class="alert alert-success">${sessionScope.reviewSuccess}</div>
         <c:remove var="reviewSuccess" scope="session"/>
@@ -364,6 +246,10 @@
     <c:if test="${not empty sessionScope.errorMessage}">
         <div class="alert alert-error">${sessionScope.errorMessage}</div>
         <c:remove var="errorMessage" scope="session"/>
+    </c:if>
+    <c:if test="${not empty sessionScope.cartToast}">
+        <div class="alert alert-success">${sessionScope.cartToast} was added to your cart!</div>
+        <c:remove var="cartToast" scope="session"/>
     </c:if>
 
     <!-- ── PRODUCT MAIN ── -->
@@ -412,7 +298,8 @@
                         </c:forEach>
                     </div>
                     <span style="font-size:13px;color:var(--muted);">
-                        <fmt:formatNumber value="${avgRating}" pattern="#.#"/> (${reviewCount} review<c:if test="${reviewCount != 1}">s</c:if>)
+                        <fmt:formatNumber value="${avgRating}" pattern="#.#"/>
+                        (${reviewCount} review<c:if test="${reviewCount != 1}">s</c:if>)
                     </span>
                 </div>
             </c:if>
@@ -471,27 +358,38 @@
 
             <div class="pd-divider"></div>
 
-            <!-- ── ADD TO CART + WISHLIST ── -->
+            <!-- ── ADD TO CART + WISHLIST (FIXED) ── -->
             <c:choose>
                 <c:when test="${not empty currentUser}">
-                    <form action="${pageContext.request.contextPath}/cart/add" method="post" id="addToCartForm">
-                        <input type="hidden" name="productId" value="${product.productId}"/>
-                        <div class="pd-qty-row">
-                            <label class="pd-qty-label">Quantity</label>
-                            <div class="pd-qty-wrap">
-                                <button type="button" class="pd-qty-btn" onclick="changeQty(-1)" ${product.outOfStock ? 'disabled' : ''}>−</button>
-                                <input type="number" name="qty" id="qtyInput" value="1" min="1"
-                                       max="${product.stock > 0 ? product.stock : 1}"
-                                       class="pd-qty-val" ${product.outOfStock ? 'disabled' : ''}/>
-                                <button type="button" class="pd-qty-btn" onclick="changeQty(1)" ${product.outOfStock ? 'disabled' : ''}>+</button>
-                            </div>
+
+                    <!-- Qty stepper — standalone, synced to hidden input via JS -->
+                    <div class="pd-qty-row">
+                        <label class="pd-qty-label">Quantity</label>
+                        <div class="pd-qty-wrap">
+                            <button type="button" class="pd-qty-btn" onclick="changeQty(-1)" ${product.outOfStock ? 'disabled' : ''}>−</button>
+                            <input type="number" id="qtyInput" value="1" min="1"
+                                   max="${product.stock > 0 ? product.stock : 1}"
+                                   class="pd-qty-val" ${product.outOfStock ? 'disabled' : ''}
+                                   oninput="syncQty()"/>
+                            <button type="button" class="pd-qty-btn" onclick="changeQty(1)" ${product.outOfStock ? 'disabled' : ''}">+</button>
                         </div>
+                    </div>
 
-                        <%-- pd-actions: Add to Cart + Wishlist side by side --%>
-                        <div class="pd-actions">
+                    <!--
+                        KEY FIX: The wishlist form is now a SIBLING of the cart form,
+                        NOT nested inside it. display:contents on each form makes both
+                        buttons sit naturally inside the flex .pd-actions container.
+                    -->
+                    <div class="pd-actions">
 
-                            <%-- Add to Cart button (submits the parent form) --%>
-                            <button type="submit" class="pd-btn-cart" ${product.outOfStock ? 'disabled' : ''}>
+                        <!-- Cart form -->
+                        <form action="${pageContext.request.contextPath}/cart/add"
+                              method="post" style="display:contents;">
+                            <input type="hidden" name="productId" value="${product.productId}"/>
+                            <input type="hidden" name="qty" id="qtyHidden" value="1"/>
+                            <button type="submit" class="pd-btn-cart"
+                                    ${product.outOfStock ? 'disabled' : ''}
+                                    onclick="syncQty()">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -502,29 +400,29 @@
                                     <c:otherwise>Add to Cart</c:otherwise>
                                 </c:choose>
                             </button>
+                        </form>
 
-                            <%-- Wishlist button — display:contents makes the <form> invisible
-                                 to flex so the button sits directly alongside Add to Cart --%>
-                            <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
-                                  method="post" style="display:contents">
-                                <input type="hidden" name="productId" value="${product.productId}"/>
-                                <button type="submit" class="pd-btn-wishlist"
-                                        title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
-                                        style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
-                                    <svg width="20" height="20" viewBox="0 0 24 24"
-                                         fill="${isWishlisted ? '#e8536a' : 'none'}"
-                                         stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
-                                         stroke-width="1.8">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                    </svg>
-                                </button>
-                            </form>
+                        <!-- Wishlist form — completely separate from cart form -->
+                        <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+                              method="post" style="display:contents;">
+                            <input type="hidden" name="productId" value="${product.productId}"/>
+                            <button type="submit" class="pd-btn-wishlist"
+                                    title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
+                                    style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
+                                <svg width="20" height="20" viewBox="0 0 24 24"
+                                     fill="${isWishlisted ? '#e8536a' : 'none'}"
+                                     stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+                                     stroke-width="1.8">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                        </form>
 
-                        </div><%-- /pd-actions --%>
-                    </form>
+                    </div><%-- /pd-actions --%>
+
                 </c:when>
                 <c:otherwise>
-                    <%-- Not logged in: show login prompt --%>
+                    <!-- Not logged in -->
                     <div style="margin-bottom:20px;">
                         <a href="${pageContext.request.contextPath}/login"
                            style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#1a1a1a;color:#fff;border:none;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .2s;"
@@ -620,7 +518,6 @@
         <!-- Reviews Tab -->
         <div id="tab-reviews" class="pd-tab-pane">
 
-            <%-- Rating summary (only shown when reviews exist) --%>
             <c:if test="${reviewCount > 0}">
                 <div class="rv-summary">
                     <div class="rv-big-score">
@@ -649,7 +546,6 @@
                 </div>
             </c:if>
 
-            <%-- Write a review section --%>
             <c:choose>
                 <c:when test="${empty currentUser}">
                     <div class="rv-login-nudge">
@@ -665,11 +561,9 @@
                 <c:otherwise>
                     <div class="rv-form-card">
                         <div class="rv-form-title">Write a Review</div>
-
                         <form action="${pageContext.request.contextPath}/review/add" method="post" id="reviewForm">
                             <input type="hidden" name="productId" value="${product.productId}"/>
                             <input type="hidden" name="rating" id="ratingInput" value="0"/>
-
                             <div class="rv-star-picker" id="starPicker">
                                 <c:forEach begin="1" end="5" var="s">
                                     <button type="button" class="rv-star-btn" data-val="${s}"
@@ -677,13 +571,10 @@
                                 </c:forEach>
                             </div>
                             <div class="rv-star-hint" id="starHint">Click to rate this product</div>
-
                             <input type="text" name="title" class="rv-inp"
                                    placeholder="Review title (optional)" maxlength="120"/>
-
                             <textarea name="body" class="rv-inp"
                                       placeholder="Share your experience with this product..." required></textarea>
-
                             <button type="submit" class="rv-submit-btn"
                                     onclick="return validateReview()">Post Review</button>
                         </form>
@@ -691,7 +582,6 @@
                 </c:otherwise>
             </c:choose>
 
-            <%-- Review list --%>
             <c:choose>
                 <c:when test="${empty reviews}">
                     <div class="rv-empty">
@@ -772,9 +662,7 @@
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════════════
-     FOOTER — matches all other pages
-     ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ FOOTER ═══ -->
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-grid">
@@ -821,11 +709,15 @@
     </div>
 </footer>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SCRIPTS
-     ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ SCRIPTS ═══ -->
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <script>
+/* ── Sync visible qty input to the hidden form field ── */
+function syncQty() {
+    var val = document.getElementById('qtyInput').value;
+    document.getElementById('qtyHidden').value = val;
+}
+
 /* ── Qty stepper ── */
 function changeQty(delta) {
     var input = document.getElementById('qtyInput');
@@ -833,6 +725,7 @@ function changeQty(delta) {
     var val = parseInt(input.value) || 1;
     var max = parseInt(input.max) || 999;
     input.value = Math.max(1, Math.min(max, val + delta));
+    syncQty();
 }
 
 /* ── Tab switcher ── */
@@ -858,15 +751,12 @@ function setRating(val) {
     currentRating = val;
     document.getElementById('ratingInput').value = val;
     document.getElementById('starHint').textContent = starLabels[val] || '';
-
-    var btns = document.querySelectorAll('.rv-star-btn');
-    btns.forEach(function(btn) {
+    document.querySelectorAll('.rv-star-btn').forEach(function(btn) {
         var v = parseInt(btn.getAttribute('data-val'));
         btn.classList.toggle('selected', v <= val);
     });
 }
 
-/* Hover preview */
 document.querySelectorAll('.rv-star-btn').forEach(function(btn) {
     btn.addEventListener('mouseenter', function() {
         var hoverVal = parseInt(btn.getAttribute('data-val'));

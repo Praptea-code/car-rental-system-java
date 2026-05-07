@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
     String contextPath = request.getContextPath();
     String currentUri = request.getRequestURI();
@@ -17,6 +18,7 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        /* ── Message preview cards ── */
         .msg-preview-list { display:flex; flex-direction:column; }
         .msg-preview-card {
             display:flex; align-items:flex-start; gap:14px;
@@ -38,7 +40,48 @@
         .mpc-date { font-size:11px; color:var(--a-muted); flex-shrink:0; }
         .mpc-subj { font-size:12px; color:var(--a-pink); font-weight:500; margin-bottom:3px; }
         .mpc-excerpt { font-size:12px; color:#555; line-height:1.5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        /* modal */
+
+        /* ── Two-column dashboard grid ── */
+        .dashboard-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        @media (max-width: 900px) {
+            .dashboard-two-col { grid-template-columns: 1fr; }
+        }
+
+        /* ── Order row in dashboard ── */
+        .dash-order-row {
+            display: flex;
+            align-items: center;
+            padding: 14px 22px;
+            border-bottom: 1px solid #f8f0f0;
+            gap: 14px;
+            transition: background .15s;
+        }
+        .dash-order-row:last-child { border-bottom: none; }
+        .dash-order-row:hover { background: #fff8f8; }
+        .dash-order-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--a-muted);
+            min-width: 80px;
+        }
+        .dash-order-customer { flex: 1; min-width: 0; }
+        .dash-order-name { font-size: 13px; font-weight: 600; color: var(--a-text); }
+        .dash-order-phone { font-size: 11px; color: var(--a-muted); }
+        .dash-order-amount {
+            font-size: 13px; font-weight: 700;
+            color: var(--a-text); min-width: 90px; text-align: right;
+        }
+        .dash-order-date {
+            font-size: 11px; color: var(--a-muted);
+            min-width: 80px; text-align: right;
+        }
+
+        /* ── Message modal ── */
         .msg-modal-overlay {
             position:fixed; inset:0; background:rgba(20,4,8,.6);
             backdrop-filter:blur(6px); z-index:300;
@@ -69,6 +112,7 @@
 <body class="admin-body">
 <div class="admin-layout">
 
+    <!-- ═══ SIDEBAR ═══ -->
     <aside class="admin-sidebar">
         <div class="admin-sidebar-top">
             <span class="admin-logo">SΡRA<span>.</span></span>
@@ -108,6 +152,7 @@
         </div>
     </aside>
 
+    <!-- ═══ MAIN ═══ -->
     <main class="admin-main">
         <div class="admin-topbar">
             <div>
@@ -115,8 +160,10 @@
                 <div class="admin-page-subtitle">Welcome back, <%= currentUser != null ? currentUser.getFirstName() : "Admin" %>. Here's what's happening.</div>
             </div>
         </div>
+
         <div class="admin-content">
 
+            <!-- Flash messages -->
             <c:if test="${not empty sessionScope.successMessage}">
                 <div class="alert alert-success">✓ ${sessionScope.successMessage}</div>
                 <c:remove var="successMessage" scope="session"/>
@@ -126,63 +173,108 @@
                 <c:remove var="errorMessage" scope="session"/>
             </c:if>
 
+            <!-- ── Stat cards ── -->
             <div class="admin-stats-grid">
                 <div class="admin-stat-card">
-                    <div class="admin-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></div>
+                    <div class="admin-stat-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                    </div>
                     <div class="admin-stat-label">Total Products</div>
                     <div class="admin-stat-num">${totalProducts}</div>
                 </div>
                 <div class="admin-stat-card">
-                    <div class="admin-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
+                    <div class="admin-stat-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+                    </div>
                     <div class="admin-stat-label">Total Orders</div>
                     <div class="admin-stat-num">${totalOrders != null ? totalOrders : 0}</div>
                 </div>
                 <div class="admin-stat-card">
-                    <div class="admin-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+                    <div class="admin-stat-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    </div>
                     <div class="admin-stat-label">Categories</div>
                     <div class="admin-stat-num">${totalCategories}</div>
                 </div>
                 <div class="admin-stat-card">
-                    <div class="admin-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                    <div class="admin-stat-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
                     <div class="admin-stat-label">Messages</div>
                     <div class="admin-stat-num">${recentMessages.size()}</div>
                 </div>
             </div>
 
-            <!-- Recent messages — card style, clickable to read full -->
-            <div class="admin-section">
-                <div class="admin-section-head">
-                    <span class="admin-section-title">Recent Messages</span>
-                    <a href="<%= contextPath %>/admin/messages" class="admin-view-all">View All →</a>
-                </div>
-                <c:choose>
-                    <c:when test="${empty recentMessages}">
-                        <div class="admin-empty">No messages yet.</div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="msg-preview-list">
-                            <c:forEach var="msg" items="${recentMessages}" begin="0" end="4">
-                                <div class="msg-preview-card"
-                                     onclick="openMsg('${msg.fullName}','${msg.email}','${msg.subject}',`${msg.message}`,'${msg.createdAt}')">
-                                    <div class="mpc-avatar">
-                                        ${fn:toUpperCase(fn:substring(msg.firstName,0,1))}${fn:toUpperCase(fn:substring(msg.lastName,0,1))}
+            <!-- ── Two-column section: Orders + Messages ── -->
+            <div class="dashboard-two-col">
+
+                <!-- Recent Orders -->
+                <div class="admin-section">
+                    <div class="admin-section-head">
+                        <span class="admin-section-title">Recent Orders</span>
+                        <a href="<%= contextPath %>/admin/orders" class="admin-view-all">View All →</a>
+                    </div>
+                    <c:choose>
+                        <c:when test="${empty recentOrders}">
+                            <div class="admin-empty">No orders yet.</div>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="order" items="${recentOrders}" begin="0" end="4">
+                                <div class="dash-order-row">
+                                    <div class="dash-order-id">#SPR-${order.orderId}</div>
+                                    <div class="dash-order-customer">
+                                        <div class="dash-order-name">${order.fullName}</div>
+                                        <div class="dash-order-phone">${order.city}</div>
                                     </div>
-                                    <div class="mpc-body">
-                                        <div class="mpc-top">
-                                            <span class="mpc-name">${msg.fullName}</span>
-                                            <span class="mpc-date">${msg.createdAt}</span>
-                                        </div>
-                                        <div class="mpc-subj">${msg.subject}</div>
-                                        <div class="mpc-excerpt">${msg.message}</div>
+                                    <span class="badge status-${order.status}">${order.status}</span>
+                                    <div class="dash-order-amount">
+                                        Rs <fmt:formatNumber value="${order.totalAmount}" pattern="#,##0.00"/>
+                                    </div>
+                                    <div class="dash-order-date">
+                                        <fmt:formatDate value="${order.createdAt}" pattern="MMM dd"/>
                                     </div>
                                 </div>
                             </c:forEach>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
 
-        </div>
+                <!-- Recent Messages -->
+                <div class="admin-section">
+                    <div class="admin-section-head">
+                        <span class="admin-section-title">Recent Messages</span>
+                        <a href="<%= contextPath %>/admin/messages" class="admin-view-all">View All →</a>
+                    </div>
+                    <c:choose>
+                        <c:when test="${empty recentMessages}">
+                            <div class="admin-empty">No messages yet.</div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="msg-preview-list">
+                                <c:forEach var="msg" items="${recentMessages}" begin="0" end="4">
+                                    <div class="msg-preview-card"
+                                         onclick="openMsg('${msg.fullName}','${msg.email}','${msg.subject}',`${msg.message}`,'${msg.createdAt}')">
+                                        <div class="mpc-avatar">
+                                            ${fn:toUpperCase(fn:substring(msg.firstName,0,1))}${fn:toUpperCase(fn:substring(msg.lastName,0,1))}
+                                        </div>
+                                        <div class="mpc-body">
+                                            <div class="mpc-top">
+                                                <span class="mpc-name">${msg.fullName}</span>
+                                                <span class="mpc-date">${msg.createdAt}</span>
+                                            </div>
+                                            <div class="mpc-subj">${msg.subject}</div>
+                                            <div class="mpc-excerpt">${msg.message}</div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+            </div><%-- /dashboard-two-col --%>
+
+        </div><%-- /admin-content --%>
     </main>
 </div>
 

@@ -82,6 +82,8 @@ public class AdminController extends HttpServlet {
         req.setAttribute("totalCategories", categoryDAO.getAllCategories().size());
         req.setAttribute("recentMessages", contactDAO.getAllMessages());
         req.setAttribute("totalOrders", allOrders.size());
+        // Pass the full list — dashboard JSP slices to first 5 with begin="0" end="4"
+        req.setAttribute("recentOrders", allOrders);
         req.getRequestDispatcher("/WEB-INF/pages/admin/dashboard.jsp").forward((ServletRequest) req, (ServletResponse) res);
     }
 

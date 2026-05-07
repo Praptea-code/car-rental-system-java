@@ -24,6 +24,52 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <link rel="stylesheet" href="<%= contextPath %>/css/products.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── Card button row ── */
+        .pp-card-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 11px 10px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            cursor: pointer;
+            transition: background .25s;
+        }
+        .add-to-cart-btn:hover:not(:disabled) { background: #e8536a; }
+        .add-to-cart-btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+
+        .buy-now-btn {
+            flex: 1;
+            padding: 11px 10px;
+            background: #e8536a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            cursor: pointer;
+            transition: opacity .2s, transform .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .buy-now-btn:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+        .buy-now-btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+    </style>
 </head>
 <body>
 
@@ -72,13 +118,7 @@
     </div>
 </nav>
 
-<%--
-    Build base URLs that carry all currently-active filters forward.
-    Each sidebar link only swaps its own dimension and keeps the others.
---%>
 <c:set var="cp" value="${pageContext.request.contextPath}"/>
-
-<%-- Active filter indicator shown in header --%>
 <c:set var="hasFilter" value="${not empty categoryId or not empty priceRange or not empty keyword}"/>
 
 <div class="products-page">
@@ -93,7 +133,6 @@
     <!-- Search + sort bar -->
     <div class="pp-search-row">
         <form action="<%= contextPath %>/products" method="get" class="pp-search-form">
-            <%-- Keep category when searching --%>
             <c:if test="${not empty categoryId}">
                 <input type="hidden" name="category" value="${categoryId}"/>
             </c:if>
@@ -103,7 +142,6 @@
             <button type="submit" class="pp-search-btn">Search</button>
         </form>
 
-        <%-- Sort dropdown — submits via GET, keeping all current params --%>
         <form action="<%= contextPath %>/products" method="get" id="sortForm" style="display:inline">
             <c:if test="${not empty categoryId}"><input type="hidden" name="category"  value="${categoryId}"/></c:if>
             <c:if test="${not empty priceRange}"> <input type="hidden" name="price"     value="${priceRange}"/></c:if>
@@ -117,7 +155,7 @@
         </form>
     </div>
 
-    <%-- Active filter chips --%>
+    <!-- Active filter chips -->
     <c:if test="${hasFilter}">
         <div class="pp-chips">
             <c:if test="${not empty keyword}">
@@ -155,16 +193,12 @@
 
         <!-- ── SIDEBAR ── -->
         <aside class="pp-sidebar">
-
-            <!-- Categories -->
             <h3 class="pp-sidebar-title">Categories</h3>
             <ul class="pp-cat-list">
-                <%-- "All" clears the category but keeps price + sort --%>
                 <li class="pp-cat-item ${empty categoryId ? 'active' : ''}">
                     <a href="${cp}/products<c:if test='${not empty priceRange}'>?price=${priceRange}</c:if><c:if test='${not empty sortBy}'>${not empty priceRange ? '&amp;' : '?'}sort=${sortBy}</c:if>">All</a>
                 </li>
                 <c:forEach var="cat" items="${categories}">
-                    <%-- Each category link keeps the current price filter + sort --%>
                     <c:set var="catActive" value="${categoryId == cat.categoryId}"/>
                     <li class="pp-cat-item ${catActive ? 'active' : ''}">
                         <a href="${cp}/products?category=${cat.categoryId}<c:if test='${not empty priceRange}'>&amp;price=${priceRange}</c:if><c:if test='${not empty sortBy}'>&amp;sort=${sortBy}</c:if>">${cat.name}</a>
@@ -172,10 +206,8 @@
                 </c:forEach>
             </ul>
 
-            <!-- Price Range -->
             <h3 class="pp-sidebar-title">Price Range</h3>
             <ul class="pp-price-list">
-                <%-- "All Prices" clears price but keeps category + sort --%>
                 <li class="pp-price-item ${empty priceRange ? 'active' : ''}">
                     <a href="${cp}/products<c:if test='${not empty categoryId}'>?category=${categoryId}</c:if><c:if test='${not empty sortBy}'>${not empty categoryId ? '&amp;' : '?'}sort=${sortBy}</c:if>">All Prices</a>
                 </li>
@@ -192,7 +224,6 @@
                     <a href="${cp}/products?price=over6000<c:if test='${not empty categoryId}'>&amp;category=${categoryId}</c:if><c:if test='${not empty sortBy}'>&amp;sort=${sortBy}</c:if>">Over Rs 6,000</a>
                 </li>
             </ul>
-
         </aside>
 
         <!-- ── MAIN GRID ── -->
@@ -220,14 +251,15 @@
                     </c:when>
                     <c:otherwise>
                         <c:forEach var="product" items="${products}">
-                            <a href="<%= contextPath %>/productDetail?id=${product.productId}"
-                               style="text-decoration:none;color:inherit;">
-                                <div class="pp-card" data-price="${product.price}" data-name="${product.name}">
+                            <div class="pp-card" data-price="${product.price}" data-name="${product.name}">
 
-                                    <c:if test="${product.discountPercent > 0}">
-                                        <span class="discount-badge">-${product.discountPercent}%</span>
-                                    </c:if>
+                                <c:if test="${product.discountPercent > 0}">
+                                    <span class="discount-badge">-${product.discountPercent}%</span>
+                                </c:if>
 
+                                <%-- Clickable image/name area goes to product detail --%>
+                                <a href="<%= contextPath %>/productDetail?id=${product.productId}"
+                                   style="text-decoration:none;color:inherit;display:block;">
                                     <div class="pp-img">
                                         <c:choose>
                                             <c:when test="${not empty product.imagePath}">
@@ -242,7 +274,6 @@
                                             <div class="out-of-stock-badge">Out of Stock</div>
                                         </c:if>
                                     </div>
-
                                     <div class="pp-card-body">
                                         <p class="product-cat">${product.categoryName}</p>
                                         <h3 class="product-name">${product.name}</h3>
@@ -252,7 +283,14 @@
                                                 <span class="product-price-old">Rs <fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
                                             </c:if>
                                         </div>
-                                        <form action="<%= contextPath %>/cart/add" method="post" style="margin-top:15px">
+                                    </div>
+                                </a>
+
+                                <%-- Buttons row: Add to Cart + Buy Now --%>
+                                <div style="padding: 0 16px 16px;">
+                                    <div class="pp-card-btns">
+                                        <%-- Add to Cart --%>
+                                        <form action="<%= contextPath %>/cart/add" method="post" style="flex:1;display:contents;">
                                             <input type="hidden" name="productId" value="${product.productId}">
                                             <input type="hidden" name="qty" value="1">
                                             <button type="submit" class="add-to-cart-btn"
@@ -264,9 +302,22 @@
                                                 </c:choose>
                                             </button>
                                         </form>
+
+                                        <%-- Buy Now — only shown when in stock --%>
+                                        <c:if test="${not product.outOfStock}">
+                                            <form action="<%= contextPath %>/buy-now" method="post" style="flex:1;display:contents;">
+                                                <input type="hidden" name="productId" value="${product.productId}">
+                                                <input type="hidden" name="qty" value="1">
+                                                <button type="submit" class="buy-now-btn"
+                                                        onclick="event.stopPropagation();">
+                                                    Buy Now
+                                                </button>
+                                            </form>
+                                        </c:if>
                                     </div>
                                 </div>
-                            </a>
+
+                            </div>
                         </c:forEach>
                     </c:otherwise>
                 </c:choose>

@@ -32,6 +32,7 @@
             --border: #e8d8da;
         }
 
+        /* ── Review styles ── */
         .rv-summary {
             display: flex;
             gap: 2.5rem;
@@ -108,7 +109,6 @@
             font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 5px;
         }
         .rv-card-body { font-size: 13.5px; color: var(--mid); line-height: 1.75; }
-
         .rv-empty { text-align: center; padding: 3rem 2rem; color: var(--muted); }
         .rv-empty-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: .3; }
         .rv-empty-title {
@@ -141,9 +141,26 @@
             display: flex; align-items: center; justify-content: center; line-height: 1;
         }
 
-        /* ── pd-actions flex fix ── */
-        .pd-actions { display: flex; gap: 12px; margin-bottom: 20px; align-items: stretch; }
-        .pd-actions form { display: contents; }
+        /* ── ACTION BUTTONS — the key layout ── */
+        .pd-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Row 1: Add to Cart + Wishlist side by side */
+        .pd-actions-row1 {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        /* Row 2: Buy Now full width */
+        .pd-actions-row2 {
+            display: flex;
+        }
+
         .pd-btn-cart {
             flex: 1;
             background: #1a1a1a; color: #fff; border: none;
@@ -152,15 +169,36 @@
             cursor: pointer; transition: background .2s;
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .pd-btn-cart:hover:not(:disabled) { background: #e8536a; }
+        .pd-btn-cart:hover:not(:disabled) { background: var(--pink); }
         .pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+
+        /* ── Wishlist button ── */
         .pd-btn-wishlist {
-            width: 48px; height: 48px; border: 1.5px solid #e8d8da;
+            width: 50px; height: 50px;
+            border: 1.5px solid var(--border);
             background: #fff; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: border-color .2s, background .2s; color: #aaa; flex-shrink: 0;
+            cursor: pointer; transition: border-color .2s, background .2s, color .2s;
+            color: #aaa; flex-shrink: 0;
         }
-        .pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
+        .pd-btn-wishlist:hover { border-color: var(--pink); background: var(--pink-light); color: var(--pink); }
+        .pd-btn-wishlist.wishlisted {
+            border-color: var(--pink); background: var(--pink-light); color: var(--pink);
+        }
+        .pd-btn-wishlist.wishlisted svg { fill: var(--pink); stroke: var(--pink); }
+
+        /* ── Buy Now button ── */
+        .pd-btn-buy-now {
+            flex: 1; width: 100%;
+            background: var(--pink); color: #fff; border: none;
+            padding: 14px 20px; border-radius: 10px;
+            font-size: 14px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: opacity .2s, transform .15s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            letter-spacing: .04em;
+        }
+        .pd-btn-buy-now:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+        .pd-btn-buy-now:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -316,21 +354,15 @@
             <!-- Trust badges -->
             <div class="pd-trust-row">
                 <div class="pd-trust-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     <span>100% Authentic</span>
                 </div>
                 <div class="pd-trust-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <span>Fast Delivery</span>
                 </div>
                 <div class="pd-trust-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                    </svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                     <span>Easy Returns</span>
                 </div>
             </div>
@@ -358,11 +390,13 @@
 
             <div class="pd-divider"></div>
 
-            <!-- ── ADD TO CART + WISHLIST (FIXED) ── -->
+            <!-- ══════════════════════════════════════════
+                 ACTION BUTTONS — logged in user
+                 ══════════════════════════════════════════ -->
             <c:choose>
                 <c:when test="${not empty currentUser}">
 
-                    <!-- Qty stepper — standalone, synced to hidden input via JS -->
+                    <!-- Quantity stepper -->
                     <div class="pd-qty-row">
                         <label class="pd-qty-label">Quantity</label>
                         <div class="pd-qty-wrap">
@@ -375,60 +409,96 @@
                         </div>
                     </div>
 
-                    <!--
-                        KEY FIX: The wishlist form is now a SIBLING of the cart form,
-                        NOT nested inside it. display:contents on each form makes both
-                        buttons sit naturally inside the flex .pd-actions container.
-                    -->
+                    <%--
+                        THREE separate forms, laid out with a wrapper div.
+                        Row 1: [Add to Cart] [♡ Wishlist]
+                        Row 2: [Buy Now — full width]
+                        Using display:contents on each <form> so flex layout
+                        flows through them without extra boxes.
+                    --%>
                     <div class="pd-actions">
 
-                        <!-- Cart form -->
-                        <form action="${pageContext.request.contextPath}/cart/add"
-                              method="post" style="display:contents;">
-                            <input type="hidden" name="productId" value="${product.productId}"/>
-                            <input type="hidden" name="qty" id="qtyHidden" value="1"/>
-                            <button type="submit" class="pd-btn-cart"
-                                    ${product.outOfStock ? 'disabled' : ''}
-                                    onclick="syncQty()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                                    <line x1="3" y1="6" x2="21" y2="6"/>
-                                    <path d="M16 10a4 4 0 0 1-8 0"/>
-                                </svg>
-                                <c:choose>
-                                    <c:when test="${product.outOfStock}">Unavailable</c:when>
-                                    <c:otherwise>Add to Cart</c:otherwise>
-                                </c:choose>
-                            </button>
-                        </form>
+                        <!-- Row 1 -->
+                        <div class="pd-actions-row1">
 
-                        <!-- Wishlist form — completely separate from cart form -->
-                        <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
-                              method="post" style="display:contents;">
-                            <input type="hidden" name="productId" value="${product.productId}"/>
-                            <button type="submit" class="pd-btn-wishlist"
-                                    title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
-                                    style="${isWishlisted ? 'border-color:#e8536a;background:#fdf0f2;color:#e8536a;' : ''}">
-                                <svg width="20" height="20" viewBox="0 0 24 24"
-                                     fill="${isWishlisted ? '#e8536a' : 'none'}"
-                                     stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
-                                     stroke-width="1.8">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                </svg>
-                            </button>
-                        </form>
+                            <%-- Add to Cart --%>
+                            <form action="${pageContext.request.contextPath}/cart/add"
+                                  method="post" style="display:contents;">
+                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                <input type="hidden" name="qty" id="qtyHidden" value="1"/>
+                                <button type="submit" class="pd-btn-cart"
+                                        ${product.outOfStock ? 'disabled' : ''}
+                                        onclick="syncQty()">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                        <line x1="3" y1="6" x2="21" y2="6"/>
+                                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                                    </svg>
+                                    <c:choose>
+                                        <c:when test="${product.outOfStock}">Unavailable</c:when>
+                                        <c:otherwise>Add to Cart</c:otherwise>
+                                    </c:choose>
+                                </button>
+                            </form>
+
+                            <%-- Wishlist toggle — completely separate form --%>
+                            <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+                                  method="post" style="display:contents;">
+                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                <button type="submit"
+                                        class="pd-btn-wishlist ${isWishlisted ? 'wishlisted' : ''}"
+                                        title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}">
+                                    <svg width="20" height="20" viewBox="0 0 24 24"
+                                         fill="${isWishlisted ? '#e8536a' : 'none'}"
+                                         stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+                                         stroke-width="1.8">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                        </div><%-- /row1 --%>
+
+                        <!-- Row 2: Buy Now -->
+                        <c:if test="${not product.outOfStock}">
+                            <div class="pd-actions-row2">
+                                <form action="${pageContext.request.contextPath}/buy-now"
+                                      method="post" style="display:contents;">
+                                    <input type="hidden" name="productId" value="${product.productId}"/>
+                                    <input type="hidden" name="qty" id="qtyBuyNow" value="1"/>
+                                    <button type="submit" class="pd-btn-buy-now"
+                                            onclick="syncQty()">
+                                        ✦ Buy Now
+                                    </button>
+                                </form>
+                            </div>
+                        </c:if>
 
                     </div><%-- /pd-actions --%>
 
                 </c:when>
                 <c:otherwise>
-                    <!-- Not logged in -->
+                    <%-- Not logged in — show login prompt --%>
                     <div style="margin-bottom:20px;">
                         <a href="${pageContext.request.contextPath}/login"
-                           style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:#1a1a1a;color:#fff;border:none;padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:background .2s;"
+                           style="display:flex;align-items:center;justify-content:center;gap:8px;
+                                  width:100%;background:#1a1a1a;color:#fff;border:none;
+                                  padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;
+                                  font-family:'DM Sans',sans-serif;transition:background .2s;
+                                  text-decoration:none;margin-bottom:10px;"
                            onmouseover="this.style.background='#e8536a'"
                            onmouseout="this.style.background='#1a1a1a'">
                             Login to Add to Cart
+                        </a>
+                        <a href="${pageContext.request.contextPath}/login"
+                           style="display:flex;align-items:center;justify-content:center;gap:8px;
+                                  width:100%;background:#e8536a;color:#fff;border:none;
+                                  padding:14px 20px;border-radius:10px;font-size:14px;font-weight:700;
+                                  font-family:'DM Sans',sans-serif;transition:opacity .2s;
+                                  text-decoration:none;letter-spacing:.04em;"
+                           onmouseover="this.style.opacity='.88'"
+                           onmouseout="this.style.opacity='1'">
+                            ✦ Login to Buy Now
                         </a>
                         <p style="font-size:12px;color:#aaa;text-align:center;margin-top:8px;">
                             <a href="${pageContext.request.contextPath}/register" style="color:#e8536a;">Create an account</a> to start shopping
@@ -712,13 +782,15 @@
 <!-- ═══ SCRIPTS ═══ -->
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 <script>
-/* ── Sync visible qty input to the hidden form field ── */
+/* Sync visible qty to both cart and buy-now hidden fields */
 function syncQty() {
     var val = document.getElementById('qtyInput').value;
-    document.getElementById('qtyHidden').value = val;
+    var h = document.getElementById('qtyHidden');
+    var b = document.getElementById('qtyBuyNow');
+    if (h) h.value = val;
+    if (b) b.value = val;
 }
 
-/* ── Qty stepper ── */
 function changeQty(delta) {
     var input = document.getElementById('qtyInput');
     if (!input) return;
@@ -728,7 +800,6 @@ function changeQty(delta) {
     syncQty();
 }
 
-/* ── Tab switcher ── */
 function switchTab(event, tabId) {
     document.querySelectorAll('.pd-tab-btn').forEach(function(b){ b.classList.remove('active'); });
     document.querySelectorAll('.pd-tab-pane').forEach(function(p){ p.classList.remove('active'); });
@@ -737,13 +808,11 @@ function switchTab(event, tabId) {
     if (pane) pane.classList.add('active');
 }
 
-/* ── Auto-open reviews tab if redirected with #tab-reviews ── */
 if (window.location.hash === '#tab-reviews') {
     var btn = document.getElementById('reviewsTabBtn');
     if (btn) btn.click();
 }
 
-/* ── Star rating picker ── */
 var currentRating = 0;
 var starLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
@@ -783,7 +852,7 @@ function validateReview() {
     return true;
 }
 
-/* ── Image zoom ── */
+/* Image zoom on hover */
 (function() {
     var panel = document.getElementById('imagePanel');
     var img   = document.getElementById('mainProductImg');

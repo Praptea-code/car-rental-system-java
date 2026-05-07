@@ -141,64 +141,33 @@
             display: flex; align-items: center; justify-content: center; line-height: 1;
         }
 
-        /* ── ACTION BUTTONS — the key layout ── */
-        .pd-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        /* Row 1: Add to Cart + Wishlist side by side */
-        .pd-actions-row1 {
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        /* Row 2: Buy Now full width */
-        .pd-actions-row2 {
-            display: flex;
-        }
-
         .pd-btn-cart {
-            flex: 1;
-            background: #1a1a1a; color: #fff; border: none;
-            padding: 14px 20px; border-radius: 10px;
-            font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif;
-            cursor: pointer; transition: background .2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .pd-btn-cart:hover:not(:disabled) { background: var(--pink); }
-        .pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
-
-        /* ── Wishlist button ── */
-        .pd-btn-wishlist {
-            width: 50px; height: 50px;
-            border: 1.5px solid var(--border);
-            background: #fff; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: border-color .2s, background .2s, color .2s;
-            color: #aaa; flex-shrink: 0;
-        }
-        .pd-btn-wishlist:hover { border-color: var(--pink); background: var(--pink-light); color: var(--pink); }
-        .pd-btn-wishlist.wishlisted {
-            border-color: var(--pink); background: var(--pink-light); color: var(--pink);
-        }
-        .pd-btn-wishlist.wishlisted svg { fill: var(--pink); stroke: var(--pink); }
-
-        /* ── Buy Now button ── */
-        .pd-btn-buy-now {
-            flex: 1; width: 100%;
-            background: var(--pink); color: #fff; border: none;
-            padding: 14px 20px; border-radius: 10px;
-            font-size: 14px; font-weight: 700; font-family: 'DM Sans', sans-serif;
-            cursor: pointer; transition: opacity .2s, transform .15s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            letter-spacing: .04em;
-        }
-        .pd-btn-buy-now:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
-        .pd-btn-buy-now:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+		    flex: 1; background: #1a1a1a; color: #fff; border: none;
+		    padding: 14px 16px; border-radius: 10px; font-size: 14px;
+		    font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer;
+		    transition: background .2s; display: flex; align-items: center;
+		    justify-content: center; gap: 8px;
+		}
+		.pd-btn-cart:hover:not(:disabled) { background: #e8536a; }
+		.pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+		
+		.pd-btn-buy-now {
+		    flex: 1; background: #e8536a; color: #fff; border: none;
+		    padding: 14px 16px; border-radius: 10px; font-size: 14px;
+		    font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer;
+		    transition: opacity .2s; display: flex; align-items: center;
+		    justify-content: center; gap: 8px; letter-spacing: .04em;
+		}
+		.pd-btn-buy-now:hover { opacity: .88; }
+		
+		.pd-btn-wishlist {
+		    width: 50px; border: 1.5px solid #e8d8da; background: #fff;
+		    border-radius: 10px; display: flex; align-items: center;
+		    justify-content: center; cursor: pointer; transition: border-color .2s,
+		    background .2s; color: #aaa;
+		}
+		.pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
+		.pd-btn-wishlist.wishlisted { border-color: #e8536a; background: #fdf0f2; }
     </style>
 </head>
 <body>
@@ -332,7 +301,7 @@
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
                     <div class="rv-stars-row" style="justify-content:flex-start;">
                         <c:forEach begin="1" end="5" var="s">
-                            <span class="rv-star ${s <= avgRating ? 'filled' : ''}">&#9733;</span>
+                            <span class="rv-star <c:if test="${s <= avgRating}">filled</c:if>">&#9733;</span>
                         </c:forEach>
                     </div>
                     <span style="font-size:13px;color:var(--muted);">
@@ -345,7 +314,7 @@
             <!-- Price -->
             <div class="pd-price-row">
                 <span class="pd-price">Rs. <fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></span>
-                <c:if test="${product.oldPrice > 0 and product.oldPrice > product.price}">
+                <c:if test="${not empty product.oldPrice and product.oldPrice > 0 and product.oldPrice > product.price}">
                     <span class="pd-price-old">Rs. <fmt:formatNumber value="${product.oldPrice}" pattern="#,##0.00"/></span>
                     <span class="pd-price-save">Save ${product.discountPercent}%</span>
                 </c:if>
@@ -400,12 +369,12 @@
                     <div class="pd-qty-row">
                         <label class="pd-qty-label">Quantity</label>
                         <div class="pd-qty-wrap">
-                            <button type="button" class="pd-qty-btn" onclick="changeQty(-1)" ${product.outOfStock ? 'disabled' : ''}>−</button>
+                            <button type="button" class="pd-qty-btn" onclick="changeQty(-1)" <c:if test="${product.outOfStock}">disabled</c:if>>−</button>
                             <input type="number" id="qtyInput" value="1" min="1"
                                    max="${product.stock > 0 ? product.stock : 1}"
-                                   class="pd-qty-val" ${product.outOfStock ? 'disabled' : ''}
+                                   class="pd-qty-val" <c:if test="${product.outOfStock}">disabled</c:if>
                                    oninput="syncQty()"/>
-                            <button type="button" class="pd-qty-btn" onclick="changeQty(1)" ${product.outOfStock ? 'disabled' : ''}">+</button>
+                            <button type="button" class="pd-qty-btn" onclick="changeQty(1)" <c:if test="${product.outOfStock}">disabled</c:if>">+</button>
                         </div>
                     </div>
 
@@ -416,66 +385,58 @@
                         Using display:contents on each <form> so flex layout
                         flows through them without extra boxes.
                     --%>
-                    <div class="pd-actions">
+                    
+                    <div class="pd-actions" style="display:flex; gap:10px; align-items:stretch; margin-bottom:20px;">
 
-                        <!-- Row 1 -->
-                        <div class="pd-actions-row1">
-
-                            <%-- Add to Cart --%>
-                            <form action="${pageContext.request.contextPath}/cart/add"
-                                  method="post" style="display:contents;">
-                                <input type="hidden" name="productId" value="${product.productId}"/>
-                                <input type="hidden" name="qty" id="qtyHidden" value="1"/>
-                                <button type="submit" class="pd-btn-cart"
-                                        ${product.outOfStock ? 'disabled' : ''}
-                                        onclick="syncQty()">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                                        <line x1="3" y1="6" x2="21" y2="6"/>
-                                        <path d="M16 10a4 4 0 0 1-8 0"/>
-                                    </svg>
-                                    <c:choose>
-                                        <c:when test="${product.outOfStock}">Unavailable</c:when>
-                                        <c:otherwise>Add to Cart</c:otherwise>
-                                    </c:choose>
-                                </button>
-                            </form>
-
-                            <%-- Wishlist toggle — completely separate form --%>
-                            <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
-                                  method="post" style="display:contents;">
-                                <input type="hidden" name="productId" value="${product.productId}"/>
-                                <button type="submit"
-                                        class="pd-btn-wishlist ${isWishlisted ? 'wishlisted' : ''}"
-                                        title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}">
-                                    <svg width="20" height="20" viewBox="0 0 24 24"
-                                         fill="${isWishlisted ? '#e8536a' : 'none'}"
-                                         stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
-                                         stroke-width="1.8">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                                    </svg>
-                                </button>
-                            </form>
-
-                        </div><%-- /row1 --%>
-
-                        <!-- Row 2: Buy Now -->
-                        <c:if test="${not product.outOfStock}">
-                            <div class="pd-actions-row2">
-                                <form action="${pageContext.request.contextPath}/buy-now"
-                                      method="post" style="display:contents;">
-                                    <input type="hidden" name="productId" value="${product.productId}"/>
-                                    <input type="hidden" name="qty" id="qtyBuyNow" value="1"/>
-                                    <button type="submit" class="pd-btn-buy-now"
-                                            onclick="syncQty()">
-                                        ✦ Buy Now
-                                    </button>
-                                </form>
-                            </div>
-                        </c:if>
-
-                    </div><%-- /pd-actions --%>
-
+					    <%-- Add to Cart --%>
+					    <form action="${pageContext.request.contextPath}/cart/add" method="post" style="flex:1;">
+					        <input type="hidden" name="productId" value="${product.productId}"/>
+					        <input type="hidden" name="qty" id="qtyHidden" value="1"/>
+					        <button type="submit" class="pd-btn-cart" style="width:100%;"
+					                <c:if test="${product.outOfStock}">disabled</c:if>
+					                onclick="syncQty()">
+					            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+					                <line x1="3" y1="6" x2="21" y2="6"/>
+					                <path d="M16 10a4 4 0 0 1-8 0"/>
+					            </svg>
+					            <c:choose>
+					                <c:when test="${product.outOfStock}">Unavailable</c:when>
+					                <c:otherwise>Add to Cart</c:otherwise>
+					            </c:choose>
+					        </button>
+					    </form>
+					
+					    <%-- Buy Now --%>
+					    <c:if test="${not product.outOfStock}">
+					        <form action="${pageContext.request.contextPath}/buy-now" method="post" style="flex:1;">
+					            <input type="hidden" name="productId" value="${product.productId}"/>
+					            <input type="hidden" name="qty" id="qtyBuyNow" value="1"/>
+					            <button type="submit" class="pd-btn-buy-now" style="width:100%;" onclick="syncQty()">
+					                ✦ Buy Now
+					            </button>
+					        </form>
+					    </c:if>
+					
+					    <%-- Wishlist heart --%>
+					    <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+					          method="post" style="flex-shrink:0;">
+					        <input type="hidden" name="productId" value="${product.productId}"/>
+					        <button type="submit"
+					                class="pd-btn-wishlist ${isWishlisted ? 'wishlisted' : ''}"
+					                title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
+					                style="width:50px; height:100%;">
+					            <svg width="20" height="20" viewBox="0 0 24 24"
+					                 fill="${isWishlisted ? '#e8536a' : 'none'}"
+					                 stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+					                 stroke-width="1.8">
+					                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+					            </svg>
+					        </button>
+					    </form>
+					
+					</div>
+                    
                 </c:when>
                 <c:otherwise>
                     <%-- Not logged in — show login prompt --%>
@@ -594,7 +555,7 @@
                         <div class="rv-big-num"><fmt:formatNumber value="${avgRating}" pattern="#.#"/></div>
                         <div class="rv-stars-row">
                             <c:forEach begin="1" end="5" var="s">
-                                <span class="rv-star ${s <= avgRating ? 'filled' : ''}">&#9733;</span>
+                                <span class="rv-star <c:if test="${s <= avgRating}">filled</c:if>">&#9733;</span>
                             </c:forEach>
                         </div>
                         <div class="rv-total-lbl">${reviewCount} review<c:if test="${reviewCount != 1}">s</c:if></div>
@@ -681,7 +642,7 @@
                                 <c:if test="${not empty rv.title}">
                                     <div class="rv-card-title">${rv.title}</div>
                                 </c:if>
-                                <div class="rv-card-body">${rv.body}</div>
+                                <div class="rv-card-body"><c:out value="${rv.body}" /></div>
                             </div>
                         </c:forEach>
                     </div>
@@ -820,13 +781,13 @@ function setRating(val) {
     currentRating = val;
     document.getElementById('ratingInput').value = val;
     document.getElementById('starHint').textContent = starLabels[val] || '';
-    document.querySelectorAll('.rv-star-btn').forEach(function(btn) {
+    Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
         var v = parseInt(btn.getAttribute('data-val'));
         btn.classList.toggle('selected', v <= val);
     });
 }
 
-document.querySelectorAll('.rv-star-btn').forEach(function(btn) {
+Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
     btn.addEventListener('mouseenter', function() {
         var hoverVal = parseInt(btn.getAttribute('data-val'));
         document.querySelectorAll('.rv-star-btn').forEach(function(b) {

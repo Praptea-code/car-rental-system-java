@@ -15,6 +15,107 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <link rel="stylesheet" href="<%= contextPath %>/css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── Message cards layout ── */
+        .msg-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .msg-card-row {
+            display: grid;
+            grid-template-columns: 48px 200px 180px 140px 1fr 140px;
+            gap: 0;
+            align-items: stretch;
+            border-bottom: 1px solid #f8f0f0;
+            transition: background .15s;
+        }
+        .msg-card-row:last-child { border-bottom: none; }
+        .msg-card-row:hover { background: #fff8f8; }
+
+        .msg-cell {
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--a-text);
+        }
+        .msg-cell-id    { color: var(--a-muted); font-family: monospace; font-size: 11px; }
+        .msg-cell-name  { font-weight: 600; color: var(--a-text); }
+        .msg-cell-email { color: var(--a-muted); font-size: 12px; }
+        .msg-cell-subj  {}
+        .msg-cell-body  {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.55;
+            /* Allow full text to show on hover */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            align-items: unset;
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: color .15s;
+        }
+        .msg-cell-body:hover { color: var(--a-pink); white-space: normal; overflow: visible; }
+        .msg-cell-date  { color: var(--a-muted); font-size: 11px; }
+
+        /* expanded message modal */
+        .msg-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(20,4,8,.6);
+            backdrop-filter: blur(6px);
+            z-index: 300;
+            display: flex; align-items: center; justify-content: center;
+            animation: fadeIn .2s ease;
+        }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .msg-modal-box {
+            background: #fff;
+            border-radius: 18px;
+            width: 560px; max-width: 95vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 60px rgba(232,83,106,.14);
+            padding: 2rem 2.2rem;
+            position: relative;
+        }
+        .msg-modal-close {
+            position: absolute; top: 14px; right: 16px;
+            background: #fdf0f2; border: none; border-radius: 50%;
+            width: 32px; height: 32px; font-size: 18px;
+            color: #999; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, color .15s;
+        }
+        .msg-modal-close:hover { background: var(--a-pink); color: #fff; }
+        .msg-modal-from {
+            font-size: .62rem; font-weight: 700; letter-spacing: .14em;
+            text-transform: uppercase; color: var(--a-pink); margin-bottom: 4px;
+        }
+        .msg-modal-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--a-text); margin-bottom: 2px; }
+        .msg-modal-meta { font-size: 12px; color: var(--a-muted); margin-bottom: 1.2rem; }
+        .msg-modal-subj-label { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--a-muted); margin-bottom: 4px; }
+        .msg-modal-subj { font-size: 14px; font-weight: 600; color: var(--a-text); margin-bottom: 1rem; padding: 8px 12px; background: #fdf8f8; border: 1px solid #f0e0e0; border-radius: 8px; }
+        .msg-modal-body-label { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--a-muted); margin-bottom: 6px; }
+        .msg-modal-body { font-size: 14px; color: #333; line-height: 1.8; white-space: pre-wrap; }
+
+        /* table header */
+        .msg-head-row {
+            display: grid;
+            grid-template-columns: 48px 200px 180px 140px 1fr 140px;
+            gap: 0;
+            border-bottom: 1.5px solid var(--a-border);
+            background: var(--a-bg);
+        }
+        .msg-head-cell {
+            padding: 10px 18px;
+            font-size: 10px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .1em;
+            color: var(--a-muted);
+        }
+    </style>
 </head>
 <body class="admin-body">
 <div class="admin-layout">
@@ -70,46 +171,75 @@
         <div class="admin-topbar">
             <div>
                 <div class="admin-page-title">Contact Messages</div>
-                <div class="admin-page-subtitle">Messages submitted through the contact form</div>
+                <div class="admin-page-subtitle">Messages submitted through the contact form — click any message to read in full</div>
             </div>
         </div>
         <div class="admin-content">
             <div class="admin-section">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Subject</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:choose>
-                            <c:when test="${empty messages}">
-                                <tr><td colspan="6" class="admin-empty">No messages received yet.</td></tr>
-                            </c:when>
-                            <c:otherwise>
-                                <c:forEach var="msg" items="${messages}">
-                                    <tr>
-                                        <td style="font-family:monospace;font-size:11px;color:var(--a-muted)">#${msg.messageId}</td>
-                                        <td style="font-weight:500">${msg.fullName}</td>
-                                        <td style="color:var(--a-muted)">${msg.email}</td>
-                                        <td><span class="badge badge-info">${msg.subject}</span></td>
-                                        <td class="msg-preview">${msg.message}</td>
-                                        <td style="font-size:11px;color:var(--a-muted)">${msg.createdAt}</td>
-                                    </tr>
-                                </c:forEach>
-                            </c:otherwise>
-                        </c:choose>
-                    </tbody>
-                </table>
+                <c:choose>
+                    <c:when test="${empty messages}">
+                        <div class="admin-empty" style="padding:3rem;">No messages received yet.</div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="msg-cards-grid">
+                            <!-- Header -->
+                            <div class="msg-head-row">
+                                <div class="msg-head-cell">#</div>
+                                <div class="msg-head-cell">Name</div>
+                                <div class="msg-head-cell">Email</div>
+                                <div class="msg-head-cell">Subject</div>
+                                <div class="msg-head-cell">Message</div>
+                                <div class="msg-head-cell">Date</div>
+                            </div>
+                            <c:forEach var="msg" items="${messages}" varStatus="loop">
+                                <div class="msg-card-row">
+                                    <div class="msg-cell msg-cell-id">#${msg.messageId}</div>
+                                    <div class="msg-cell msg-cell-name">${msg.fullName}</div>
+                                    <div class="msg-cell msg-cell-email">${msg.email}</div>
+                                    <div class="msg-cell msg-cell-subj">
+                                        <span class="badge badge-info">${msg.subject}</span>
+                                    </div>
+                                    <div class="msg-cell-body" onclick="openMsg('${msg.fullName}','${msg.email}','${msg.subject}',`${msg.message}`,'${msg.createdAt}')" title="Click to read full message">
+                                        ${msg.message}
+                                    </div>
+                                    <div class="msg-cell msg-cell-date">${msg.createdAt}</div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </main>
 </div>
+
+<!-- Message detail modal -->
+<div id="msgModal" class="msg-modal-overlay" style="display:none" onclick="if(event.target===this)closeMsg()">
+    <div class="msg-modal-box">
+        <button class="msg-modal-close" onclick="closeMsg()">&times;</button>
+        <div class="msg-modal-from">Message from</div>
+        <div class="msg-modal-name" id="modalName"></div>
+        <div class="msg-modal-meta" id="modalMeta"></div>
+        <div class="msg-modal-subj-label">Subject</div>
+        <div class="msg-modal-subj" id="modalSubj"></div>
+        <div class="msg-modal-body-label">Message</div>
+        <div class="msg-modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+function openMsg(name, email, subj, body, date) {
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalMeta').textContent = email + ' · ' + date;
+    document.getElementById('modalSubj').textContent = subj;
+    document.getElementById('modalBody').textContent = body;
+    document.getElementById('msgModal').style.display = 'flex';
+}
+function closeMsg() {
+    document.getElementById('msgModal').style.display = 'none';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMsg(); });
+</script>
 <script src="<%= contextPath %>/js/main.js"></script>
 </body>
 </html>

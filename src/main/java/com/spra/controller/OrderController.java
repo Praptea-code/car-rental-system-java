@@ -1,6 +1,7 @@
 package com.spra.controller;
 
 import com.spra.dao.OrderDAO;
+import com.spra.model.CartItem;
 import com.spra.model.CartModel;
 import com.spra.model.OrderModel;
 import com.spra.model.UserModel;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/order/place", "/order/status"}, asyncSupported = true)
 public class OrderController extends HttpServlet {
@@ -57,6 +59,9 @@ public class OrderController extends HttpServlet {
             return;
         }
 
+        // Snapshot the cart items BEFORE clearing the cart
+        List<CartItem> itemsToSave = new java.util.ArrayList<>(cart.getItems());
+
         OrderModel order = new OrderModel();
         order.setUserId(user.getUserId());
         order.setFullName(fullName);
@@ -66,10 +71,18 @@ public class OrderController extends HttpServlet {
         order.setTotalAmount(cart.getGrandTotal());
 
         int orderId = orderDAO.placeOrder(order);
-        if (orderId > 0) {
-            // Save the individual cart items so we can decrement stock later
-            orderDAO.saveOrderItems(orderId, cart.getItems());
 
+        if (orderId > 0) {
+            // Save order items using the snapshot — cart is still intact here
+            boolean itemsSaved = orderDAO.saveOrderItems(orderId, itemsToSave);
+
+            if (!itemsSaved) {
+                // Log the failure — stock decrement won't work without items
+                System.err.println("[OrderController] WARNING: saveOrderItems failed for orderId=" + orderId
+                        + ". Stock decrement will not work when this order is shipped.");
+            }
+
+            // Now safe to clear the cart
             cart.clear();
             req.getSession().setAttribute("cart", cart);
             req.getSession().setAttribute("orderSuccess", true);
@@ -77,6 +90,7 @@ public class OrderController extends HttpServlet {
         } else {
             req.getSession().setAttribute("errorMessage", "Failed to place order. Please try again.");
         }
+
         res.sendRedirect(req.getContextPath() + "/cart");
     }
 
@@ -88,7 +102,6 @@ public class OrderController extends HttpServlet {
 
         try {
             int orderId = Integer.parseInt(idParam);
-            // updateStatus now handles stock decrement internally when SHIPPED
             boolean updated = orderDAO.updateStatus(orderId, status);
             req.getSession().setAttribute(
                 updated ? "successMessage" : "errorMessage",

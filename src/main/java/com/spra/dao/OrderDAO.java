@@ -63,8 +63,7 @@ public class OrderDAO {
 
     /**
      * Decrements stock for all products in the given order.
-     * Call this when status changes to SHIPPED.
-     * Uses MAX(0, stock - qty) to avoid going negative.
+     * Uses GREATEST(0, stock - qty) to avoid going negative.
      */
     public boolean decrementStockForOrder(int orderId) {
         String sql = "UPDATE products p " +
@@ -122,30 +121,60 @@ public class OrderDAO {
     }
 
     /**
-     * Updates the order status. If changing to SHIPPED, also decrements product stock.
+     * Updates the order status.
+     * Stock is decremented ONLY when transitioning TO 'SHIPPED' for the first time
+     * (i.e., the current status in the DB is NOT already 'SHIPPED').
+     * This prevents double-decrement if the admin saves 'SHIPPED' again.
      */
-    public boolean updateStatus(int orderId, String status) {
+    public boolean updateStatus(int orderId, String newStatus) {
+        // Step 1: Read current status to guard against double-decrement
+        String currentStatus = getCurrentStatus(orderId);
+
+        // Step 2: Update the status
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
         Connection conn = null;
+        boolean updated = false;
         try {
             conn = DbConfig.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, status);
+            ps.setString(1, newStatus);
             ps.setInt(2, orderId);
-            boolean updated = ps.executeUpdate() > 0;
-
-            // Decrement stock when order ships
-            if (updated && "SHIPPED".equalsIgnoreCase(status)) {
-                decrementStockForOrder(orderId);
-            }
-
-            return updated;
+            updated = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("[OrderDAO.updateStatus] " + e.getMessage());
             return false;
         } finally {
             DbConfig.closeConnection(conn);
         }
+
+        // Step 3: Decrement stock ONLY when transitioning into SHIPPED for the first time
+        if (updated
+                && "SHIPPED".equalsIgnoreCase(newStatus)
+                && !"SHIPPED".equalsIgnoreCase(currentStatus)) {
+            decrementStockForOrder(orderId);
+        }
+
+        return updated;
+    }
+
+    /**
+     * Returns the current status string for an order, or null if not found.
+     */
+    private String getCurrentStatus(int orderId) {
+        String sql = "SELECT status FROM orders WHERE order_id = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getString("status");
+        } catch (SQLException e) {
+            System.err.println("[OrderDAO.getCurrentStatus] " + e.getMessage());
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+        return null;
     }
 
     private OrderModel mapRow(ResultSet rs, boolean withUser) throws SQLException {

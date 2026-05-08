@@ -473,10 +473,18 @@
         <h2 class="spotlight-title">${bestseller.name}</h2>
         <p class="spotlight-desc">${bestseller.description}</p>
         <div class="spotlight-actions">
-            <button class="buy-btn">Buy Now</button>
-            <span class="buy-price">RS <fmt:formatNumber value="${bestseller.price}" pattern="#,##0.00"/></span>
-            <a href="#" class="follow-link">Follow Instagram</a>
-        </div>
+
+		    <a href="<%= contextPath %>/productDetail?id=${bestseller.productId}"
+		       class="buy-btn"
+		       style="display:inline-block;text-decoration:none;">
+		        Buy Now
+		    </a>
+		
+		    <span class="buy-price">
+		        Rs <fmt:formatNumber value="${bestseller.price}" pattern="#,##0.00"/>
+		    </span>
+		
+		</div>
     </div>
 </section>
 </c:if>	

@@ -375,7 +375,7 @@
     </div>
 
     <div class="hero-content">
-        <p class="hero-eyebrow">New Collection 2025</p>
+        <p class="hero-eyebrow">New Collection 2026</p>
         <h1 class="hero-title">Beauty that<br><em>Begins</em> with You</h1>
         <p class="hero-sub">Premium skincare designed to bring out your most luminous self.</p>
         <a href="<%= contextPath %>/products" class="hero-btn">Shop the Collection</a>

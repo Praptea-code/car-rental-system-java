@@ -191,12 +191,7 @@
 
 <script src="<%= contextPath %>/js/main.js"></script>
 <script>
-/* ============================================================
-   Field-level error routing
-   Maps server error messages → the correct field
-   ============================================================ */
 (function () {
-    /* Map: substring in the server message → field id */
     var errorRoutes = [
         { match: /first name/i,            field: 'firstName' },
         { match: /last name/i,             field: 'lastName' },
@@ -214,22 +209,29 @@
         { match: /password/i,              field: 'password' }
     ];
 
-    function showFieldError(fieldId, message) {
+    function showFieldError(fieldId, message, autoFocus) {
         var errDiv  = document.getElementById('err-' + fieldId);
         var errText = document.getElementById('err-' + fieldId + '-text');
         var input   = document.getElementById(fieldId);
         if (!errDiv || !errText) return;
         errText.textContent = message;
         errDiv.style.display = 'flex';
-        if (input) {
-            input.classList.add('input-error');
-            /* Scroll smoothly to the problematic field */
+        if (input) input.classList.add('input-error');
+        // Only scroll/focus when explicitly requested (server-side routing)
+        if (autoFocus && input) {
             input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            input.focus();
+            // Don't call input.focus() — it fights with the user's own clicks
         }
     }
 
-    /* Read server error injected by JSP */
+    function clearFieldError(fieldId) {
+        var errDiv = document.getElementById('err-' + fieldId);
+        var input  = document.getElementById(fieldId);
+        if (errDiv) errDiv.style.display = 'none';
+        if (input)  input.classList.remove('input-error');
+    }
+
+    // Read server error injected by JSP
     var serverErrEl = document.getElementById('serverErrorMsg');
     if (serverErrEl) {
         var msg = serverErrEl.textContent.trim();
@@ -237,12 +239,11 @@
             var routed = false;
             for (var i = 0; i < errorRoutes.length; i++) {
                 if (errorRoutes[i].match.test(msg)) {
-                    showFieldError(errorRoutes[i].field, msg);
+                    showFieldError(errorRoutes[i].field, msg, true); // autoFocus=true only here
                     routed = true;
                     break;
                 }
             }
-            /* Fallback: show as a small top banner only if we couldn't route it */
             if (!routed) {
                 var fallback = document.createElement('div');
                 fallback.className = 'alert alert-error';
@@ -253,96 +254,67 @@
         }
     }
 
-    /* ── Live client-side validation on blur ── */
+    // Live client-side validation on blur (no autoFocus)
     var form = document.getElementById('registerForm');
     if (!form) return;
 
-    function clearFieldError(fieldId) {
-        var errDiv = document.getElementById('err-' + fieldId);
-        var input  = document.getElementById(fieldId);
-        if (errDiv) errDiv.style.display = 'none';
-        if (input)  input.classList.remove('input-error');
-    }
-
-    /* First Name */
     document.getElementById('firstName').addEventListener('blur', function () {
         var v = this.value.trim();
-        if (!v || !/^[A-Za-z\s]+$/.test(v)) {
-            showFieldError('firstName', 'First name must contain only letters and spaces.');
-        } else { clearFieldError('firstName'); }
+        if (!v || !/^[A-Za-z\s]+$/.test(v)) showFieldError('firstName', 'First name must contain only letters and spaces.');
+        else clearFieldError('firstName');
     });
 
-    /* Last Name */
     document.getElementById('lastName').addEventListener('blur', function () {
         var v = this.value.trim();
-        if (!v || !/^[A-Za-z\s]+$/.test(v)) {
-            showFieldError('lastName', 'Last name must contain only letters and spaces.');
-        } else { clearFieldError('lastName'); }
+        if (!v || !/^[A-Za-z\s]+$/.test(v)) showFieldError('lastName', 'Last name must contain only letters and spaces.');
+        else clearFieldError('lastName');
     });
 
-    /* Username */
     document.getElementById('username').addEventListener('blur', function () {
         var v = this.value.trim();
-        if (!v || v.length <= 6 || !/^[A-Za-z0-9]+$/.test(v)) {
-            showFieldError('username', 'Username must be more than 6 characters, letters and digits only.');
-        } else { clearFieldError('username'); }
+        if (!v || v.length <= 6 || !/^[A-Za-z0-9]+$/.test(v)) showFieldError('username', 'Username must be more than 6 characters, letters and digits only.');
+        else clearFieldError('username');
     });
 
-    /* Email */
     document.getElementById('email').addEventListener('blur', function () {
         var v = this.value.trim();
-        if (!v || !/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(v)) {
-            showFieldError('email', 'Please enter a valid email address.');
-        } else { clearFieldError('email'); }
+        if (!v || !/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(v)) showFieldError('email', 'Please enter a valid email address.');
+        else clearFieldError('email');
     });
 
-    /* Phone */
     document.getElementById('phone').addEventListener('blur', function () {
         var v = this.value.trim();
-        if (!v || !v.startsWith('+') || v.length !== 14) {
-            showFieldError('phone', 'Phone must start with + and be exactly 14 characters.');
-        } else { clearFieldError('phone'); }
+        if (!v || !v.startsWith('+') || v.length !== 14) showFieldError('phone', 'Phone must start with + and be exactly 14 characters.');
+        else clearFieldError('phone');
     });
 
-    /* Birthdate */
     document.getElementById('birthdate').addEventListener('blur', function () {
         var v = this.value;
-        if (!v) {
-            showFieldError('birthdate', 'Please enter your date of birth.');
-        } else if (new Date(v) > new Date()) {
-            showFieldError('birthdate', 'Birthdate cannot be in the future.');
-        } else { clearFieldError('birthdate'); }
+        if (!v) showFieldError('birthdate', 'Please enter your date of birth.');
+        else if (new Date(v) > new Date()) showFieldError('birthdate', 'Birthdate cannot be in the future.');
+        else clearFieldError('birthdate');
     });
 
-    /* Password */
     document.getElementById('password').addEventListener('blur', function () {
         var v = this.value;
-        if (!v || v.length <= 6) {
-            showFieldError('password', 'Password must be more than 6 characters.');
-        } else if (!/[A-Z]/.test(v) || !/[0-9]/.test(v) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(v)) {
+        if (!v || v.length <= 6) showFieldError('password', 'Password must be more than 6 characters.');
+        else if (!/[A-Z]/.test(v) || !/[0-9]/.test(v) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(v))
             showFieldError('password', 'Password must include at least one uppercase letter, one number, and one special character.');
-        } else { clearFieldError('password'); }
+        else clearFieldError('password');
     });
 
-    /* Confirm Password */
     document.getElementById('retypePassword').addEventListener('blur', function () {
-        var pw  = document.getElementById('password').value;
-        var v   = this.value;
-        if (!v) {
-            showFieldError('retypePassword', 'Please confirm your password.');
-        } else if (v !== pw) {
-            showFieldError('retypePassword', 'Passwords do not match.');
-        } else { clearFieldError('retypePassword'); }
+        var pw = document.getElementById('password').value;
+        var v  = this.value;
+        if (!v) showFieldError('retypePassword', 'Please confirm your password.');
+        else if (v !== pw) showFieldError('retypePassword', 'Passwords do not match.');
+        else clearFieldError('retypePassword');
     });
 
-    /* Also recheck confirm on password change */
     document.getElementById('password').addEventListener('input', function () {
         var conf = document.getElementById('retypePassword');
-        if (conf.value && conf.value !== this.value) {
-            showFieldError('retypePassword', 'Passwords do not match.');
-        } else if (conf.value) {
-            clearFieldError('retypePassword');
-        }
+        if (conf.value && conf.value !== this.value) showFieldError('retypePassword', 'Passwords do not match.');
+        else if (conf.value) clearFieldError('retypePassword');
     });
 
 }());

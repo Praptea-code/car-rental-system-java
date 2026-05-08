@@ -141,7 +141,6 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <%-- View Details button triggers the popup --%>
                                             <button class="admin-edit-btn"
                                                 onclick="openOrderDetail(
                                                     ${order.orderId},
@@ -170,15 +169,15 @@
 
 <script>
 function filterOrders(status, btn) {
-    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-tab').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
-    document.querySelectorAll('#ordersTable tbody tr[data-status]').forEach(row => {
+    document.querySelectorAll('#ordersTable tbody tr[data-status]').forEach(function(row){
         row.style.display = (status === 'ALL' || row.dataset.status === status) ? '' : 'none';
     });
 }
 </script>
 
-<%-- ── ORDER DETAIL POPUP (shared snippet) ── --%>
+<!-- ── ORDER DETAIL POPUP ── -->
 <div id="orderDetailOverlay"
      style="display:none;position:fixed;inset:0;background:rgba(10,4,6,.72);
             backdrop-filter:blur(8px);z-index:9100;
@@ -222,10 +221,51 @@ function filterOrders(status, btn) {
     from { opacity:0; transform:translateY(30px) scale(.97); }
     to   { opacity:1; transform:translateY(0) scale(1); }
 }
+/* ── Quantity pill badge ── */
+.od-qty-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8536a;
+    color: #fff;
+    font-size: .62rem;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    padding: 0 6px;
+    margin-left: 6px;
+    letter-spacing: .02em;
+    flex-shrink: 0;
+}
 </style>
 
 <script>
 var _odCtx = '<%= contextPath %>';
+
+/**
+ * Merges order items that share the same productId,
+ * summing their quantities and subtotals.
+ * This handles edge-cases where the same product was added
+ * as separate DB rows (e.g. two separate "Add to Cart" clicks).
+ */
+function mergeOrderItems(items) {
+    var map = {};
+    var order = [];
+    items.forEach(function(it) {
+        var key = it.productId;
+        if (map[key] !== undefined) {
+            /* Already seen — accumulate */
+            order[map[key]].quantity += it.quantity;
+            order[map[key]].subtotal += it.subtotal;
+        } else {
+            map[key] = order.length;
+            /* Clone so we don't mutate the original */
+            order.push(Object.assign({}, it));
+        }
+    });
+    return order;
+}
 
 function openOrderDetail(orderId, fullName, phone, address, city, status, createdAt, total) {
     var ov = document.getElementById('orderDetailOverlay');
@@ -242,23 +282,47 @@ function openOrderDetail(orderId, fullName, phone, address, city, status, create
 
     fetch(_odCtx + '/order/items?orderId=' + orderId)
         .then(function(r){ return r.json(); })
-        .then(function(items){
+        .then(function(rawItems){
             odHide('odLoading');
-            if (!items || items.length === 0) { odShow('odEmpty'); return; }
+            if (!rawItems || rawItems.length === 0) { odShow('odEmpty'); return; }
+
+            /* ── Merge duplicate products ── */
+            var items = mergeOrderItems(rawItems);
+
             var html = '';
             items.forEach(function(it){
                 var src = it.imagePath ? _odCtx + '/assets/images/products/' + it.imagePath : null;
+
                 html += '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f8f0f0;">';
+
+                /* Thumbnail */
                 html += '<div style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:#f8f0f2;flex-shrink:0;display:flex;align-items:center;justify-content:center;">';
                 html += src ? '<img src="'+src+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\'<span style=font-size:1.6rem>💄</span>\'">'
                             : '<span style="font-size:1.6rem;">💄</span>';
                 html += '</div>';
+
+                /* Name + price × qty */
                 html += '<div style="flex:1;min-width:0;">';
                 html += '<div style="font-size:.58rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">'+odEsc(it.categoryName)+'</div>';
-                html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:600;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+odEsc(it.productName)+'</div>';
-                html += '<div style="font-size:.78rem;color:#888;margin-top:2px;">Rs '+parseFloat(it.price).toLocaleString('en-IN',{minimumFractionDigits:2})+' × '+it.quantity+'</div>';
+
+                /* Product name + quantity pill (only shown when qty > 1) */
+                html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">';
+                html += odEsc(it.productName);
+                if (it.quantity > 1) {
+                    html += '<span class="od-qty-pill">×' + it.quantity + '</span>';
+                }
                 html += '</div>';
-                html += '<div style="font-size:.95rem;font-weight:600;color:#1a1a1a;flex-shrink:0;">Rs '+parseFloat(it.subtotal).toLocaleString('en-IN',{minimumFractionDigits:2})+'</div>';
+
+                html += '<div style="font-size:.78rem;color:#888;margin-top:2px;">Rs '
+                      + parseFloat(it.price).toLocaleString('en-IN',{minimumFractionDigits:2})
+                      + ' each</div>';
+                html += '</div>';
+
+                /* Line subtotal */
+                html += '<div style="font-size:.95rem;font-weight:600;color:#1a1a1a;flex-shrink:0;">Rs '
+                      + parseFloat(it.subtotal).toLocaleString('en-IN',{minimumFractionDigits:2})
+                      + '</div>';
+
                 html += '</div>';
             });
             document.getElementById('odItems').innerHTML = '<div style="padding-bottom:.4rem;">'+html+'</div>';
@@ -273,9 +337,9 @@ function closeOrderDetail() {
 }
 
 function tile(label, value) {
-    return '<div style="background:#fdf8f8;border:1px solid #f0e0e0;border-radius:8px;padding:10px 14px;">' +
-           '<div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:3px;">'+label+'</div>' +
-           '<div style="font-size:.84rem;font-weight:500;color:#1a1a1a;">'+odEsc(value)+'</div></div>';
+    return '<div style="background:#fdf8f8;border:1px solid #f0e0e0;border-radius:8px;padding:10px 14px;">'
+         + '<div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:3px;">'+label+'</div>'
+         + '<div style="font-size:.84rem;font-weight:500;color:#1a1a1a;">'+odEsc(value)+'</div></div>';
 }
 function odEsc(s) {
     if (!s) return '—';

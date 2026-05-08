@@ -114,7 +114,6 @@
         .req-item.ok { color:#3B9B3F; }
         .btn-badge { background:rgba(255,255,255,.25); color:#fff; font-size:.58rem; padding:2px 7px; border-radius:10px; }
         .p-btn-outline .btn-badge { background:var(--pink); color:#fff; }
-        /* ── Orders tab ── */
         .orders-list { display:flex; flex-direction:column; gap:14px; }
         .order-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color .18s, box-shadow .18s; }
         .order-card-head { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; background:#fdf8f8; border-bottom:1px solid #f8f0f0; flex-wrap:wrap; gap:10px; }
@@ -132,7 +131,6 @@
         .order-total-row { display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid #f8f0f0; }
         .order-total-lbl { font-size:.78rem; color:var(--muted); }
         .order-total-amt { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--dark); }
-        /* ── Timeline ── */
         .order-timeline { display:flex; align-items:center; gap:0; margin-top:14px; padding-top:14px; border-top:1px solid #f8f0f0; }
         .tl-step { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
         .tl-step::after { content:''; position:absolute; top:12px; left:50%; width:100%; height:2px; background:#f0e0e0; z-index:0; }
@@ -143,19 +141,12 @@
         .tl-dot svg { color:#ccc; }
         .tl-label { font-size:.58rem; color:var(--muted); margin-top:6px; text-align:center; text-transform:uppercase; letter-spacing:.05em; }
         .tl-label.done { color:var(--pink); font-weight:600; }
-        /* ── View details button ── */
-        .view-items-btn {
-            display:inline-flex; align-items:center; gap:6px;
-            padding:8px 16px; background:#fff;
-            border:1.5px solid var(--border); border-radius:8px;
-            font-size:.75rem; font-weight:600; color:var(--mid);
-            cursor:pointer; transition:all .18s; font-family:'DM Sans',sans-serif;
-            margin-top:14px;
-        }
+        .view-items-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; background:#fff; border:1.5px solid var(--border); border-radius:8px; font-size:.75rem; font-weight:600; color:var(--mid); cursor:pointer; transition:all .18s; font-family:'DM Sans',sans-serif; margin-top:14px; }
         .view-items-btn:hover { border-color:var(--pink); color:var(--pink); background:var(--pink-light); }
-        /* cart badge */
         .cart-icon-btn { position:relative; }
         .cart-badge { position:absolute; top:-6px; right:-6px; background:var(--pink); color:#fff; font-size:10px; font-weight:600; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:1; }
+        /* ── Quantity pill ── */
+        .od-qty-pill { display:inline-flex; align-items:center; justify-content:center; background:#e8536a; color:#fff; font-size:.62rem; font-weight:700; min-width:22px; height:22px; border-radius:11px; padding:0 6px; margin-left:6px; letter-spacing:.02em; flex-shrink:0; }
         @media (max-width:900px) { .profile-layout { grid-template-columns:1fr; padding:24px; } .profile-sidebar { position:static; flex-direction:row; flex-wrap:wrap; } .ph-stats { display:none; } .cart-panel-grid { grid-template-columns:1fr; } .info-grid { grid-template-columns:1fr; } .order-delivery-info { grid-template-columns:1fr; } }
         @media (max-width:600px) { .profile-hero { padding:36px 24px; } .profile-hero-inner { flex-direction:column; text-align:center; align-items:center; } .ph-eyebrow::before { display:none; } .pf-row { grid-template-columns:1fr; } }
     </style>
@@ -356,7 +347,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Progress timeline -->
                                                 <div class="order-timeline">
                                                     <c:set var="s" value="${order.status}"/>
                                                     <div class="tl-step">
@@ -379,13 +369,11 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Total row + View Items button -->
                                                 <div class="order-total-row">
                                                     <span class="order-total-lbl">Total Amount (COD)</span>
                                                     <span class="order-total-amt">Rs <fmt:formatNumber value="${order.totalAmount}" pattern="#,##0.00"/></span>
                                                 </div>
 
-                                                <%-- View Items button — triggers popup --%>
                                                 <button class="view-items-btn"
                                                     onclick="openOrderDetail(
                                                         ${order.orderId},
@@ -632,6 +620,27 @@
 <script>
 var _odCtx = '${contextPath}';
 
+/**
+ * Merges order items that share the same productId,
+ * summing quantities and subtotals so the same product
+ * never appears twice — just shows ×2, ×3 etc.
+ */
+function mergeOrderItems(items) {
+    var map = {};
+    var merged = [];
+    items.forEach(function(it) {
+        var key = it.productId;
+        if (map[key] !== undefined) {
+            merged[map[key]].quantity += it.quantity;
+            merged[map[key]].subtotal += it.subtotal;
+        } else {
+            map[key] = merged.length;
+            merged.push(Object.assign({}, it));
+        }
+    });
+    return merged;
+}
+
 function openOrderDetail(orderId, fullName, phone, address, city, status, createdAt, total) {
     var ov = document.getElementById('orderDetailOverlay');
     ov.style.display = 'flex';
@@ -649,30 +658,50 @@ function openOrderDetail(orderId, fullName, phone, address, city, status, create
 
     fetch(_odCtx + '/order/items?orderId=' + orderId)
         .then(function(r){ return r.json(); })
-        .then(function(items){
+        .then(function(rawItems){
             odHide('odLoading');
-            if (!items || items.length === 0) { odShow('odEmpty'); return; }
+            if (!rawItems || rawItems.length === 0) { odShow('odEmpty'); return; }
+
+            /* ── Merge duplicate products ── */
+            var items = mergeOrderItems(rawItems);
+
             var html = '';
             items.forEach(function(it){
                 var src = it.imagePath
                     ? _odCtx + '/assets/images/products/' + it.imagePath
                     : null;
+
                 html += '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f8f0f0;">';
+
+                /* Thumbnail */
                 html += '<div style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:#f8f0f2;flex-shrink:0;display:flex;align-items:center;justify-content:center;">';
                 html += src
                     ? '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\'<span style=font-size:1.6rem>💄</span>\'">'
                     : '<span style="font-size:1.6rem;">💄</span>';
                 html += '</div>';
+
+                /* Name + quantity pill + price */
                 html += '<div style="flex:1;min-width:0;">';
                 html += '<div style="font-size:.58rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">' + odEsc(it.categoryName) + '</div>';
-                html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:600;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + odEsc(it.productName) + '</div>';
-                html += '<div style="font-size:.78rem;color:#888;margin-top:2px;">Rs '
-                      + parseFloat(it.price).toLocaleString('en-IN',{minimumFractionDigits:2})
-                      + ' &times; ' + it.quantity + '</div>';
+
+                /* Product name row — qty pill appears after the name when > 1 */
+                html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">';
+                html += odEsc(it.productName);
+                if (it.quantity > 1) {
+                    html += '<span style="display:inline-flex;align-items:center;justify-content:center;background:#e8536a;color:#fff;font-size:.62rem;font-weight:700;min-width:22px;height:22px;border-radius:11px;padding:0 6px;margin-left:6px;letter-spacing:.02em;flex-shrink:0;">×' + it.quantity + '</span>';
+                }
                 html += '</div>';
+
+                html += '<div style="font-size:.78rem;color:#888;margin-top:2px;">Rs '
+                      + parseFloat(it.price).toLocaleString('en-IN', {minimumFractionDigits:2})
+                      + ' each</div>';
+                html += '</div>';
+
+                /* Line subtotal */
                 html += '<div style="font-size:.95rem;font-weight:600;color:#1a1a1a;flex-shrink:0;">Rs '
-                      + parseFloat(it.subtotal).toLocaleString('en-IN',{minimumFractionDigits:2})
+                      + parseFloat(it.subtotal).toLocaleString('en-IN', {minimumFractionDigits:2})
                       + '</div>';
+
                 html += '</div>';
             });
             document.getElementById('odItems').innerHTML =

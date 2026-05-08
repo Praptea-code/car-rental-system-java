@@ -2,6 +2,7 @@ package com.spra.dao;
 
 import com.spra.config.DbConfig;
 import com.spra.model.CartItem;
+import com.spra.model.OrderItemModel;
 import com.spra.model.OrderModel;
 
 import java.sql.*;
@@ -36,7 +37,6 @@ public class OrderDAO {
 
     /**
      * Saves cart items into order_items for a given order.
-     * Call this right after placeOrder() succeeds.
      */
     public boolean saveOrderItems(int orderId, List<CartItem> items) {
         String sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
@@ -62,8 +62,45 @@ public class OrderDAO {
     }
 
     /**
+     * Returns all line items for a given order, joined with product name,
+     * image, and category — used by the order detail popup on both user and admin pages.
+     */
+    public List<OrderItemModel> getOrderItems(int orderId) {
+        List<OrderItemModel> list = new ArrayList<>();
+        String sql = "SELECT oi.item_id, oi.order_id, oi.product_id, oi.quantity, oi.price, " +
+                     "p.name AS product_name, p.image_path, c.name AS category_name " +
+                     "FROM order_items oi " +
+                     "JOIN products p ON oi.product_id = p.product_id " +
+                     "LEFT JOIN categories c ON p.category_id = c.category_id " +
+                     "WHERE oi.order_id = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderItemModel item = new OrderItemModel();
+                item.setItemId(rs.getInt("item_id"));
+                item.setOrderId(rs.getInt("order_id"));
+                item.setProductId(rs.getInt("product_id"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setPrice(rs.getDouble("price"));
+                item.setProductName(rs.getString("product_name"));
+                item.setImagePath(rs.getString("image_path"));
+                item.setCategoryName(rs.getString("category_name"));
+                list.add(item);
+            }
+        } catch (SQLException e) {
+            System.err.println("[OrderDAO.getOrderItems] " + e.getMessage());
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+        return list;
+    }
+
+    /**
      * Decrements stock for all products in the given order.
-     * Uses GREATEST(0, stock - qty) to avoid going negative.
      */
     public boolean decrementStockForOrder(int orderId) {
         String sql = "UPDATE products p " +
@@ -121,16 +158,11 @@ public class OrderDAO {
     }
 
     /**
-     * Updates the order status.
-     * Stock is decremented ONLY when transitioning TO 'SHIPPED' for the first time
-     * (i.e., the current status in the DB is NOT already 'SHIPPED').
-     * This prevents double-decrement if the admin saves 'SHIPPED' again.
+     * Updates order status. Decrements stock only on first transition to SHIPPED.
      */
     public boolean updateStatus(int orderId, String newStatus) {
-        // Step 1: Read current status to guard against double-decrement
         String currentStatus = getCurrentStatus(orderId);
 
-        // Step 2: Update the status
         String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
         Connection conn = null;
         boolean updated = false;
@@ -147,7 +179,6 @@ public class OrderDAO {
             DbConfig.closeConnection(conn);
         }
 
-        // Step 3: Decrement stock ONLY when transitioning into SHIPPED for the first time
         if (updated
                 && "SHIPPED".equalsIgnoreCase(newStatus)
                 && !"SHIPPED".equalsIgnoreCase(currentStatus)) {
@@ -157,9 +188,6 @@ public class OrderDAO {
         return updated;
     }
 
-    /**
-     * Returns the current status string for an order, or null if not found.
-     */
     private String getCurrentStatus(int orderId) {
         String sql = "SELECT status FROM orders WHERE order_id = ?";
         Connection conn = null;

@@ -20,7 +20,6 @@
             --border: #e8d8da; --bg-soft: #fdf8f8;
         }
         .profile-page-wrap { min-height: 100vh; background: #fdf8f8; }
-        /* ── Hero ── */
         .profile-hero { background: linear-gradient(135deg, #2a1215 0%, #1a1a1a 50%, #3a1820 100%); padding: 52px 48px 40px; position: relative; overflow: hidden; }
         .profile-hero::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; border-radius:50%; background:rgba(232,83,106,.1); pointer-events:none; }
         .profile-hero-inner { position:relative; z-index:2; max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:28px; }
@@ -37,9 +36,7 @@
         .ph-stat:last-child { border-right:none; }
         .ph-stat-num { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:700; color:#fff; line-height:1; }
         .ph-stat-lbl { font-size:.58rem; color:rgba(255,255,255,.35); text-transform:uppercase; letter-spacing:.1em; margin-top:4px; }
-        /* ── Layout ── */
         .profile-layout { max-width:1100px; margin:0 auto; padding:40px 48px 80px; display:grid; grid-template-columns:220px 1fr; gap:22px; align-items:start; }
-        /* ── Sidebar ── */
         .profile-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:6px; }
         .pnav-btn { display:flex; align-items:center; gap:10px; padding:13px 16px; border-radius:10px; cursor:pointer; border:1.5px solid var(--border); background:#fff; color:var(--mid); font-weight:500; font-size:.82rem; transition:all .18s; text-align:left; width:100%; font-family:'DM Sans',sans-serif; }
         .pnav-btn:hover { border-color:#f4a0b0; color:var(--dark); }
@@ -50,20 +47,17 @@
         .pnav-divider { border:none; border-top:1px solid var(--border); margin:8px 0; }
         .pnav-link { display:flex; align-items:center; gap:8px; padding:10px 14px; font-size:.75rem; color:var(--muted); cursor:pointer; background:none; border:none; width:100%; text-align:left; transition:color .15s; font-family:'DM Sans',sans-serif; }
         .pnav-link:hover { color:var(--pink); }
-        /* ── Main ── */
         .profile-main { min-width:0; }
         .p-alert { padding:12px 16px; border-radius:8px; font-size:.82rem; margin-bottom:18px; }
         .p-alert-ok  { background:#eaf3de; color:#3B6D11; border:1px solid #c0dd97; }
         .p-alert-err { background:#fceaea; color:#a32d2d; border:1px solid #f09595; }
         .ptab { display:none; }
         .ptab.active { display:block; }
-        /* ── Cards ── */
         .pcard { background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:18px; }
         .pcard-head { padding:20px 28px; border-bottom:1px solid #f8f0f0; background:#fdf8f8; }
         .pcard-title { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--dark); }
         .pcard-sub { font-size:.72rem; color:var(--muted); margin-top:2px; }
         .pcard-body { padding:24px 28px; }
-        /* ── Forms ── */
         .pf-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
         .pf-grp { margin-bottom:16px; }
         .pf-lbl { display:block; font-size:.7rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
@@ -81,14 +75,12 @@
         .password-wrap .pf-inp { padding-right:56px; }
         .toggle-pass { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; font-size:.72rem; color:#aaa; cursor:pointer; font-family:'DM Sans',sans-serif; }
         .toggle-pass:hover { color:var(--pink); }
-        /* ── Info tiles ── */
         .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
         .info-tile { background:#fdf8f8; border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
         .info-lbl { font-size:.58rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
         .info-val { font-size:.9rem; font-weight:600; color:var(--dark); }
         .status-dot { display:inline-flex; align-items:center; gap:6px; }
         .status-dot::before { content:''; width:8px; height:8px; border-radius:50%; background:#3B9B3F; display:inline-block; }
-        /* ── Cart items ── */
         .cart-panel-grid { display:grid; grid-template-columns:1fr 290px; gap:16px; align-items:start; }
         .cart-rows { display:flex; flex-direction:column; gap:8px; }
         .cart-row { display:flex; align-items:center; gap:14px; padding:12px 14px; background:#fdf8f8; border:1px solid var(--border); border-radius:10px; }
@@ -100,7 +92,6 @@
         .ci-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .ci-price { font-size:.8rem; font-weight:600; color:var(--pink); }
         .ci-sub { font-size:.88rem; font-weight:700; color:var(--dark); flex-shrink:0; }
-        /* Summary */
         .sum-card { background:#fdf8f8; border:1px solid var(--border); border-radius:14px; padding:22px; position:sticky; top:80px; }
         .sum-title { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; color:var(--dark); margin-bottom:16px; }
         .sum-line { display:flex; justify-content:space-between; font-size:.8rem; color:var(--mid); margin-bottom:10px; }
@@ -108,13 +99,11 @@
         .sum-total { font-size:1rem; font-weight:700; color:var(--dark); }
         .sum-cta { width:100%; background:var(--pink); color:#fff; border:none; padding:13px; border-radius:8px; font-size:.82rem; font-weight:600; cursor:pointer; margin-top:14px; transition:opacity .2s; font-family:'DM Sans',sans-serif; display:block; text-align:center; }
         .sum-cta:hover { opacity:.88; color:#fff; }
-        /* Empty */
         .cart-empty { text-align:center; padding:48px 20px; }
         .cart-empty-icon { font-size:3rem; margin-bottom:12px; opacity:.25; }
         .cart-empty-txt { font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--muted); margin-bottom:16px; }
         .cart-empty-btn { display:inline-block; background:var(--pink); color:#fff; padding:11px 24px; border-radius:22px; font-size:.8rem; font-weight:600; transition:opacity .2s; }
         .cart-empty-btn:hover { opacity:.88; color:#fff; }
-        /* Password strength */
         .pwd-bar-wrap { margin:8px 0 14px; }
         .pwd-bar-track { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
         .pwd-bar-fill { height:100%; border-radius:2px; transition:width .3s,background .3s; }
@@ -125,9 +114,9 @@
         .req-item.ok { color:#3B9B3F; }
         .btn-badge { background:rgba(255,255,255,.25); color:#fff; font-size:.58rem; padding:2px 7px; border-radius:10px; }
         .p-btn-outline .btn-badge { background:var(--pink); color:#fff; }
-        /* ── ORDERS TAB ── */
+        /* ── Orders tab ── */
         .orders-list { display:flex; flex-direction:column; gap:14px; }
-        .order-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+        .order-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color .18s, box-shadow .18s; }
         .order-card-head { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; background:#fdf8f8; border-bottom:1px solid #f8f0f0; flex-wrap:wrap; gap:10px; }
         .order-id { font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
         .order-date { font-size:.72rem; color:var(--muted); }
@@ -138,13 +127,12 @@
         .os-CANCELLED { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; }
         .order-card-body { padding:16px 20px; }
         .order-delivery-info { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
-        .order-info-tile { }
         .order-info-lbl { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:3px; }
         .order-info-val { font-size:.84rem; color:var(--dark); font-weight:500; }
         .order-total-row { display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid #f8f0f0; }
         .order-total-lbl { font-size:.78rem; color:var(--muted); }
         .order-total-amt { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--dark); }
-        /* Timeline */
+        /* ── Timeline ── */
         .order-timeline { display:flex; align-items:center; gap:0; margin-top:14px; padding-top:14px; border-top:1px solid #f8f0f0; }
         .tl-step { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
         .tl-step::after { content:''; position:absolute; top:12px; left:50%; width:100%; height:2px; background:#f0e0e0; z-index:0; }
@@ -155,10 +143,19 @@
         .tl-dot svg { color:#ccc; }
         .tl-label { font-size:.58rem; color:var(--muted); margin-top:6px; text-align:center; text-transform:uppercase; letter-spacing:.05em; }
         .tl-label.done { color:var(--pink); font-weight:600; }
-        /* cart badge nav */
+        /* ── View details button ── */
+        .view-items-btn {
+            display:inline-flex; align-items:center; gap:6px;
+            padding:8px 16px; background:#fff;
+            border:1.5px solid var(--border); border-radius:8px;
+            font-size:.75rem; font-weight:600; color:var(--mid);
+            cursor:pointer; transition:all .18s; font-family:'DM Sans',sans-serif;
+            margin-top:14px;
+        }
+        .view-items-btn:hover { border-color:var(--pink); color:var(--pink); background:var(--pink-light); }
+        /* cart badge */
         .cart-icon-btn { position:relative; }
         .cart-badge { position:absolute; top:-6px; right:-6px; background:var(--pink); color:#fff; font-size:10px; font-weight:600; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:1; }
-        /* Responsive */
         @media (max-width:900px) { .profile-layout { grid-template-columns:1fr; padding:24px; } .profile-sidebar { position:static; flex-direction:row; flex-wrap:wrap; } .ph-stats { display:none; } .cart-panel-grid { grid-template-columns:1fr; } .info-grid { grid-template-columns:1fr; } .order-delivery-info { grid-template-columns:1fr; } }
         @media (max-width:600px) { .profile-hero { padding:36px 24px; } .profile-hero-inner { flex-direction:column; text-align:center; align-items:center; } .ph-eyebrow::before { display:none; } .pf-row { grid-template-columns:1fr; } }
     </style>
@@ -326,7 +323,7 @@
                         <div class="pcard">
                             <div class="pcard-head">
                                 <div class="pcard-title">My Orders (${fn:length(orders)})</div>
-                                <div class="pcard-sub">Track your delivery status below</div>
+                                <div class="pcard-sub">Click "View Items" on any order to see what's inside</div>
                             </div>
                             <div class="pcard-body">
                                 <div class="orders-list">
@@ -341,19 +338,19 @@
                                             </div>
                                             <div class="order-card-body">
                                                 <div class="order-delivery-info">
-                                                    <div class="order-info-tile">
+                                                    <div>
                                                         <div class="order-info-lbl">Deliver To</div>
                                                         <div class="order-info-val">${order.fullName}</div>
                                                     </div>
-                                                    <div class="order-info-tile">
+                                                    <div>
                                                         <div class="order-info-lbl">Phone</div>
                                                         <div class="order-info-val">${order.phone}</div>
                                                     </div>
-                                                    <div class="order-info-tile">
+                                                    <div>
                                                         <div class="order-info-lbl">Address</div>
                                                         <div class="order-info-val">${order.address}, ${order.city}</div>
                                                     </div>
-                                                    <div class="order-info-tile">
+                                                    <div>
                                                         <div class="order-info-lbl">Payment</div>
                                                         <div class="order-info-val">Cash on Delivery</div>
                                                     </div>
@@ -361,7 +358,6 @@
 
                                                 <!-- Progress timeline -->
                                                 <div class="order-timeline">
-                                                    <%-- Step 1: Ordered --%>
                                                     <c:set var="s" value="${order.status}"/>
                                                     <div class="tl-step">
                                                         <div class="tl-dot done">
@@ -369,14 +365,12 @@
                                                         </div>
                                                         <div class="tl-label done">Ordered</div>
                                                     </div>
-                                                    <%-- Step 2: Shipped --%>
                                                     <div class="tl-step">
                                                         <div class="tl-dot ${s == 'SHIPPED' or s == 'DELIVERED' ? 'done' : ''}">
                                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                                                         </div>
                                                         <div class="tl-label ${s == 'SHIPPED' or s == 'DELIVERED' ? 'done' : ''}">Shipped</div>
                                                     </div>
-                                                    <%-- Step 3: Delivered --%>
                                                     <div class="tl-step">
                                                         <div class="tl-dot ${s == 'DELIVERED' ? 'done' : ''}">
                                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
@@ -385,10 +379,27 @@
                                                     </div>
                                                 </div>
 
+                                                <!-- Total row + View Items button -->
                                                 <div class="order-total-row">
                                                     <span class="order-total-lbl">Total Amount (COD)</span>
                                                     <span class="order-total-amt">Rs <fmt:formatNumber value="${order.totalAmount}" pattern="#,##0.00"/></span>
                                                 </div>
+
+                                                <%-- View Items button — triggers popup --%>
+                                                <button class="view-items-btn"
+                                                    onclick="openOrderDetail(
+                                                        ${order.orderId},
+                                                        '${order.fullName.replace("'", "\\'")}',
+                                                        '${order.phone}',
+                                                        '${order.address.replace("'", "\\'")}',
+                                                        '${order.city}',
+                                                        '${order.status}',
+                                                        '<fmt:formatDate value="${order.createdAt}" pattern="MMM dd, yyyy"/>',
+                                                        ${order.totalAmount}
+                                                    )">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+                                                    View Items in this Order
+                                                </button>
 
                                                 <c:if test="${order.status == 'CANCELLED'}">
                                                     <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.78rem;color:#dc2626;">
@@ -570,7 +581,133 @@
     </div>
 </footer>
 
+<!-- ═══ ORDER DETAIL POPUP ═══ -->
+<div id="orderDetailOverlay"
+     style="display:none;position:fixed;inset:0;background:rgba(10,4,6,.72);
+            backdrop-filter:blur(8px);z-index:9100;
+            align-items:center;justify-content:center;">
+    <div id="orderDetailBox"
+         style="background:#fff;border-radius:22px;width:600px;max-width:95vw;
+                max-height:88vh;overflow-y:auto;
+                box-shadow:0 40px 100px rgba(0,0,0,.28);
+                position:relative;font-family:'DM Sans',sans-serif;">
+        <button onclick="closeOrderDetail()"
+                style="position:absolute;top:16px;right:16px;background:#f8f0f2;border:none;
+                       border-radius:50%;width:34px;height:34px;font-size:20px;color:#999;
+                       display:flex;align-items:center;justify-content:center;
+                       cursor:pointer;transition:background .2s,color .2s;z-index:2;"
+                onmouseover="this.style.background='#e8536a';this.style.color='#fff'"
+                onmouseout="this.style.background='#f8f0f2';this.style.color='#999'">&times;</button>
+        <div style="padding:2rem 2rem 0;">
+            <div id="odEyebrow" style="font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#e8536a;margin-bottom:6px;"></div>
+            <div id="odTitle"   style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:#1a1a1a;margin-bottom:4px;"></div>
+            <div id="odMeta"    style="font-size:.78rem;color:#aaa;margin-bottom:1.4rem;"></div>
+            <div id="odInfo"    style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.4rem;"></div>
+            <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#aaa;margin-bottom:10px;">Items in this order</div>
+        </div>
+        <div id="odItems"   style="padding:0 2rem;"></div>
+        <div id="odLoading" style="display:none;padding:4rem 2rem;text-align:center;color:#aaa;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;">Loading order details…</div>
+        </div>
+        <div id="odEmpty" style="display:none;padding:3rem 2rem;text-align:center;color:#aaa;">
+            <div style="font-size:2rem;margin-bottom:10px;opacity:.25;">📦</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;">No item details recorded for this order</div>
+            <div style="font-size:.75rem;margin-top:6px;">Items are tracked for orders placed after the latest update.</div>
+        </div>
+        <div id="odFooter" style="padding:1.2rem 2rem 2rem;border-top:1px solid #f8f0f0;margin-top:1.2rem;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.82rem;color:#aaa;">Total (Cash on Delivery)</span>
+            <span id="odTotal" style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:#1a1a1a;"></span>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes odSlide {
+    from { opacity:0; transform:translateY(30px) scale(.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+}
+#orderDetailBox { animation: odSlide .38s cubic-bezier(.22,1,.36,1); }
+</style>
+
 <script>
+var _odCtx = '${contextPath}';
+
+function openOrderDetail(orderId, fullName, phone, address, city, status, createdAt, total) {
+    var ov = document.getElementById('orderDetailOverlay');
+    ov.style.display = 'flex';
+    document.getElementById('odEyebrow').textContent = 'Order #SPR-' + orderId;
+    document.getElementById('odTitle').textContent   = fullName;
+    document.getElementById('odMeta').textContent    = createdAt + '  ·  ' + status;
+    document.getElementById('odInfo').innerHTML =
+        odTile('Phone',   phone)   +
+        odTile('Address', address) +
+        odTile('City',    city)    +
+        odTile('Payment', 'Cash on Delivery');
+    document.getElementById('odTotal').textContent =
+        'Rs ' + parseFloat(total).toLocaleString('en-IN', {minimumFractionDigits:2});
+    odShow('odLoading'); odHide('odItems'); odHide('odEmpty');
+
+    fetch(_odCtx + '/order/items?orderId=' + orderId)
+        .then(function(r){ return r.json(); })
+        .then(function(items){
+            odHide('odLoading');
+            if (!items || items.length === 0) { odShow('odEmpty'); return; }
+            var html = '';
+            items.forEach(function(it){
+                var src = it.imagePath
+                    ? _odCtx + '/assets/images/products/' + it.imagePath
+                    : null;
+                html += '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f8f0f0;">';
+                html += '<div style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:#f8f0f2;flex-shrink:0;display:flex;align-items:center;justify-content:center;">';
+                html += src
+                    ? '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\'<span style=font-size:1.6rem>💄</span>\'">'
+                    : '<span style="font-size:1.6rem;">💄</span>';
+                html += '</div>';
+                html += '<div style="flex:1;min-width:0;">';
+                html += '<div style="font-size:.58rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">' + odEsc(it.categoryName) + '</div>';
+                html += '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:600;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + odEsc(it.productName) + '</div>';
+                html += '<div style="font-size:.78rem;color:#888;margin-top:2px;">Rs '
+                      + parseFloat(it.price).toLocaleString('en-IN',{minimumFractionDigits:2})
+                      + ' &times; ' + it.quantity + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:.95rem;font-weight:600;color:#1a1a1a;flex-shrink:0;">Rs '
+                      + parseFloat(it.subtotal).toLocaleString('en-IN',{minimumFractionDigits:2})
+                      + '</div>';
+                html += '</div>';
+            });
+            document.getElementById('odItems').innerHTML =
+                '<div style="padding-bottom:.4rem;">' + html + '</div>';
+            odShow('odItems');
+        })
+        .catch(function(){ odHide('odLoading'); odShow('odEmpty'); });
+}
+
+function closeOrderDetail() {
+    document.getElementById('orderDetailOverlay').style.display = 'none';
+    document.getElementById('odItems').innerHTML = '';
+}
+
+function odTile(label, value) {
+    return '<div style="background:#fdf8f8;border:1px solid #f0e0e0;border-radius:8px;padding:10px 14px;">'
+         + '<div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#aaa;margin-bottom:3px;">' + label + '</div>'
+         + '<div style="font-size:.84rem;font-weight:500;color:#1a1a1a;">' + odEsc(value) + '</div>'
+         + '</div>';
+}
+function odEsc(s) {
+    if (!s) return '—';
+    var d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+function odShow(id){ document.getElementById(id).style.display = 'block'; }
+function odHide(id){ document.getElementById(id).style.display = 'none';  }
+
+document.getElementById('orderDetailOverlay').addEventListener('click', function(e){
+    if (e.target === this) closeOrderDetail();
+});
+document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeOrderDetail();
+});
+
+/* ── Tab switching ── */
 function switchTab(id, btn) {
     document.querySelectorAll('.ptab').forEach(function(p){ p.classList.remove('active'); });
     document.querySelectorAll('.pnav-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -602,7 +739,7 @@ function checkStrength(v) {
     bar.style.width = (score/4*100) + '%';
     bar.style.background = score > 0 ? colors[score-1] : '#e0e0e0';
     hint.textContent = score === 0 ? 'Enter a new password' : txts[score-1];
-    hint.style.color  = score > 0 ? colors[score-1] : '#888';
+    hint.style.color = score > 0 ? colors[score-1] : '#888';
 }
 document.addEventListener('DOMContentLoaded', function() {
     var msg = document.getElementById('flash-msg');

@@ -328,6 +328,7 @@
     overflow: hidden;
     transition: border-color .2s, transform .2s, box-shadow .2s;
     box-shadow: 0 2px 12px rgba(232, 83, 106, 0.04);
+    cursor: pointer;
 }
 .admin-stat-card::before {
     content: '';

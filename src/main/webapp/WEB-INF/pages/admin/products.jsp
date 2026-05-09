@@ -139,15 +139,15 @@
             <div style="display:flex;gap:10px;align-items:center;">
                 <!-- View toggle -->
                 <div class="view-toggle">
-                    <button class="view-toggle-btn active" id="btnTable" onclick="setView('table')" title="Table view">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-                        </svg>
-                    </button>
                     <button class="view-toggle-btn" id="btnGrid" onclick="setView('grid')" title="Grid view">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                             <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                    </button>
+                    <button class="view-toggle-btn active" id="btnTable" onclick="setView('table')" title="Table view">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
                         </svg>
                     </button>
                 </div>
@@ -170,7 +170,7 @@
             <div class="admin-section">
 
                 <!-- TABLE VIEW -->
-                <table class="admin-table" id="productTable">
+                <table class="admin-table" id="productTable" style="display:none">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -221,7 +221,7 @@
                 </table>
 
                 <!-- CARD GRID VIEW -->
-                <div class="product-card-grid" id="productCardGrid" style="display:none;">
+                <div class="product-card-grid" id="productCardGrid" style="display:grid;">
                     <c:choose>
                         <c:when test="${empty products}">
                             <div class="admin-empty" style="grid-column:1/-1;padding:3rem;">No products found.</div>
@@ -384,7 +384,13 @@ function setView(mode) {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-    if (localStorage.getItem('spra_prod_view') === 'grid') setView('grid');
+    var saved = localStorage.getItem('spra_prod_view');
+
+    if (saved === 'grid') {
+        setView('grid');
+    } else {
+        setView('table');
+    }
 });
 </script>
 <script src="<%= contextPath %>/js/main.js"></script>

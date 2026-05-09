@@ -41,22 +41,42 @@ public class OrderDAO {
     public boolean saveOrderItems(int orderId, List<CartItem> items) {
         String sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
         Connection conn = null;
+        int savedCount = 0;
         try {
             conn = DbConfig.getConnection();
+            conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement(sql);
             for (CartItem item : items) {
-                ps.setInt(1, orderId);
-                ps.setInt(2, item.getProductId());
-                ps.setInt(3, item.getQuantity());
-                ps.setDouble(4, item.getPrice());
-                ps.addBatch();
+                try {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, item.getProductId());
+                    ps.setInt(3, item.getQuantity());
+                    ps.setDouble(4, item.getPrice());
+                    ps.executeUpdate();
+                    savedCount++;
+                } catch (SQLException itemEx) {
+                    System.err.println("[OrderDAO.saveOrderItems] Failed to save item productId="
+                        + item.getProductId() + " for orderId=" + orderId
+                        + " — " + itemEx.getMessage());
+                    // continue saving other items even if one fails
+                }
             }
-            ps.executeBatch();
-            return true;
+            conn.commit();
+            System.out.println("[OrderDAO.saveOrderItems] Saved " + savedCount + "/" + items.size()
+                + " items for orderId=" + orderId);
+            return savedCount > 0;
         } catch (SQLException e) {
             System.err.println("[OrderDAO.saveOrderItems] " + e.getMessage());
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException rb) {
+                    System.err.println("[OrderDAO.saveOrderItems] Rollback failed: " + rb.getMessage());
+                }
+            }
             return false;
         } finally {
+            if (conn != null) {
+                try { conn.setAutoCommit(true); } catch (SQLException e) { /* ignore */ }
+            }
             DbConfig.closeConnection(conn);
         }
     }

@@ -18,35 +18,6 @@ import java.util.UUID;
 import org.json.JSONObject;   // <-- needs json-20240303.jar in WEB-INF/lib
 
 /**
- * GoogleAuthController
- *
- * Handles the Google OAuth 2.0 "Authorization Code" flow:
- *
- *   GET /auth/google          → Redirect user to Google's consent screen
- *   GET /auth/google/callback → Google redirects back here with a code;
- *                               we exchange it for user info and log in.
- *
- * ── SETUP STEPS ─────────────────────────────────────────────────────────
- *
- * 1. Go to https://console.cloud.google.com/
- * 2. Create a NEW project (top-left dropdown → "New Project") — name it "Spra"
- * 3. In the left menu → "APIs & Services" → "OAuth consent screen"
- *    - User Type: External → CREATE
- *    - App name: Spra Beauty  |  Support email: your Gmail
- *    - Scroll to bottom → SAVE AND CONTINUE (skip Scopes, skip Test users for now)
- * 4. In the left menu → "APIs & Services" → "Credentials"
- *    - Click "+ CREATE CREDENTIALS" → "OAuth client ID"
- *    - Application type: Web application
- *    - Name: Spra Web Client
- *    - Authorized redirect URIs → ADD URI:
- *        http://localhost:8080/spra/auth/google/callback
- *    - Click CREATE → copy the Client ID and Client Secret
- * 5. Paste them below in GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
- * 6. Download org.json jar from https://repo1.maven.org/maven2/org/json/json/20240303/json-20240303.jar
- *    and place it in WEB-INF/lib  (also add to Eclipse classpath)
- *
- * ─────────────────────────────────────────────────────────────────────────
- *
  * @author Spra Team
  */
 @WebServlet(urlPatterns = {"/auth/google", "/auth/google/callback"}, asyncSupported = true)
@@ -78,7 +49,7 @@ public class GoogleAuthController extends HttpServlet {
         }
     }
 
-    // ── Step 1: Redirect to Google ────────────────────────────
+    //Step 1: Redirect to Google 
     private void startOAuthFlow(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
 
@@ -98,7 +69,7 @@ public class GoogleAuthController extends HttpServlet {
         res.sendRedirect(authUrl);
     }
 
-    // ── Step 2: Google redirects back here ───────────────────
+    //Step 2: Google redirects back here 
     private void handleCallback(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
@@ -144,7 +115,7 @@ public class GoogleAuthController extends HttpServlet {
         String firstName = googleUser.optString("given_name", "User");
         String lastName  = googleUser.optString("family_name", "");
 
-        // ── Find or create user ───────────────────────────────
+        //Find or create user
 
         // 1. Look up by google_id first
         UserModel user = userDAO.getUserByGoogleId(googleId);
@@ -187,7 +158,7 @@ public class GoogleAuthController extends HttpServlet {
             return;
         }
 
-        // ── Log in the user ───────────────────────────────────
+        //Log in the user
         SessionUtil.loginUser(req, user);
         req.getSession().setAttribute("showLoader", true);
         CookieUtil.addCookie(res, "spra_user", user.getUsername(), 604800);
@@ -199,7 +170,7 @@ public class GoogleAuthController extends HttpServlet {
         }
     }
 
-    // ── OAuth helpers ─────────────────────────────────────────
+    // OAuth helpers
 
     /** POSTs the authorisation code to Google and returns the access token. */
     private String exchangeCodeForToken(String code) {

@@ -207,10 +207,10 @@
                                                     onclick="openEditModal(${p.productId},'${p.name}',${p.price},${p.oldPrice},${p.stock},${p.categoryId},'${p.imagePath}',${p.featured},${p.bestseller},'${p.description}')">
                                                     Edit
                                                 </button>
-                                                <form action="<%= contextPath %>/admin/products/delete" method="post" style="display:inline" onsubmit="return confirm('Delete this product?')">
-                                                    <input type="hidden" name="productId" value="${p.productId}">
-                                                    <button type="submit" class="admin-delete-btn">Delete</button>
-                                                </form>
+                                                <button class="admin-delete-btn"
+												        onclick="openDeleteModal(${p.productId}, '${p.name}', '${p.categoryName}', '${p.imagePath}')">
+												    Delete
+												</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -263,11 +263,10 @@
                                                 onclick="openEditModal(${p.productId},'${p.name}',${p.price},${p.oldPrice},${p.stock},${p.categoryId},'${p.imagePath}',${p.featured},${p.bestseller},'${p.description}')">
                                                 Edit
                                             </button>
-                                            <form action="<%= contextPath %>/admin/products/delete" method="post"
-                                                  style="flex:1;" onsubmit="return confirm('Delete this product?')">
-                                                <input type="hidden" name="productId" value="${p.productId}">
-                                                <button type="submit" class="admin-delete-btn" style="width:100%;">Delete</button>
-                                            </form>
+                                            <button class="admin-delete-btn" style="width:100%;"
+											        onclick="openDeleteModal(${p.productId}, '${p.name}', '${p.categoryName}', '${p.imagePath}')">
+											    Delete
+											</button>
                                         </div>
                                     </div>
                                 </div>
@@ -347,7 +346,55 @@
         </form>
     </div>
 </div>
-
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal-box" style="width:440px;">
+        <div class="modal-head">
+            <span class="modal-title">Delete Product</span>
+            <button class="modal-close" onclick="closeDeleteModal()">×</button>
+        </div>
+        <div class="modal-body" style="padding:24px;">
+            <div style="width:64px;height:64px;background:#fceaea;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:1px solid #f09595;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                    <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                </svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:#1a1a1a;text-align:center;margin-bottom:8px;">Are you sure?</div>
+            <div style="font-size:13px;color:#888;text-align:center;line-height:1.7;margin-bottom:20px;">
+                You are about to permanently delete this product.<br>This action cannot be undone.
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;background:#fdf8f8;border:1px solid #f0e0e0;border-radius:10px;padding:12px 14px;margin-bottom:16px;">
+                <div id="delThumb" style="width:44px;height:44px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0e8e8;display:flex;align-items:center;justify-content:center;">
+                    <img id="delThumbImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+                </div>
+                <div>
+                    <div id="delCat" style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;"></div>
+                    <div id="delName" style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#1a1a1a;"></div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;background:#fceaea;border:1px solid #f09595;border-radius:8px;padding:12px 14px;font-size:12px;color:#a32d2d;line-height:1.6;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>Deleting this product will also remove it from wishlists. This cannot be reversed.</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="admin-cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/admin/products/delete" style="margin:0;">
+                <input type="hidden" name="productId" id="deleteProductId">
+                <button type="submit" class="admin-delete-btn"
+                    style="background:#a32d2d;color:#fff;border:none;padding:9px 24px;border-radius:20px;font-size:13px;font-weight:500;box-shadow:0 4px 14px rgba(163,45,45,0.3);display:flex;align-items:center;gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                    Yes, delete product
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
 function openEditModal(id,name,price,oldPrice,stock,catId,image,featured,bestseller,desc){
     document.getElementById('editProductId').value   = id;
@@ -383,6 +430,24 @@ function setView(mode) {
     }
 }
 
+function openDeleteModal(productId, name, category, imagePath) {
+    document.getElementById('deleteProductId').value = productId;
+    document.getElementById('delName').textContent = name;
+    document.getElementById('delCat').textContent = category || '';
+    var img = document.getElementById('delThumbImg');
+    if (imagePath) {
+        img.src = '${pageContext.request.contextPath}/assets/images/products/' + imagePath;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+    document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', function(){
     var saved = localStorage.getItem('spra_prod_view');
 
@@ -392,6 +457,8 @@ document.addEventListener('DOMContentLoaded', function(){
         setView('table');
     }
 });
+
+
 </script>
 <script src="<%= contextPath %>/js/main.js"></script>
 </body>

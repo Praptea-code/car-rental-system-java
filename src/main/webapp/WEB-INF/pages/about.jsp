@@ -149,7 +149,7 @@
     <div class="team-grid">
 
         <div class="team-card">
-            <div class="team-avatar"><img src="${pageContext.request.contextPath}/assets/images/prapti.png" alt="Prapti"></div>
+            <div class="team-avatar"><img src="${pageContext.request.contextPath}/assets/images/prapti2.png" alt="Prapti"></div>
             <h3 class="team-name">Prapti Bhattarai</h3>
             <p class="team-role">CEO</p>
             <p class="team-bio">CEO with 7 years in luxury beauty. Every Spra campaign is her canvas.</p>
@@ -160,13 +160,13 @@
                 </div>
                 <div class="skill-bar-wrap">
                     <div class="skill-bar-label"><span></span>Commitment<span>98%</span></div>
-                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:88%"></div></div>
+                    <div class="skill-bar-track"><div class="skill-bar-fill" style="width:98%"></div></div>
                 </div>
             </div>
         </div>
 
     </div>
-    <p class="team-wrap-line">and that&apos;s a wrap.</p>
+
 </section>
 
 <!-- ===== VALUES SECTION ===== -->

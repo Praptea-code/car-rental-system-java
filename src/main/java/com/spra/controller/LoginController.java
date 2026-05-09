@@ -15,12 +15,6 @@ import java.io.IOException;
 /**
  * LoginController — updated with Remember Me support.
  *
- * Remember Me works by:
- *   1. Setting the "spra_user" cookie max-age to 30 days instead of 7 days.
- *   2. On every page load (via a Filter — see RememberMeFilter.java),
- *      if no session exists but the cookie is present, the user is
- *      silently re-authenticated.
- *
  * @author Spra Team
  */
 @WebServlet(urlPatterns = {"/login"}, asyncSupported = true)
@@ -59,7 +53,7 @@ public class LoginController extends HttpServlet {
             SessionUtil.loginUser(req, user);
             req.getSession().setAttribute("showLoader", true);
 
-            // ── Remember Me logic 
+            //  Remember Me logic 
             int cookieAge = rememberMe ? REMEMBER_ME_SECONDS : SESSION_SECONDS;
             CookieUtil.addCookie(res, "spra_user", user.getUsername(), cookieAge);
             

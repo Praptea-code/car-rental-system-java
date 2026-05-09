@@ -46,24 +46,23 @@ public class ProfileController extends HttpServlet {
         }
 
         // Wishlist
-        List<WishlistModel> wishlist = wishlistDAO.getWishlistByUser(user.getUserId());
+        List<WishlistModel> wishlist = wishlistDAO.getWishlistByUser(user.getUserId()); 
         int wishlistCount = wishlist.size();
 
         // Orders
         List<OrderModel> orders = orderDAO.getOrdersByUser(user.getUserId());
 
-        req.setAttribute("currentUser",   user);
-        req.setAttribute("cart",          cart);
-        req.setAttribute("wishlist",      wishlist);
-        req.setAttribute("wishlistCount", wishlistCount);
-        req.setAttribute("orders",        orders);
+        req.setAttribute("currentUser",user);
+        req.setAttribute("cart",cart);
+        req.setAttribute("wishlist",wishlist);
+        req.setAttribute("wishlistCount",wishlistCount);
+        req.setAttribute("orders",orders);
 
         req.getRequestDispatcher("/WEB-INF/pages/user/profile.jsp").forward(req, res);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         UserModel currentUser = SessionUtil.getLoggedInUser(req);
         if (currentUser == null) {
@@ -82,14 +81,13 @@ public class ProfileController extends HttpServlet {
         }
     }
 
-    private void handleProfileUpdate(HttpServletRequest req, HttpServletResponse res,
-                                     UserModel currentUser)
+    private void handleProfileUpdate(HttpServletRequest req, HttpServletResponse res, UserModel currentUser)
             throws ServletException, IOException {
 
         String firstName = ValidationUtil.safeTrim(req.getParameter("firstName"));
-        String lastName  = ValidationUtil.safeTrim(req.getParameter("lastName"));
-        String email     = ValidationUtil.safeTrim(req.getParameter("email"));
-        String phone     = ValidationUtil.safeTrim(req.getParameter("phone"));
+        String lastName= ValidationUtil.safeTrim(req.getParameter("lastName"));
+        String email= ValidationUtil.safeTrim(req.getParameter("email"));
+        String phone = ValidationUtil.safeTrim(req.getParameter("phone"));
 
         if (!ValidationUtil.isValidName(firstName) || !ValidationUtil.isValidName(lastName)) {
             req.setAttribute("errorMessage", "Names must contain only letters and spaces.");
@@ -117,9 +115,7 @@ public class ProfileController extends HttpServlet {
         doGet(req, res);
     }
 
-    private void handlePasswordChange(HttpServletRequest req, HttpServletResponse res,
-                                      UserModel currentUser)
-            throws ServletException, IOException {
+    private void handlePasswordChange(HttpServletRequest req, HttpServletResponse res, UserModel currentUser) throws ServletException, IOException {
 
         String currentPass = ValidationUtil.safeTrim(req.getParameter("currentPassword"));
         String newPass     = ValidationUtil.safeTrim(req.getParameter("newPassword"));

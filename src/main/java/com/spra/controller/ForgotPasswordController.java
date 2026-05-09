@@ -29,7 +29,6 @@ public class ForgotPasswordController extends HttpServlet {
     private final UserDAO            userDAO  = new UserDAO();
     private final PasswordResetDAO   tokenDAO = new PasswordResetDAO();
 
-    // ── GET ───────────────────────────────────────────────────
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -59,7 +58,6 @@ public class ForgotPasswordController extends HttpServlet {
         }
     }
 
-    // ── POST ──────────────────────────────────────────────────
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -73,7 +71,7 @@ public class ForgotPasswordController extends HttpServlet {
         }
     }
 
-    // ── Forgot password: send email ───────────────────────────
+    // Forgot password: send email 
     private void handleForgotPassword(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
@@ -113,7 +111,7 @@ public class ForgotPasswordController extends HttpServlet {
            .forward(req, res);
     }
 
-    // ── Reset password: save new password ────────────────────
+    // Reset password: save new password
     private void handleResetPassword(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 

@@ -144,9 +144,8 @@ public class AdminController extends HttpServlet {
         try {
             int productId = Integer.parseInt(idParam);
             boolean deleted = productDAO.deleteProduct(productId);
-            req.getSession().setAttribute(
-                    deleted ? "successMessage" : "errorMessage",
-                    deleted ? "Product deleted." : "Failed to delete product."
+            req.getSession().setAttribute(deleted ? "successMessage" : "errorMessage",
+            		deleted ? "Product deleted." : "Failed to delete product."
             );
         } catch (NumberFormatException e) {
             req.getSession().setAttribute("errorMessage", "Invalid product ID.");

@@ -29,8 +29,8 @@ import java.util.Properties;
 public class EmailUtil {
 
     // ── CONFIGURE THESE TWO LINES ──────────────────────────
-    private static final String GMAIL_ADDRESS      = "your_gmail@gmail.com";   // <-- your Gmail
-    private static final String GMAIL_APP_PASSWORD = "abcdefghijklmnop";        // <-- 16-char App Password (no spaces)
+    private static final String GMAIL_ADDRESS      = "bhattarai.prapti00@gmail.com";   // <-- your Gmail
+    private static final String GMAIL_APP_PASSWORD = "ulfouesiapowdgdi";        // <-- 16-char App Password (no spaces)
     // ──────────────────────────────────────────────────────
 
     private static final String SMTP_HOST = "smtp.gmail.com";

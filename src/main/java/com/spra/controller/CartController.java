@@ -26,9 +26,7 @@ public class CartController extends HttpServlet {
     private static final String SESSION_TOAST = "cartToast";
     private final ProductDAO productDAO = new ProductDAO();
 
-    // ─────────────────────────────────────────
-    //  GET /cart  →  Displays the page [FIXED]
-    // ─────────────────────────────────────────
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -43,9 +41,7 @@ public class CartController extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(req, res);
     }
 
-    // ─────────────────────────────────────────
-    //  POST  →  Handles clicks (Add/Remove/Update)
-    // ─────────────────────────────────────────
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -61,9 +57,7 @@ public class CartController extends HttpServlet {
         res.sendRedirect(req.getContextPath() + "/cart");
     }
 
-    // ─────────────────────────────────────────
-    //  Handlers (Your Original Logic Restored)
-    // ─────────────────────────────────────────
+    
 
     private void handleAdd(HttpServletRequest req, HttpServletResponse res) throws IOException {
         int productId = parseInt(req.getParameter("productId"), -1);
@@ -111,9 +105,7 @@ public class CartController extends HttpServlet {
         res.sendRedirect(req.getContextPath() + "/cart");
     }
 
-    // ─────────────────────────────────────────
-    //  Helpers
-    // ─────────────────────────────────────────
+ 
 
     private CartModel getOrCreateCart(HttpServletRequest req) {
         HttpSession session = req.getSession(true);

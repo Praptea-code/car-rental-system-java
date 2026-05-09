@@ -16,6 +16,75 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <link rel="stylesheet" href="<%= contextPath %>/css/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── View toggle ── */
+        .view-toggle {
+            display: flex; gap: 4px;
+            background: var(--a-bg); border: 1px solid var(--a-border);
+            border-radius: 8px; padding: 3px;
+        }
+        .view-toggle-btn {
+            width: 32px; height: 32px; background: none; border: none;
+            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            color: var(--a-muted); cursor: pointer; transition: all .15s;
+        }
+        .view-toggle-btn.active {
+            background: #fff; color: var(--a-pink);
+            box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        }
+
+        /* ── Product card grid ── */
+        .product-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px; padding: 20px;
+        }
+        .pc-card {
+            background: var(--a-bg); border: 1px solid var(--a-border);
+            border-radius: 14px; overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .pc-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(232,83,106,.1);
+        }
+        .pc-card-img {
+            width: 100%; height: 160px; object-fit: cover;
+            background: #f0e8e8; display: block;
+        }
+        .pc-card-img-ph {
+            width: 100%; height: 160px; background: #fdf0f2;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+        }
+        .pc-card-body { padding: 14px; }
+        .pc-card-cat {
+            font-size: 10px; color: var(--a-muted);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;
+        }
+        .pc-card-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem; font-weight: 600; color: var(--a-text);
+            margin-bottom: 8px; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .pc-card-row {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 12px;
+        }
+        .pc-card-price { font-size: 13px; font-weight: 600; color: var(--a-text); }
+        .pc-card-stock-ok  { font-size: 11px; color: #3B6D11; background: #eaf3de; padding: 2px 8px; border-radius: 10px; }
+        .pc-card-stock-out { font-size: 11px; color: #a32d2d; background: #fceaea; padding: 2px 8px; border-radius: 10px; }
+        .pc-card-actions { display: flex; gap: 6px; }
+        .pc-card-actions button { flex: 1; text-align: center; font-size: 11px; padding: 6px 8px; }
+        .pc-card-featured {
+            position: absolute; top: 10px; left: 10px;
+            background: #e8536a; color: #fff; font-size: 9px;
+            font-weight: 700; padding: 2px 8px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: .5px;
+        }
+        .pc-card-wrap { position: relative; }
+    </style>
 </head>
 <body class="admin-body">
 <div class="admin-layout">
@@ -28,29 +97,23 @@
         </div>
         <nav class="admin-nav">
             <div class="admin-nav-section">Main</div>
-
-            <a href="<%= contextPath %>/admin/dashboard" class="admin-nav-link <%= currentUri.endsWith("/dashboard") ? "active" : "" %>">
+            <a href="<%= contextPath %>/admin/dashboard" class="admin-nav-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 <span class="nav-label">Dashboard</span>
             </a>
-
-            <a href="<%= contextPath %>/admin/products" class="admin-nav-link <%= currentUri.endsWith("/products") ? "active" : "" %>">
+            <a href="<%= contextPath %>/admin/products" class="admin-nav-link active">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
                 <span class="nav-label">Products</span>
             </a>
-
-            <a href="<%= contextPath %>/admin/orders" class="admin-nav-link <%= currentUri.endsWith("/orders") ? "active" : "" %>">
+            <a href="<%= contextPath %>/admin/orders" class="admin-nav-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 12 2 2 4-4"/></svg>
                 <span class="nav-label">Orders</span>
             </a>
-
-            <a href="<%= contextPath %>/admin/messages" class="admin-nav-link <%= currentUri.endsWith("/messages") ? "active" : "" %>">
+            <a href="<%= contextPath %>/admin/messages" class="admin-nav-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 <span class="nav-label">Messages</span>
             </a>
-
             <div class="admin-nav-section">Store</div>
-
             <a href="<%= contextPath %>/home" class="admin-nav-link">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                 <span class="nav-label">View Site</span>
@@ -73,9 +136,25 @@
                 <div class="admin-page-title">Manage Products</div>
                 <div class="admin-page-subtitle">Add, edit, and remove products from your store</div>
             </div>
-            <button class="admin-add-btn" onclick="document.getElementById('addProductModal').style.display='flex'">
-                + Add Product
-            </button>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <!-- View toggle -->
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="btnTable" onclick="setView('table')" title="Table view">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <button class="view-toggle-btn" id="btnGrid" onclick="setView('grid')" title="Grid view">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="admin-add-btn" onclick="document.getElementById('addProductModal').style.display='flex'">
+                    + Add Product
+                </button>
+            </div>
         </div>
 
         <div class="admin-content">
@@ -89,7 +168,9 @@
             </c:if>
 
             <div class="admin-section">
-                <table class="admin-table">
+
+                <!-- TABLE VIEW -->
+                <table class="admin-table" id="productTable">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -138,6 +219,63 @@
                         </c:choose>
                     </tbody>
                 </table>
+
+                <!-- CARD GRID VIEW -->
+                <div class="product-card-grid" id="productCardGrid" style="display:none;">
+                    <c:choose>
+                        <c:when test="${empty products}">
+                            <div class="admin-empty" style="grid-column:1/-1;padding:3rem;">No products found.</div>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="p" items="${products}">
+                                <div class="pc-card">
+                                    <div class="pc-card-wrap">
+                                        <c:choose>
+                                            <c:when test="${not empty p.imagePath}">
+                                                <img class="pc-card-img"
+                                                     src="${pageContext.request.contextPath}/assets/images/products/${p.imagePath}"
+                                                     alt="${p.name}">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="pc-card-img-ph">&#128138;</div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test="${p.featured}">
+                                            <span class="pc-card-featured">Featured</span>
+                                        </c:if>
+                                    </div>
+                                    <div class="pc-card-body">
+                                        <div class="pc-card-cat">${p.categoryName}</div>
+                                        <div class="pc-card-name">${p.name}</div>
+                                        <div class="pc-card-row">
+                                            <span class="pc-card-price">Rs <fmt:formatNumber value="${p.price}" pattern="#,##0"/></span>
+                                            <c:choose>
+                                                <c:when test="${p.stock == 0}">
+                                                    <span class="pc-card-stock-out">Out of stock</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="pc-card-stock-ok">${p.stock} left</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <div class="pc-card-actions">
+                                            <button class="admin-edit-btn"
+                                                onclick="openEditModal(${p.productId},'${p.name}',${p.price},${p.oldPrice},${p.stock},${p.categoryId},'${p.imagePath}',${p.featured},${p.bestseller},'${p.description}')">
+                                                Edit
+                                            </button>
+                                            <form action="<%= contextPath %>/admin/products/delete" method="post"
+                                                  style="flex:1;" onsubmit="return confirm('Delete this product?')">
+                                                <input type="hidden" name="productId" value="${p.productId}">
+                                                <button type="submit" class="admin-delete-btn" style="width:100%;">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
             </div>
         </div>
     </main>
@@ -210,7 +348,7 @@
     </div>
 </div>
 
-<script> 
+<script>
 function openEditModal(id,name,price,oldPrice,stock,catId,image,featured,bestseller,desc){
     document.getElementById('editProductId').value   = id;
     document.getElementById('editName').value        = name;
@@ -224,6 +362,30 @@ function openEditModal(id,name,price,oldPrice,stock,catId,image,featured,bestsel
     document.getElementById('editBestseller').checked = bestseller;
     document.getElementById('editProductModal').style.display = 'flex';
 }
+
+function setView(mode) {
+    var table = document.getElementById('productTable');
+    var grid  = document.getElementById('productCardGrid');
+    var btnT  = document.getElementById('btnTable');
+    var btnG  = document.getElementById('btnGrid');
+    if (mode === 'grid') {
+        table.style.display = 'none';
+        grid.style.display  = 'grid';
+        btnT.classList.remove('active');
+        btnG.classList.add('active');
+        localStorage.setItem('spra_prod_view','grid');
+    } else {
+        table.style.display = '';
+        grid.style.display  = 'none';
+        btnT.classList.add('active');
+        btnG.classList.remove('active');
+        localStorage.setItem('spra_prod_view','table');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+    if (localStorage.getItem('spra_prod_view') === 'grid') setView('grid');
+});
 </script>
 <script src="<%= contextPath %>/js/main.js"></script>
 </body>

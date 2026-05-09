@@ -17,11 +17,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         /* ── Message cards layout ── */
-        .msg-cards-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
+        /* ── Inbox two-panel layout ── */
+.inbox-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    height: calc(100vh - 80px);  /* fills below topbar */
+    overflow: hidden;
+}
+.inbox-list {
+    border-right: 1px solid var(--a-border);
+    overflow-y: auto;
+    background: #fff;
+}
+.inbox-list-head {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--a-border);
+    display: flex; align-items: center; gap: 10px;
+    position: sticky; top: 0; background: #fff; z-index: 2;
+}
+.inbox-list-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 600; color: var(--a-text);
+}
+.inbox-count {
+    background: var(--a-pink); color: #fff;
+    font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+}
+.inbox-empty { padding: 3rem 20px; color: var(--a-muted); font-style: italic; text-align: center; }
+.inbox-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 20px; cursor: pointer;
+    border-bottom: 1px solid #f8f0f0; transition: background .15s;
+}
+.inbox-row:hover { background: #fff8f8; }
+.inbox-row.active { background: var(--a-pink-light); border-left: 3px solid var(--a-pink); }
+.inbox-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #f4a0b0, #e8536a);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 13px;
+    font-weight: 600; color: #fff; text-transform: uppercase;
+}
+.inbox-row-body { flex: 1; min-width: 0; }
+.inbox-row-top { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+.inbox-row-name { font-size: 13px; font-weight: 600; color: var(--a-text); }
+.inbox-row-date { font-size: 10px; color: var(--a-muted); flex-shrink: 0; }
+.inbox-row-subj { font-size: 12px; color: var(--a-pink); font-weight: 500; margin-bottom: 2px; }
+.inbox-row-preview {
+    font-size: 11px; color: #888; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ── Reader pane ── */
+.inbox-reader {
+    overflow-y: auto; background: var(--a-bg);
+    display: flex; align-items: flex-start;
+}
+.inbox-reader-empty {
+    width: 100%; padding: 5rem 2rem; text-align: center; color: var(--a-muted);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.inbox-reader-inner { padding: 3rem; max-width: 680px; width: 100%; }
+.reader-eyebrow {
+    font-size: .6rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--a-pink); margin-bottom: 6px;
+}
+.reader-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; color: var(--a-text); margin-bottom: 4px;
+}
+.reader-meta { font-size: 12px; color: var(--a-muted); margin-bottom: 1.6rem; }
+.reader-subj-label {
+    font-size: .6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--a-muted); margin-bottom: 6px;
+}
+.reader-subj {
+    font-size: 15px; font-weight: 600; color: var(--a-text);
+    padding: 10px 14px; background: #fff;
+    border: 1px solid var(--a-border); border-radius: 8px; margin-bottom: 4px;
+}
+.reader-body {
+    font-size: 14px; color: #333; line-height: 1.9;
+    white-space: pre-wrap; padding: 16px;
+    background: #fff; border: 1px solid var(--a-border); border-radius: 8px;
+    margin-top: 6px;
+}
+
+@media (max-width: 800px) {
+    .inbox-layout { grid-template-columns: 1fr; }
+    .inbox-reader { display: none; }
+}
         .msg-card-row {
             display: grid;
             grid-template-columns: 48px 200px 180px 140px 1fr 140px;

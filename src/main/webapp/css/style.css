@@ -377,3 +377,156 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
   to   { opacity:1; transform: translateY(0); }
 }
 @keyframes slFadeIn { from { opacity:0; } to { opacity:1; } }
+
+
+/* These rules ensure the badge works on EVERY page     */
+.cart-icon-btn {
+    position: relative;   /* needed so the absolute badge positions correctly */
+}
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #e8536a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ---- Cart Toast Popup (slides in from top-right after Add to Cart) ---- */
+.cart-toast-popup {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    z-index: 9999;
+    width: 340px;
+    background: #fff;
+    border: 1px solid #e8d8da;
+    border-left: 4px solid #e8536a;
+    border-radius: 16px;
+    padding: 18px 20px 16px;
+    box-shadow: 0 8px 32px rgba(232,83,106,.15);
+    animation: ctpSlideIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes ctpSlideIn {
+    from { opacity: 0; transform: translateX(60px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+.cart-toast-popup.ctp-hiding {
+    animation: ctpSlideOut .3s ease forwards;
+}
+@keyframes ctpSlideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(60px); }
+}
+.ctp-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: #f8f0f2;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background .15s, color .15s;
+}
+.ctp-close:hover { background: #e8536a; color: #fff; }
+.ctp-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-right: 22px;
+}
+.ctp-check {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e8536a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.ctp-check svg { display: block; }
+.ctp-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
+.ctp-sub   { font-size: 11px; color: #aaa; }
+.ctp-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fdf8f8;
+    border: 1px solid #f0e0e0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+}
+.ctp-thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    background: #f0e8e8;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+.ctp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ctp-cat   { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+.ctp-name  { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.2; margin-bottom: 3px; }
+.ctp-price { font-size: 12px; font-weight: 600; color: #e8536a; }
+.ctp-btns  { display: flex; gap: 8px; }
+.ctp-btn-cart {
+    flex: 1;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background .18s;
+}
+.ctp-btn-cart:hover { background: #e8536a; }
+.ctp-btn-cont {
+    flex: 1;
+    background: #fff;
+    color: #555;
+    border: 1.5px solid #e8d8da;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color .18s, color .18s;
+}
+.ctp-btn-cont:hover { border-color: #e8536a; color: #e8536a; }
+.ctp-bar { height: 2px; background: #f0e0e0; border-radius: 1px; margin-top: 12px; overflow: hidden; }
+.ctp-bar-fill {
+    height: 100%;
+    background: #e8536a;
+    border-radius: 1px;
+    width: 100%;
+    animation: ctpCountdown 4s linear forwards;
+}
+@keyframes ctpCountdown { from { width: 100%; } to { width: 0%; } }

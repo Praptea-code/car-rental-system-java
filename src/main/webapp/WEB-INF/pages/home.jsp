@@ -330,7 +330,7 @@
         </a>
 
         <!-- Cart icon -->
-        <a href="<%= contextPath %>/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
+         <a href="${pageContext.request.contextPath}/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
 		    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
 		        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
 		        <line x1="3" y1="6" x2="21" y2="6"/>
@@ -390,8 +390,6 @@
         <p class="section-sub">Discover our most loved beauty essentials, curated just for you.</p>
     </div>
 
-    <%-- Invisible toast that pops up when item is added --%>
-    <div class="feat-toast" id="featToast"></div>
 
     <div class="products-grid">
         <c:forEach var="product" items="${featuredProducts}">
@@ -433,9 +431,15 @@
                         </c:when>
                         <c:otherwise>
                             <button class="feat-atc-btn"
-                                    onclick="addToCart(this, ${product.productId}, '${product.name}')">
-                                Add to Cart
-                            </button>
+						            onclick="addToCart(this,
+						                ${product.productId},
+						                '${product.name}',
+						                '${product.categoryName}',
+						                ${product.price},
+						                '${product.imagePath}',
+						                '${pageContext.request.contextPath}')">
+						        Add to Cart
+						    </button>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -656,114 +660,42 @@
 <script src="<%= contextPath %>/js/main.js"></script>
 
 <script>
-/* ============================================================
-   AJAX Add to Cart — no page refresh
-   ============================================================ */
-function addToCart(btn, productId, productName) {
-    btn.disabled = true;
-    btn.textContent = 'Adding…';
-    btn.classList.add('adding');
-
-    var formData = new FormData();
-    formData.append('productId', productId);
-    formData.append('qty', 1);
-
-    fetch('<%= contextPath %>/cart/add', {
-        method: 'POST',
-        body: formData,
-        redirect: 'manual'          // stop the server redirect from navigating away
-    })
-    .then(function () {
-        // Update button momentarily
-        btn.textContent = '✓ Added!';
+    /* Login popup for guests */
+    (function () {
+        var popup = document.getElementById('loginPopup');
+        if (!popup) return;
+        try {
+            if (sessionStorage.getItem('spra_popup_seen') === '1') {
+                popup.style.display = 'none';
+                return;
+            }
+        } catch (e) {}
+        popup.style.opacity = '0';
         setTimeout(function () {
-            btn.textContent = 'Add to Cart';
-            btn.disabled = false;
-            btn.classList.remove('adding');
-        }, 1600);
-
-        // Show bottom toast
-        var toast = document.getElementById('featToast');
-        if (toast) {
-            toast.textContent = '✓ ' + productName + ' added to cart';
-            toast.classList.add('show');
-            setTimeout(function () { toast.classList.remove('show'); }, 2800);
-        }
-
-        // Bump the nav cart badge without a full reload
-        updateCartBadge();
-    })
-    .catch(function () {
-        btn.textContent = 'Add to Cart';
-        btn.disabled = false;
-        btn.classList.remove('adding');
+            popup.style.transition = 'opacity .4s ease';
+            popup.style.opacity = '1';
+        }, 600);
+    }());
+ 
+    function dismissPopup() {
+        var popup = document.getElementById('loginPopup');
+        if (!popup) return;
+        popup.style.transition = 'opacity .3s ease';
+        popup.style.opacity = '0';
+        setTimeout(function () { popup.style.display = 'none'; }, 320);
+        try { sessionStorage.setItem('spra_popup_seen', '1'); } catch (e) {}
+    }
+ 
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') dismissPopup();
     });
-}
-
-/* Fetch the cart page silently just to read the updated badge count */
-function updateCartBadge() {
-    fetch('<%= contextPath %>/cart', { method: 'GET' })
-    .then(function(r){ return r.text(); })
-    .then(function(html) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
-        var newBadge = doc.querySelector('.cart-badge');
-        var allBadges = document.querySelectorAll('.cart-badge');
-
-        allBadges.forEach(function(b){ b.remove(); });
-
-        if (newBadge) {
-            document.querySelectorAll('.cart-icon-btn').forEach(function(iconBtn) {
-                var clone = newBadge.cloneNode(true);
-                iconBtn.appendChild(clone);
-            });
-        }
-    })
-    .catch(function(){});   // silently ignore network errors
-}
-
-
-(function () {
-    var popup = document.getElementById('loginPopup');
-    if (!popup) return; // user is logged in, nothing to do
-
-    // Show only once per browser session
-    try {
-        if (sessionStorage.getItem('spra_popup_seen') === '1') {
-            popup.style.display = 'none';
-            return;
-        }
-    } catch (e) {}
-
-    // Slight delay so the page has a moment to render first
-    popup.style.opacity = '0';
-    setTimeout(function () {
-        popup.style.transition = 'opacity .4s ease';
-        popup.style.opacity = '1';
-    }, 600);
-}());
-
-function dismissPopup() {
-    var popup = document.getElementById('loginPopup');
-    if (!popup) return;
-    popup.style.transition = 'opacity .3s ease';
-    popup.style.opacity = '0';
-    setTimeout(function () { popup.style.display = 'none'; }, 320);
-    try { sessionStorage.setItem('spra_popup_seen', '1'); } catch (e) {}
-}
-
-// Escape key closes popup
-document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') dismissPopup();
-});
-
-// Click outside the box closes popup
-var popupOverlay = document.getElementById('loginPopup');
-if (popupOverlay) {
-    popupOverlay.addEventListener('click', function (e) {
-        if (e.target === popupOverlay) dismissPopup();
-    });
-}
+ 
+    var popupOverlay = document.getElementById('loginPopup');
+    if (popupOverlay) {
+        popupOverlay.addEventListener('click', function (e) {
+            if (e.target === popupOverlay) dismissPopup();
+        });
+    }
 </script>
 
 </body>

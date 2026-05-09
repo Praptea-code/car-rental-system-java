@@ -68,7 +68,7 @@ public class CartController extends HttpServlet {
     private void handleAdd(HttpServletRequest req, HttpServletResponse res) throws IOException {
         int productId = parseInt(req.getParameter("productId"), -1);
         int qty       = Math.max(1, parseInt(req.getParameter("qty"), 1));
-
+ 
         if (productId > 0) {
             ProductModel product = productDAO.getProductById(productId);
             if (product != null && !product.isOutOfStock()) {
@@ -81,7 +81,12 @@ public class CartController extends HttpServlet {
                         qty
                 );
                 getOrCreateCart(req).addItem(item);
-                req.getSession(true).setAttribute(SESSION_TOAST, product.getName());
+ 
+                // Store toast data in session so any page can show the popup
+                req.getSession(true).setAttribute(SESSION_TOAST,           product.getName());
+                req.getSession(true).setAttribute("cartToastCategory",     product.getCategoryName() != null ? product.getCategoryName() : "");
+                req.getSession(true).setAttribute("cartToastPrice",        product.getPrice());
+                req.getSession(true).setAttribute("cartToastImage",        product.getImagePath() != null ? product.getImagePath() : "");
             }
         }
         String referer = req.getHeader("Referer");

@@ -171,7 +171,27 @@
     </style>
 </head>
 <body>
-
+<%-- ═══ CART TOAST POPUP TRIGGER ═══
+     Fires when the user is redirected back after adding to cart.
+     CartController stores the product details in session.
+     This block reads them, shows the popup, then clears the session. --%>
+<c:if test="${not empty sessionScope.cartToast}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showCartToast(
+            '${sessionScope.cartToast}',
+            '${sessionScope.cartToastCategory}',
+            ${not empty sessionScope.cartToastPrice ? sessionScope.cartToastPrice : 0},
+            '${sessionScope.cartToastImage}',
+            '${pageContext.request.contextPath}'
+        );
+    });
+    </script>
+    <c:remove var="cartToast"         scope="session"/>
+    <c:remove var="cartToastCategory" scope="session"/>
+    <c:remove var="cartToastPrice"    scope="session"/>
+    <c:remove var="cartToastImage"    scope="session"/>
+</c:if>
 <!-- ═══ NAVIGATION ═══ -->
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>

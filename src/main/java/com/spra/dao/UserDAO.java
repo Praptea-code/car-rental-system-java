@@ -226,6 +226,95 @@ public class UserDAO {
         u.setLoginAttempts(rs.getInt("login_attempts"));
         u.setLockedUntil(rs.getTimestamp("locked_until"));
         u.setCreatedAt(rs.getTimestamp("created_at"));
+        u.setGoogleId(rs.getString("google_id"));
         return u;
+    }
+    
+    /**
+     * Retrieves a user by email address (used by forgot-password flow).
+     */
+    public UserModel getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapRow(rs);
+        } catch (SQLException e) {
+            System.err.println("[UserDAO.getUserByEmail] " + e.getMessage());
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+        return null;
+    }
+ 
+    /**
+     * Retrieves a user by their Google sub/ID (used during Google OAuth callback).
+     */
+    public UserModel getUserByGoogleId(String googleId) {
+        String sql = "SELECT * FROM users WHERE google_id = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, googleId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapRow(rs);
+        } catch (SQLException e) {
+            System.err.println("[UserDAO.getUserByGoogleId] " + e.getMessage());
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+        return null;
+    }
+ 
+    /**
+     * Registers a new Google OAuth user (no password, google_id stored).
+     * Returns the new user_id, or -1 on failure.
+     */
+    public int registerGoogleUser(UserModel user) {
+        String sql = "INSERT INTO users (first_name, last_name, username, email, google_id, role, is_active) "
+                   + "VALUES (?, ?, ?, ?, ?, 'USER', 1)";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getUsername());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getGoogleId());
+            ps.executeUpdate();
+            ResultSet keys = ps.getGeneratedKeys();
+            if (keys.next()) return keys.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("[UserDAO.registerGoogleUser] " + e.getMessage());
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
+        return -1;
+    }
+ 
+    /**
+     * Links a Google ID to an existing account (when user logs in with Google
+     * but an account with that email already exists).
+     */
+    public boolean linkGoogleId(int userId, String googleId) {
+        String sql = "UPDATE users SET google_id = ? WHERE user_id = ?";
+        Connection conn = null;
+        try {
+            conn = DbConfig.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, googleId);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UserDAO.linkGoogleId] " + e.getMessage());
+            return false;
+        } finally {
+            DbConfig.closeConnection(conn);
+        }
     }
 }

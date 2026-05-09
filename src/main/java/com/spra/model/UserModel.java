@@ -90,6 +90,10 @@ public class UserModel {
     public Timestamp getCreatedAt()                { return createdAt; }
     public void setCreatedAt(Timestamp t)          { this.createdAt = t; }
 
+    private String googleId;
+    
+    public String getGoogleId()              { return googleId; }
+    public void setGoogleId(String googleId) { this.googleId = googleId; }
     /** Convenience — returns "First Last". */
     public String getFullName() {
         return firstName + " " + lastName;

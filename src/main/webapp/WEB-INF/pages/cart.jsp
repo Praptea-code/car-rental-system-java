@@ -169,7 +169,7 @@
 
 <!-- ═══ NAV ═══ -->
 <nav class="nav">
-    <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>
+    <a href="${pageContext.request.contextPath}/home" class="nav-logo">SPR<span class="nav-dot">A</span></a>
     <ul class="nav-links">
         <li><a href="<%= contextPath %>/home">Home</a></li>
         <li><a href="<%= contextPath %>/products">Products</a></li>

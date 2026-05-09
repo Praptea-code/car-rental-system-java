@@ -56,6 +56,7 @@
             cursor: pointer;
             transition: border-color .18s, background .18s, box-shadow .18s;
             margin-bottom: 0;
+            text-decoration: none;
         }
         .google-btn:hover {
             border-color: #e8536a;
@@ -100,9 +101,10 @@
             <c:if test="${not empty errorMessage}">
                 <span id="serverErrorMsg" style="display:none"><c:out value="${errorMessage}"/></span>
             </c:if>
-
+            
+            
             <!-- Google Sign-Up -->
-            <button type="button" class="google-btn" onclick="handleGoogleSignUp()">
+            <a href="<%= contextPath %>/auth/google" class="google-btn">
                 <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M47.532 24.552c0-1.636-.145-3.2-.415-4.698H24.48v8.883h12.94c-.558 3.003-2.25 5.547-4.793 7.254v6.03h7.763c4.54-4.181 7.142-10.337 7.142-17.469z" fill="#4285F4"/>
                     <path d="M24.48 48c6.487 0 11.927-2.15 15.9-5.81l-7.763-6.03c-2.15 1.44-4.903 2.29-8.137 2.29-6.254 0-11.552-4.226-13.44-9.903H2.97v6.228C6.929 42.796 15.115 48 24.48 48z" fill="#34A853"/>
@@ -110,7 +112,7 @@
                     <path d="M24.48 9.554c3.524 0 6.684 1.211 9.171 3.588l6.874-6.874C36.4 2.388 30.966 0 24.48 0 15.115 0 6.929 5.204 2.97 13.225l8.07 6.228c1.888-5.677 7.186-9.9 13.44-9.9z" fill="#EA4335"/>
                 </svg>
                 Continue with Google
-            </button>
+            </a>
 
             <!-- OR divider -->
             <div class="auth-divider">

@@ -29,8 +29,8 @@ import java.util.Properties;
 public class EmailUtil {
 
     // ── CONFIGURE THESE TWO LINES ──────────────────────────
-    private static final String GMAIL_ADDRESS      = "bhattarai.prapti00@gmail.com";   
-    private static final String GMAIL_APP_PASSWORD = "eqzvgpisstthrsya";        
+    private static final String GMAIL_ADDRESS      = "your_gmail@gmail.com";   // <-- your Gmail
+    private static final String GMAIL_APP_PASSWORD = "abcdefghijklmnop";        // <-- 16-char App Password (no spaces)
     // ──────────────────────────────────────────────────────
 
     private static final String SMTP_HOST = "smtp.gmail.com";
@@ -47,7 +47,7 @@ public class EmailUtil {
      * @throws MessagingException if sending fails
      */
     public static void sendHtml(String toEmail, String subject, String htmlBody)
-            throws MessagingException {
+            throws MessagingException, java.io.UnsupportedEncodingException {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth",            "true");
@@ -80,7 +80,7 @@ public class EmailUtil {
      * @param resetLink  full reset URL e.g. http://localhost:8080/spra/reset-password?token=abc123
      */
     public static void sendPasswordResetEmail(String toEmail, String firstName, String resetLink)
-            throws MessagingException {
+            throws MessagingException, java.io.UnsupportedEncodingException {
 
         String subject = "Reset your Spra password";
 

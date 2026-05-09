@@ -32,22 +32,48 @@
             to   { opacity: 1; transform: translateX(0); }
         }
         .field-error svg { flex-shrink: 0; }
-
-        /* Highlight the input that has an error */
-        .input-error {
-            border-color: #e74c3c !important;
-            background: #fffafa !important;
+        .input-error { border-color: #e74c3c !important; background: #fffafa !important; }
+        .field-ok {
+            font-size: .68rem; color: #27ae60; margin-top: 4px;
+            display: flex; align-items: center; gap: 5px; padding: 4px 8px;
         }
 
-        /* A small "ok" indicator when field is valid and has been touched */
-        .field-ok {
-            font-size: .68rem;
-            color: #27ae60;
-            margin-top: 4px;
+        /* ── Google button ── */
+        .google-btn {
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 8px;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: #fff;
+            border: 1.5px solid #e0d8d8;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: border-color .18s, background .18s, box-shadow .18s;
+            margin-bottom: 0;
+        }
+        .google-btn:hover {
+            border-color: #e8536a;
+            background: #fdf8f8;
+            box-shadow: 0 2px 12px rgba(232,83,106,.08);
+        }
+
+        /* ── Divider ── */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0;
+        }
+        .auth-divider-line { flex: 1; height: 1px; background: #e8e0e0; }
+        .auth-divider-text {
+            font-size: 12px; color: #bbb;
+            letter-spacing: .04em; white-space: nowrap;
         }
     </style>
 </head>
@@ -71,17 +97,29 @@
             <h1 class="auth-form-title">Create Account</h1>
             <p class="auth-form-sub">Already have an account? <a href="<%= contextPath %>/login" class="auth-link">Login</a></p>
 
-            <%-- 
-                We no longer show a big top-level error banner.
-                Field-level errors are shown inline below each field.
-                The errorMessage from the server is parsed by JS to match the right field,
-                but we also keep a fallback top alert for truly unexpected errors.
-            --%>
             <c:if test="${not empty errorMessage}">
-                <%-- Hidden span — JS will parse this and place it near the right field --%>
                 <span id="serverErrorMsg" style="display:none"><c:out value="${errorMessage}"/></span>
             </c:if>
 
+            <!-- Google Sign-Up -->
+            <button type="button" class="google-btn" onclick="handleGoogleSignUp()">
+                <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M47.532 24.552c0-1.636-.145-3.2-.415-4.698H24.48v8.883h12.94c-.558 3.003-2.25 5.547-4.793 7.254v6.03h7.763c4.54-4.181 7.142-10.337 7.142-17.469z" fill="#4285F4"/>
+                    <path d="M24.48 48c6.487 0 11.927-2.15 15.9-5.81l-7.763-6.03c-2.15 1.44-4.903 2.29-8.137 2.29-6.254 0-11.552-4.226-13.44-9.903H2.97v6.228C6.929 42.796 15.115 48 24.48 48z" fill="#34A853"/>
+                    <path d="M11.04 28.547A14.37 14.37 0 0 1 10.263 24c0-1.585.274-3.126.777-4.547v-6.228H2.97A23.972 23.972 0 0 0 .48 24c0 3.874.927 7.54 2.49 10.775l8.07-6.228z" fill="#FBBC05"/>
+                    <path d="M24.48 9.554c3.524 0 6.684 1.211 9.171 3.588l6.874-6.874C36.4 2.388 30.966 0 24.48 0 15.115 0 6.929 5.204 2.97 13.225l8.07 6.228c1.888-5.677 7.186-9.9 13.44-9.9z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <!-- OR divider -->
+            <div class="auth-divider">
+                <div class="auth-divider-line"></div>
+                <span class="auth-divider-text">or register with email</span>
+                <div class="auth-divider-line"></div>
+            </div>
+
+            <!-- Registration form -->
             <form action="<%= contextPath %>/register" method="post" class="auth-form" novalidate id="registerForm">
 
                 <div class="form-row-2">
@@ -191,6 +229,15 @@
 
 <script src="<%= contextPath %>/js/main.js"></script>
 <script>
+function handleGoogleSignUp() {
+    /*
+     * TODO: Same Google OAuth setup as login.jsp.
+     * The same /oauth2/callback servlet handles both sign-in and sign-up —
+     * if the Google email isn't in your DB yet, auto-create the account there.
+     */
+    alert('Google Sign-Up is not configured yet.\n\nSee the code comment in register.jsp → handleGoogleSignUp() for setup instructions.');
+}
+
 (function () {
     var errorRoutes = [
         { match: /first name/i,            field: 'firstName' },
@@ -217,10 +264,8 @@
         errText.textContent = message;
         errDiv.style.display = 'flex';
         if (input) input.classList.add('input-error');
-        // Only scroll/focus when explicitly requested (server-side routing)
         if (autoFocus && input) {
             input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            // Don't call input.focus() — it fights with the user's own clicks
         }
     }
 
@@ -231,7 +276,6 @@
         if (input)  input.classList.remove('input-error');
     }
 
-    // Read server error injected by JSP
     var serverErrEl = document.getElementById('serverErrorMsg');
     if (serverErrEl) {
         var msg = serverErrEl.textContent.trim();
@@ -239,7 +283,7 @@
             var routed = false;
             for (var i = 0; i < errorRoutes.length; i++) {
                 if (errorRoutes[i].match.test(msg)) {
-                    showFieldError(errorRoutes[i].field, msg, true); // autoFocus=true only here
+                    showFieldError(errorRoutes[i].field, msg, true);
                     routed = true;
                     break;
                 }
@@ -254,7 +298,6 @@
         }
     }
 
-    // Live client-side validation on blur (no autoFocus)
     var form = document.getElementById('registerForm');
     if (!form) return;
 
@@ -316,7 +359,6 @@
         if (conf.value && conf.value !== this.value) showFieldError('retypePassword', 'Passwords do not match.');
         else if (conf.value) clearFieldError('retypePassword');
     });
-
 }());
 </script>
 </body>

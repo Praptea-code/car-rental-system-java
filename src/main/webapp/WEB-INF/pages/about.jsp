@@ -242,7 +242,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p class="footer-copy">&copy; 2026 Spra. Made with <span class="footer-heart">&#9829;</span> All rights reserved.</p>
+            <p class="footer-copy">&copy; 2025 Spra. Made with <span class="footer-heart">&#9829;</span> All rights reserved.</p>
             <div class="footer-legal">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>

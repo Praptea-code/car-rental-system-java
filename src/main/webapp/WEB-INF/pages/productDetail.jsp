@@ -142,39 +142,36 @@
         }
 
         .pd-btn-cart {
-		    flex: 1; background: #1a1a1a; color: #fff; border: none;
-		    padding: 14px 16px; border-radius: 10px; font-size: 14px;
-		    font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer;
-		    transition: background .2s; display: flex; align-items: center;
-		    justify-content: center; gap: 8px;
-		}
-		.pd-btn-cart:hover:not(:disabled) { background: #e8536a; }
-		.pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
-		
-		.pd-btn-buy-now {
-		    flex: 1; background: #e8536a; color: #fff; border: none;
-		    padding: 14px 16px; border-radius: 10px; font-size: 14px;
-		    font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer;
-		    transition: opacity .2s; display: flex; align-items: center;
-		    justify-content: center; gap: 8px; letter-spacing: .04em;
-		}
-		.pd-btn-buy-now:hover { opacity: .88; }
-		
-		.pd-btn-wishlist {
-		    width: 50px; border: 1.5px solid #e8d8da; background: #fff;
-		    border-radius: 10px; display: flex; align-items: center;
-		    justify-content: center; cursor: pointer; transition: border-color .2s,
-		    background .2s; color: #aaa;
-		}
-		.pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
-		.pd-btn-wishlist.wishlisted { border-color: #e8536a; background: #fdf0f2; }
+            flex: 1; background: #1a1a1a; color: #fff; border: none;
+            padding: 14px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer;
+            transition: background .2s; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+        .pd-btn-cart:hover:not(:disabled) { background: #e8536a; }
+        .pd-btn-cart:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+
+        .pd-btn-buy-now {
+            flex: 1; background: #e8536a; color: #fff; border: none;
+            padding: 14px 16px; border-radius: 10px; font-size: 14px;
+            font-weight: 700; font-family: 'DM Sans', sans-serif; cursor: pointer;
+            transition: opacity .2s; display: flex; align-items: center;
+            justify-content: center; gap: 8px; letter-spacing: .04em;
+        }
+        .pd-btn-buy-now:hover { opacity: .88; }
+
+        .pd-btn-wishlist {
+            width: 50px; border: 1.5px solid #e8d8da; background: #fff;
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; transition: border-color .2s,
+            background .2s; color: #aaa;
+        }
+        .pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
+        .pd-btn-wishlist.wishlisted { border-color: #e8536a; background: #fdf0f2; }
     </style>
 </head>
 <body>
-<%-- ═══ CART TOAST POPUP TRIGGER ═══
-     Fires when the user is redirected back after adding to cart.
-     CartController stores the product details in session.
-     This block reads them, shows the popup, then clears the session. --%>
+<%-- ═══ CART TOAST POPUP TRIGGER ═══ --%>
 <c:if test="${not empty sessionScope.cartToast}">
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -192,6 +189,7 @@
     <c:remove var="cartToastPrice"    scope="session"/>
     <c:remove var="cartToastImage"    scope="session"/>
 </c:if>
+
 <!-- ═══ NAVIGATION ═══ -->
 <nav class="nav">
     <div class="nav-logo">SΡRA<span class="nav-dot">.</span></div>
@@ -273,10 +271,6 @@
     <c:if test="${not empty sessionScope.errorMessage}">
         <div class="alert alert-error">${sessionScope.errorMessage}</div>
         <c:remove var="errorMessage" scope="session"/>
-    </c:if>
-    <c:if test="${not empty sessionScope.cartToast}">
-        <div class="alert alert-success">${sessionScope.cartToast} was added to your cart!</div>
-        <c:remove var="cartToast" scope="session"/>
     </c:if>
 
     <!-- ── PRODUCT MAIN ── -->
@@ -380,113 +374,116 @@
             <div class="pd-divider"></div>
 
             <!-- ══════════════════════════════════════════
-                 ACTION BUTTONS — logged in user
+                 ACTION BUTTONS
+                 Add to Cart  — open to everyone
+                 Buy Now      — redirects guests to login
+                 Wishlist     — redirects guests to login
                  ══════════════════════════════════════════ -->
-            <c:choose>
-                <c:when test="${not empty currentUser}">
 
-                    <!-- Quantity stepper -->
-                    <div class="pd-qty-row">
-                        <label class="pd-qty-label">Quantity</label>
-                        <div class="pd-qty-wrap">
-                            <button type="button" class="pd-qty-btn" onclick="changeQty(-1)" <c:if test="${product.outOfStock}">disabled</c:if>>−</button>
-                            <input type="number" id="qtyInput" value="1" min="1"
-                                   max="${product.stock > 0 ? product.stock : 1}"
-                                   class="pd-qty-val" <c:if test="${product.outOfStock}">disabled</c:if>
-                                   oninput="syncQty()"/>
-                            <button type="button" class="pd-qty-btn" onclick="changeQty(1)" <c:if test="${product.outOfStock}">disabled</c:if>">+</button>
-                        </div>
-                    </div>
+            <!-- Quantity stepper — always visible -->
+            <div class="pd-qty-row">
+                <label class="pd-qty-label">Quantity</label>
+                <div class="pd-qty-wrap">
+                    <button type="button" class="pd-qty-btn" onclick="changeQty(-1)"
+                            <c:if test="${product.outOfStock}">disabled</c:if>>−</button>
+                    <input type="number" id="qtyInput" value="1" min="1"
+                           max="${product.stock > 0 ? product.stock : 1}"
+                           class="pd-qty-val"
+                           <c:if test="${product.outOfStock}">disabled</c:if>
+                           oninput="syncQty()"/>
+                    <button type="button" class="pd-qty-btn" onclick="changeQty(1)"
+                            <c:if test="${product.outOfStock}">disabled</c:if>>+</button>
+                </div>
+            </div>
 
-                    <%--
-                        THREE separate forms, laid out with a wrapper div.
-                        Row 1: [Add to Cart] [♡ Wishlist]
-                        Row 2: [Buy Now — full width]
-                        Using display:contents on each <form> so flex layout
-                        flows through them without extra boxes.
-                    --%>
-                    
-                    <div class="pd-actions" style="display:flex; gap:10px; align-items:stretch; margin-bottom:20px;">
+            <div class="pd-actions" style="display:flex; gap:10px; align-items:stretch; margin-bottom:20px;">
 
-					    <%-- Add to Cart --%>
-					    <form action="${pageContext.request.contextPath}/cart/add" method="post" style="flex:1;">
-					        <input type="hidden" name="productId" value="${product.productId}"/>
-					        <input type="hidden" name="qty" id="qtyHidden" value="1"/>
-					        <button type="submit" class="pd-btn-cart" style="width:100%;"
-					                <c:if test="${product.outOfStock}">disabled</c:if>
-					                onclick="syncQty()">
-					            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-					                <line x1="3" y1="6" x2="21" y2="6"/>
-					                <path d="M16 10a4 4 0 0 1-8 0"/>
-					            </svg>
-					            <c:choose>
-					                <c:when test="${product.outOfStock}">Unavailable</c:when>
-					                <c:otherwise>Add to Cart</c:otherwise>
-					            </c:choose>
-					        </button>
-					    </form>
-					
-					    <%-- Buy Now --%>
-					    <c:if test="${not product.outOfStock}">
-					        <form action="${pageContext.request.contextPath}/buy-now" method="post" style="flex:1;">
-					            <input type="hidden" name="productId" value="${product.productId}"/>
-					            <input type="hidden" name="qty" id="qtyBuyNow" value="1"/>
-					            <button type="submit" class="pd-btn-buy-now" style="width:100%;" onclick="syncQty()">
-					                ✦ Buy Now
-					            </button>
-					        </form>
-					    </c:if>
-					
-					    <%-- Wishlist heart --%>
-					    <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
-					          method="post" style="flex-shrink:0;">
-					        <input type="hidden" name="productId" value="${product.productId}"/>
-					        <button type="submit"
-					                class="pd-btn-wishlist ${isWishlisted ? 'wishlisted' : ''}"
-					                title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
-					                style="width:50px; height:100%;">
-					            <svg width="20" height="20" viewBox="0 0 24 24"
-					                 fill="${isWishlisted ? '#e8536a' : 'none'}"
-					                 stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
-					                 stroke-width="1.8">
-					                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-					            </svg>
-					        </button>
-					    </form>
-					
-					</div>
-                    
-                </c:when>
-                <c:otherwise>
-                    <%-- Not logged in — show login prompt --%>
-                    <div style="margin-bottom:20px;">
+                <%-- ── Add to Cart — no login required ── --%>
+                <form action="${pageContext.request.contextPath}/cart/add" method="post" style="flex:1;">
+                    <input type="hidden" name="productId" value="${product.productId}"/>
+                    <input type="hidden" name="qty" id="qtyHidden" value="1"/>
+                    <button type="submit" class="pd-btn-cart" style="width:100%;"
+                            <c:if test="${product.outOfStock}">disabled</c:if>
+                            onclick="syncQty()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                        <c:choose>
+                            <c:when test="${product.outOfStock}">Unavailable</c:when>
+                            <c:otherwise>Add to Cart</c:otherwise>
+                        </c:choose>
+                    </button>
+                </form>
+
+                <%-- ── Buy Now — login required ── --%>
+                <c:if test="${not product.outOfStock}">
+                    <c:choose>
+                        <c:when test="${not empty currentUser}">
+                            <form action="${pageContext.request.contextPath}/buy-now" method="post" style="flex:1;">
+                                <input type="hidden" name="productId" value="${product.productId}"/>
+                                <input type="hidden" name="qty" id="qtyBuyNow" value="1"/>
+                                <button type="submit" class="pd-btn-buy-now" style="width:100%;" onclick="syncQty()">
+                                    ✦ Buy Now
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <%-- Looks identical but sends guest to login --%>
+                            <a href="${pageContext.request.contextPath}/login"
+                               class="pd-btn-buy-now"
+                               style="flex:1; text-decoration:none;">
+                                ✦ Buy Now
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+
+                <%-- ── Wishlist heart — login required ── --%>
+                <c:choose>
+                    <c:when test="${not empty currentUser}">
+                        <form action="${pageContext.request.contextPath}/wishlist/${isWishlisted ? 'remove' : 'add'}"
+                              method="post" style="flex-shrink:0;">
+                            <input type="hidden" name="productId" value="${product.productId}"/>
+                            <button type="submit"
+                                    class="pd-btn-wishlist ${isWishlisted ? 'wishlisted' : ''}"
+                                    title="${isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}"
+                                    style="width:50px; height:100%;">
+                                <svg width="20" height="20" viewBox="0 0 24 24"
+                                     fill="${isWishlisted ? '#e8536a' : 'none'}"
+                                     stroke="${isWishlisted ? '#e8536a' : 'currentColor'}"
+                                     stroke-width="1.8">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
                         <a href="${pageContext.request.contextPath}/login"
-                           style="display:flex;align-items:center;justify-content:center;gap:8px;
-                                  width:100%;background:#1a1a1a;color:#fff;border:none;
-                                  padding:14px 20px;border-radius:10px;font-size:14px;font-weight:500;
-                                  font-family:'DM Sans',sans-serif;transition:background .2s;
-                                  text-decoration:none;margin-bottom:10px;"
-                           onmouseover="this.style.background='#e8536a'"
-                           onmouseout="this.style.background='#1a1a1a'">
-                            Login to Add to Cart
+                           class="pd-btn-wishlist"
+                           title="Login to add to wishlist"
+                           style="width:50px; height:50px; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
                         </a>
-                        <a href="${pageContext.request.contextPath}/login"
-                           style="display:flex;align-items:center;justify-content:center;gap:8px;
-                                  width:100%;background:#e8536a;color:#fff;border:none;
-                                  padding:14px 20px;border-radius:10px;font-size:14px;font-weight:700;
-                                  font-family:'DM Sans',sans-serif;transition:opacity .2s;
-                                  text-decoration:none;letter-spacing:.04em;"
-                           onmouseover="this.style.opacity='.88'"
-                           onmouseout="this.style.opacity='1'">
-                            ✦ Login to Buy Now
-                        </a>
-                        <p style="font-size:12px;color:#aaa;text-align:center;margin-top:8px;">
-                            <a href="${pageContext.request.contextPath}/register" style="color:#e8536a;">Create an account</a> to start shopping
-                        </p>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                    </c:otherwise>
+                </c:choose>
+
+            </div>
+
+            <%-- Small nudge shown only to guests — below the buttons, not blocking --%>
+            <c:if test="${empty currentUser}">
+                <p style="font-size:12px; color:#aaa; margin-bottom:20px; line-height:1.6;">
+                    <a href="${pageContext.request.contextPath}/login"
+                       style="color:#e8536a; font-weight:600;">Sign in</a>
+                    or
+                    <a href="${pageContext.request.contextPath}/register"
+                       style="color:#e8536a; font-weight:600;">create an account</a>
+                    to use Buy Now, Wishlist &amp; track your orders.
+                </p>
+            </c:if>
 
             <div class="pd-divider"></div>
 

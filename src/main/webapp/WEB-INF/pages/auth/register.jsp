@@ -11,6 +11,7 @@
     <title>Register &ndash; Spra.</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <link rel="stylesheet" href="<%= contextPath %>/css/auth.css">
+    <link rel="icon" type="image/svg+xml" href="<%= contextPath %>/assets/images/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         /* ── Field-level error styles ── */

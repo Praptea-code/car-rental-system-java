@@ -5,42 +5,37 @@ import com.spra.model.UserModel;
 import com.spra.util.CookieUtil;
 import com.spra.util.SessionUtil;
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * RememberMeFilter
+ * RememberMeFilter — runs on every request, restores session from cookie.
  *
- * Runs on every request. If the user has no active session but has a
- * "spra_user" cookie (set at login with Remember Me checked), the filter
- * re-creates the session automatically — giving the "stay logged in" effect.
- *
- * Place this file at: src/main/java/com/spra/filter/RememberMeFilter.java
- *
- * @author Spra Team
+ * REGISTERED IN web.xml ONLY.
+ * The @WebFilter annotation has been intentionally removed.
+ * Must execute BEFORE AuthFilter — guaranteed only via web.xml ordering.
  */
-@WebFilter(urlPatterns = {"/*"}, asyncSupported = true)
 public class RememberMeFilter implements Filter {
 
     private final UserDAO userDAO = new UserDAO();
 
     @Override
-    public void doFilter(ServletRequest servletReq, ServletResponse servletRes,
-                         FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletReq,
+                         ServletResponse servletRes,
+                         FilterChain chain)
+            throws IOException, ServletException {
 
         HttpServletRequest  req = (HttpServletRequest)  servletReq;
         HttpServletResponse res = (HttpServletResponse) servletRes;
 
-        // Only act if the user is NOT already logged in
+        // Only attempt cookie restore when there is no active session
         if (SessionUtil.getLoggedInUser(req) == null) {
-
             String rememberedUsername = CookieUtil.getCookie(req, "spra_user");
 
             if (rememberedUsername != null && !rememberedUsername.isBlank()) {
-                // Look up the user and silently log them in
                 UserModel user = userDAO.getUserByUsername(rememberedUsername);
+                // Only restore if account is active
                 if (user != null && user.isActive()) {
                     SessionUtil.loginUser(req, user);
                 }

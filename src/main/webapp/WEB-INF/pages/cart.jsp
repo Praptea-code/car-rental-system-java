@@ -114,6 +114,11 @@
         /* Responsive */
         @media (max-width: 900px) { .cart-layout { flex-direction: column; } .cart-summary-col { width: 100%; } .cart-summary { position: static; } .cart-col-head { display: none; } .cart-item { grid-template-columns: 1fr auto; grid-template-rows: auto auto; } .ci-product { grid-column: 1 / -1; } .ci-unit-price { display: none; } }
         @media (max-width: 600px) { .cart-page { padding: 2rem 1.2rem 4rem; } }
+   
+		@keyframes odSlide {
+		    from { opacity:0; transform:translateY(30px) scale(.97); }
+		    to   { opacity:1; transform:translateY(0) scale(1); }
+		}
     </style>
 </head>
 <body>
@@ -300,9 +305,71 @@
 
                     <div class="cart-bottom-row">
                         <a href="<%= contextPath %>/products" class="cart-continue-btn">&larr; Continue Shopping</a>
-                        <form action="<%= contextPath %>/cart/clear" method="post">
-                            <button type="submit" class="cart-clear-btn" onclick="return confirm('Clear entire cart?')">Clear Cart</button>
-                        </form>
+                        <button type="button" class="cart-clear-btn" onclick="openClearCartModal()">Clear Cart</button>
+
+						<!-- Clear Cart Modal -->
+						<div id="clearCartModal" style="display:none;position:fixed;inset:0;background:rgba(10,4,6,.72);
+						     backdrop-filter:blur(8px);z-index:9100;align-items:center;justify-content:center;">
+						    <div style="background:#fff;border-radius:22px;width:440px;max-width:95vw;
+						                box-shadow:0 40px 100px rgba(0,0,0,.28);padding:2.5rem 2.2rem 2rem;
+						                position:relative;text-align:center;font-family:'DM Sans',sans-serif;
+						                animation:odSlide .38s cubic-bezier(.22,1,.36,1);">
+						
+						        <button onclick="closeClearCartModal()"
+						                style="position:absolute;top:14px;right:16px;background:#f8f0f2;border:none;
+						                       border-radius:50%;width:32px;height:32px;font-size:18px;color:#999;
+						                       display:flex;align-items:center;justify-content:center;cursor:pointer;
+						                       transition:background .2s,color .2s;"
+						                onmouseover="this.style.background='#e8536a';this.style.color='#fff'"
+						                onmouseout="this.style.background='#f8f0f2';this.style.color='#999'">&times;</button>
+						
+						        <!-- Icon -->
+						        <div style="width:72px;height:72px;background:#fceaea;border-radius:50%;
+						                    display:flex;align-items:center;justify-content:center;
+						                    margin:0 auto 18px;border:1px solid #f09595;">
+						            <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+						                 stroke="#a32d2d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						                <polyline points="3 6 5 6 21 6"/>
+						                <path d="M19 6l-1 14H6L5 6"/>
+						                <path d="M10 11v6M14 11v6"/>
+						                <path d="M9 6V4h6v2"/>
+						            </svg>
+						        </div>
+						
+						        <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
+						                    font-weight:600;color:#1a1a1a;margin-bottom:8px;">Clear your cart?</div>
+						
+						        <p style="font-size:.84rem;color:#888;line-height:1.7;margin-bottom:1.8rem;
+						                  max-width:300px;margin-left:auto;margin-right:auto;">
+						            All <strong style="color:#1a1a1a;">${cart.totalCount} item<c:if test="${cart.totalCount != 1}">s</c:if></strong>
+						            will be removed. This cannot be undone.
+						        </p>
+						
+						        <div style="display:flex;gap:10px;justify-content:center;">
+						            <button onclick="closeClearCartModal()"
+						                    style="flex:1;max-width:160px;padding:12px;background:#fff;
+						                           border:1.5px solid #e8d8da;border-radius:10px;font-size:.84rem;
+						                           font-weight:600;color:#555;cursor:pointer;font-family:'DM Sans',sans-serif;
+						                           transition:border-color .2s,color .2s;"
+						                    onmouseover="this.style.borderColor='#e8536a';this.style.color='#e8536a'"
+						                    onmouseout="this.style.borderColor='#e8d8da';this.style.color='#555'">
+						                Keep Shopping
+						            </button>
+						            <form action="<%= contextPath %>/cart/clear" method="post" style="flex:1;max-width:160px;">
+						                <button type="submit"
+						                        style="width:100%;padding:12px;background:#a32d2d;color:#fff;
+						                               border:none;border-radius:10px;font-size:.84rem;font-weight:600;
+						                               cursor:pointer;font-family:'DM Sans',sans-serif;
+						                               box-shadow:0 4px 14px rgba(163,45,45,.3);
+						                               transition:opacity .2s;"
+						                        onmouseover="this.style.opacity='.85'"
+						                        onmouseout="this.style.opacity='1'">
+						                    Yes, Clear Cart
+						                </button>
+						            </form>
+						        </div>
+						    </div>
+						</div>
                     </div>
                 </div>
 
@@ -354,9 +421,9 @@
                         </c:choose>
 
                         <div class="cs-badges">
-                            <span class="cs-badge">&#128274; Secure</span>
-                            <span class="cs-badge">&#9989; Free returns</span>
-                            <span class="cs-badge">&#128666; Free ship</span>
+                            <span class="cs-badge"> Secure</span>
+                            <span class="cs-badge"> Free returns</span>
+                            <span class="cs-badge"> Free ship</span>
                         </div>
                     </div>
                 </div>
@@ -442,6 +509,20 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function() { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 500);
         }, 3500);
     }
+});
+
+function openClearCartModal() {
+    var m = document.getElementById('clearCartModal');
+    m.style.display = 'flex';
+}
+function closeClearCartModal() {
+    document.getElementById('clearCartModal').style.display = 'none';
+}
+document.getElementById('clearCartModal').addEventListener('click', function(e) {
+    if (e.target === this) closeClearCartModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeClearCartModal();
 });
 </script>
 </body>

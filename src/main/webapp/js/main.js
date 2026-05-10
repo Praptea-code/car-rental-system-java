@@ -1,5 +1,3 @@
-
-
 /* ---- Password toggle ---- */
 function togglePassword(fieldId, btn) {
     var field = document.getElementById(fieldId);
@@ -16,16 +14,10 @@ function togglePassword(fieldId, btn) {
 /* ============================================================
    CART TOAST POPUP
    showCartToast(name, category, price, imagePath, contextPath)
-   - name        : product name string
-   - category    : category name string (can be empty)
-   - price       : number e.g. 2499
-   - imagePath   : filename only e.g. "rose-serum.jpg" (can be empty)
-   - contextPath : the servlet context path e.g. "/spra"
    ============================================================ */
 var _ctpDismissTimer = null;
 
 function showCartToast(name, category, price, imagePath, contextPath) {
-    /* remove any existing toast first */
     var old = document.getElementById('sprCartToast');
     if (old) { old.remove(); }
     if (_ctpDismissTimer) { clearTimeout(_ctpDismissTimer); }
@@ -69,7 +61,6 @@ function showCartToast(name, category, price, imagePath, contextPath) {
         + '<div class="ctp-bar"><div class="ctp-bar-fill"></div></div>';
 
     document.body.appendChild(div);
-
     _ctpDismissTimer = setTimeout(function () { dismissCartToast(); }, 4000);
 }
 
@@ -85,33 +76,26 @@ function dismissCartToast() {
 
 /* ============================================================
    UPDATE NAV CART BADGE
-   Call this after an AJAX add-to-cart to refresh the
-   pink number badge on the cart icon WITHOUT reloading.
    ============================================================ */
-function updateNavCartBadge(contextPath) {
-    fetch(contextPath + '/cart', { method: 'GET', redirect: 'follow' })
-    .then(function (r) { return r.text(); })
-    .then(function (html) {
-        var parser = new DOMParser();
-        var doc    = parser.parseFromString(html, 'text/html');
-        var fresh  = doc.querySelector('.cart-badge');
+function updateNavCartBadge(count) {
+    // Remove all existing badges
+    document.querySelectorAll('.cart-badge').forEach(function (b) { b.remove(); });
 
-        /* remove all existing badges on this page */
-        document.querySelectorAll('.cart-badge').forEach(function (b) { b.remove(); });
-
-        /* if the cart now has items, add the badge to every cart icon */
-        if (fresh) {
-            document.querySelectorAll('.cart-icon-btn').forEach(function (iconBtn) {
-                iconBtn.appendChild(fresh.cloneNode(true));
-            });
-        }
-    })
-    .catch(function () { /* silently ignore network errors */ });
+    if (count > 0) {
+        var badge = document.createElement('span');
+        badge.className = 'cart-badge';
+        badge.textContent = count;
+        document.querySelectorAll('.cart-icon-btn').forEach(function (iconBtn) {
+            iconBtn.appendChild(badge.cloneNode(true));
+        });
+    }
 }
 
 /* ============================================================
    AJAX ADD TO CART  (used on home.jsp featured products)
-   onclick="addToCart(this, productId, name, category, price, imagePath, contextPath)"
+   THE FIX: use a hidden form submit instead of fetch so the
+   browser handles the session cookie and redirect properly.
+   We intercept the form, use fetch correctly, then update UI.
    ============================================================ */
 function addToCart(btn, productId, name, category, price, imagePath, contextPath) {
     btn.disabled = true;
@@ -122,20 +106,40 @@ function addToCart(btn, productId, name, category, price, imagePath, contextPath
     fd.append('productId', productId);
     fd.append('qty', 1);
 
-    fetch(contextPath + '/cart/add', { method: 'POST', body: fd, redirect: 'manual' })
-    .then(function () {
-        /* restore button after short delay */
+    // KEY FIX: removed redirect:'manual' — let fetch follow the redirect
+    // naturally so the session cookie is handled correctly by the browser.
+    fetch(contextPath + '/cart/add', {
+        method: 'POST',
+        body: fd,
+        credentials: 'same-origin'   // explicitly send session cookie
+    })
+    .then(function (response) {
+        // response.ok will be true after following the redirect to home/cart
         btn.textContent = '✓ Added!';
         setTimeout(function () {
             btn.textContent = original;
             btn.disabled = false;
         }, 1600);
 
-        /* show the proper popup toast */
+        // Show the toast popup
         showCartToast(name, category, price, imagePath, contextPath);
 
-        /* refresh the nav badge number */
-        updateNavCartBadge(contextPath);
+        // Fetch current cart count from server and update badge
+        return fetch(contextPath + '/cart', {
+            method: 'GET',
+            credentials: 'same-origin'
+        });
+    })
+    .then(function (response) {
+        return response.text();
+    })
+    .then(function (html) {
+        // Parse the returned cart page and extract the badge count
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var badge = doc.querySelector('.cart-badge');
+        var count = badge ? parseInt(badge.textContent) : 0;
+        updateNavCartBadge(count);
     })
     .catch(function () {
         btn.textContent = original;
@@ -148,7 +152,7 @@ function addToCart(btn, productId, name, category, price, imagePath, contextPath
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* auto-dismiss server-rendered alert banners after 5 s */
+    // Auto-dismiss server-rendered alert banners after 5s
     document.querySelectorAll('.alert').forEach(function (el) {
         setTimeout(function () {
             el.style.transition = 'opacity .5s';
@@ -157,14 +161,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 5000);
     });
 
-    /* close modal overlays when clicking the backdrop */
+    // Close modal overlays on backdrop click
     document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay) overlay.style.display = 'none';
         });
     });
 
-    /* active nav link highlight (fallback for pages without controller-set activePage) */
+    // Active nav link highlight
     var path = window.location.pathname;
     document.querySelectorAll('.nav-links a').forEach(function (link) {
         var href = link.getAttribute('href');
@@ -173,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    /* admin sidebar active highlight */
+    // Admin sidebar active highlight
     document.querySelectorAll('.admin-nav-link').forEach(function (link) {
         if (link.href && window.location.href.indexOf(link.href) !== -1) {
             link.classList.add('active');

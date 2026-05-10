@@ -425,24 +425,22 @@
 
                 <%-- Add to Cart — AJAX, no page refresh --%>
                 <div style="padding: 0 16px 16px;">
-                    <c:choose>
-                        <c:when test="${product.outOfStock}">
-                            <button class="feat-atc-btn" disabled>Out of Stock</button>
-                        </c:when>
-                        <c:otherwise>
-                            <button class="feat-atc-btn"
-						            onclick="addToCart(this,
-						                ${product.productId},
-						                '${product.name}',
-						                '${product.categoryName}',
-						                ${product.price},
-						                '${product.imagePath}',
-						                '${pageContext.request.contextPath}')">
-						        Add to Cart
-						    </button>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
+				    <c:choose>
+				        <c:when test="${product.outOfStock}">
+				            <button class="feat-atc-btn" disabled>Out of Stock</button>
+				        </c:when>
+				        <c:otherwise>
+						    <form action="${pageContext.request.contextPath}/cart/add" 
+						          method="post" 
+						          target="cart-frame"
+						          onsubmit="handleHomeCartAdd(this, '${product.name}', '${product.categoryName}', ${product.price}, '${product.imagePath}', '${pageContext.request.contextPath}')">
+						        <input type="hidden" name="productId" value="${product.productId}">
+						        <input type="hidden" name="qty" value="1">
+						        <button type="submit" class="feat-atc-btn">Add to Cart</button>
+						    </form>
+						</c:otherwise>
+				    </c:choose>
+				</div>
             </div>
         </c:forEach>
     </div>
@@ -658,7 +656,44 @@
 </footer>
 
 <script src="<%= contextPath %>/js/main.js"></script>
+<!-- Hidden iframe absorbs the form POST redirect so main page never reloads -->
+<iframe name="cart-frame" style="display:none;" aria-hidden="true"></iframe>
 
+<script>
+function handleHomeCartAdd(form, name, category, price, imagePath, contextPath) {
+    var btn = form.querySelector('button');
+    btn.disabled = true;
+    btn.textContent = '✓ Added!';
+    setTimeout(function() {
+        btn.disabled = false;
+        btn.textContent = 'Add to Cart';
+    }, 1600);
+
+    // Show toast
+    showCartToast(name, category, price, imagePath, contextPath);
+
+    // Update nav badge count after a short delay
+    // (gives the iframe POST time to complete on the server)
+    setTimeout(function() {
+        fetch(contextPath + '/cart', { credentials: 'same-origin' })
+        .then(function(r) { return r.text(); })
+        .then(function(html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var badge = doc.querySelector('.cart-badge');
+            var count = badge ? parseInt(badge.textContent) : 0;
+            document.querySelectorAll('.cart-badge').forEach(function(b) { b.remove(); });
+            if (count > 0) {
+                document.querySelectorAll('.cart-icon-btn').forEach(function(btn) {
+                    var b = document.createElement('span');
+                    b.className = 'cart-badge';
+                    b.textContent = count;
+                    btn.appendChild(b);
+                });
+            }
+        });
+    }, 400);
+}
+</script>
 <script>
     /* Login popup for guests */
     (function () {
@@ -696,6 +731,18 @@
             if (e.target === popupOverlay) dismissPopup();
         });
     }
+	 // Save scroll position before any cart form submits, restore after reload
+	 document.querySelectorAll('form[action*="/cart/add"]').forEach(function(form) {
+	     form.addEventListener('submit', function() {
+	         sessionStorage.setItem('scrollPos', window.scrollY);
+	     });
+	 });
+	
+	 var savedPos = sessionStorage.getItem('scrollPos');
+	 if (savedPos) {
+	     window.scrollTo(0, parseInt(savedPos));
+	     sessionStorage.removeItem('scrollPos');
+	 }
 </script>
 
 </body>

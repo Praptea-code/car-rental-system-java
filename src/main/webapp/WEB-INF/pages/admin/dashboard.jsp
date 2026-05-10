@@ -67,10 +67,7 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(232, 83, 106, 0.14);
         }
-        .stat-card-link:hover .admin-stat-num {
-            color: var(--a-pink);
-        }
-
+        
         /* ── Order row in dashboard ── */
         .dash-order-row {
             display: flex;

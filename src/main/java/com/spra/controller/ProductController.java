@@ -82,6 +82,7 @@ public class ProductController extends HttpServlet {
                     products = products.stream()
                             .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())).toList();
                     break;
+                    
                 default:
                     break;
             }

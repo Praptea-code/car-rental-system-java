@@ -1,6 +1,8 @@
 package com.spra.controller;
 
 import com.spra.dao.UserDAO;
+import com.spra.config.EnvConfig;
+
 import com.spra.model.UserModel;
 import com.spra.util.CookieUtil;
 import com.spra.util.SessionUtil;
@@ -23,13 +25,11 @@ import org.json.JSONObject;   // <-- needs json-20240303.jar in WEB-INF/lib
 @WebServlet(urlPatterns = {"/auth/google", "/auth/google/callback"}, asyncSupported = true)
 public class GoogleAuthController extends HttpServlet {
 
-    // ── CONFIGURE THESE ──────────────────────────────────────
-    private static final String GOOGLE_CLIENT_ID     = "299075735780-6u9tan3ml9a8slir6c1ou25nj729969c.apps.googleusercontent.com";
-    private static final String GOOGLE_CLIENT_SECRET = "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";
-    // The redirect URI must EXACTLY match what you put in Google Cloud Console
-    private static final String REDIRECT_URI         = "http://localhost:8080/spra/auth/google/callback";
-    // ─────────────────────────────────────────────────────────
-
+    
+	private static final String GOOGLE_CLIENT_ID     = EnvConfig.get("GOOGLE_CLIENT_ID");
+	private static final String GOOGLE_CLIENT_SECRET = EnvConfig.get("GOOGLE_CLIENT_SECRET");
+	private static final String REDIRECT_URI         = "http://localhost:8080/spra/auth/google/callback";
+   
     private static final String AUTH_URL  = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
     private static final String USER_URL  = "https://www.googleapis.com/oauth2/v3/userinfo";

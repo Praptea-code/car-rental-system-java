@@ -1,0 +1,5 @@
+.env
+build/
+*.class
+.DS_Store
+Thumbs.db

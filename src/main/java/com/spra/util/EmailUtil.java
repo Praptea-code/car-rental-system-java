@@ -1,5 +1,6 @@
 package com.spra.util;
 
+import com.spra.config.EnvConfig;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -7,31 +8,15 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
- * EmailUtil
- * Sends emails via Gmail SMTP (TLS on port 587).
- *
- * ── SETUP ──────────────────────────────────────────────────
- * 1. Go to https://myaccount.google.com/security
- * 2. Enable 2-Step Verification (required for App Passwords)
- * 3. Go to https://myaccount.google.com/apppasswords
- * 4. Create an App Password → App: "Mail", Device: "Other" → name it "Spra"
- * 5. Copy the 16-character password (e.g. "abcd efgh ijkl mnop")
- * 6. Paste it (without spaces) into GMAIL_APP_PASSWORD below
- * 7. Replace GMAIL_ADDRESS with your Gmail address
- * ──────────────────────────────────────────────────────────
- *
- * NOTE: Add these two JARs to WEB-INF/lib (download from Maven Central):
- *   - jakarta.mail-2.0.1.jar  (or jakarta.mail-api + angus-mail)
- *   - activation-2.0.1.jar
- *
+
  * @author Spra Team
  */
 public class EmailUtil {
 
-    // ── CONFIGURE THESE TWO LINES ──────────────────────────
-    private static final String GMAIL_ADDRESS      = "bhattarai.prapti00@gmail.com";   // <-- your Gmail
-    private static final String GMAIL_APP_PASSWORD = "ulfouesiapowdgdi";        // <-- 16-char App Password (no spaces)
-    // ──────────────────────────────────────────────────────
+    
+	private static final String GMAIL_ADDRESS      = EnvConfig.get("GMAIL_ADDRESS");
+	private static final String GMAIL_APP_PASSWORD = EnvConfig.get("GMAIL_APP_PASSWORD");
+   
 
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final int    SMTP_PORT = 587;

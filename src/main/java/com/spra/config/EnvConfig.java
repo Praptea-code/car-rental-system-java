@@ -5,6 +5,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class EnvConfig {
 
     private static final Dotenv dotenv = Dotenv.configure()
+            .directory("C:/Users/Acer/eclipse-workspace/spra")
             .ignoreIfMissing()
             .load();
 

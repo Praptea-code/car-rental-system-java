@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2026 at 03:18 AM
+-- Generation Time: May 10, 2026 at 03:58 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -195,7 +195,14 @@ INSERT INTO `products` (`product_id`, `name`, `description`, `price`, `old_price
 (5, 'Blush Palette', '6-shade warm blush palette for all skin tones.', 3336.00, NULL, 35, 'blushPalette.jpg', 2, 0, 0, '2026-04-14 15:46:29'),
 (6, 'Glow Moisturiser', 'Lightweight daily moisturiser with SPF 30.', 4438.00, 5446.00, 60, 'moisturizer.jpg', 1, 0, 0, '2026-04-14 15:46:29'),
 (7, 'Nude Lip Combo', 'Define and shape lips with this nude liner.', 3222.00, NULL, 45, 'lipCombo.jpg', 4, 0, 0, '2026-04-14 15:46:29'),
-(8, 'Pearl Eye Ring', 'Subtle shimmer eyeshadow for day looks.', 2119.00, 0.00, 200, 'eyeRing.jpg', 5, 0, 0, '2026-04-14 15:46:29');
+(8, 'Pearl Eye Ring', 'Subtle shimmer eyeshadow for day looks.', 2119.00, 0.00, 200, 'eyeRing.jpg', 5, 0, 0, '2026-04-14 15:46:29'),
+(9, 'Vitamin C Brightening Serum', 'Potent vitamin C serum that fades dark spots and evens skin tone.', 5299.00, 6200.00, 40, 'vitaminC.jpg', 1, 0, 0, '2026-05-10 01:29:33'),
+(10, 'Retinol Night Repair Cream', 'Overnight retinol cream that reduces fine lines and renews skin texture.', 6850.00, 7999.00, 25, 'retinol.jpg', 1, 0, 0, '2026-05-10 01:29:33'),
+(11, 'Soothing Aloe Toner', 'Alcohol-free toner with aloe vera and green tea to calm and hydrate.', 2199.00, NULL, 55, 'aloe.jpg', 1, 0, 0, '2026-05-10 01:29:33'),
+(12, 'Oud Noir Eau de Parfum', 'Rich and smoky oud fragrance with hints of amber and sandalwood.', 7299.00, 8500.00, 20, 'perfume.jpg', 3, 0, 0, '2026-05-10 01:29:33'),
+(13, 'Glass Lip Gloss', 'High-shine non-sticky gloss that gives a plumped glass-lip effect.', 1599.00, NULL, 70, 'lipgloss.jpg', 4, 0, 0, '2026-05-10 01:29:34'),
+(14, 'Volumizing Curl Mascara', '24-hour volumizing mascara that lifts and curls lashes without clumping.', 2599.00, 2999.00, 48, 'curl.jpg', 5, 0, 0, '2026-05-10 01:29:34'),
+(15, 'Rose Quartz Facial Roller', 'Cooling rose quartz roller that depuffs, boosts circulation and aids serum absorption.', 2299.00, 2799.00, 35, 'roller.jpg', 6, 0, 0, '2026-05-10 01:29:34');
 
 -- --------------------------------------------------------
 
@@ -383,7 +390,7 @@ ALTER TABLE `password_reset_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `reviews`

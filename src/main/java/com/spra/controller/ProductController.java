@@ -16,6 +16,8 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/products"}, asyncSupported = true)
 public class ProductController extends HttpServlet {
 
+    private static final int PAGE_SIZE = 12;
+
     private final ProductDAO  productDAO  = new ProductDAO();
     private final CategoryDAO categoryDAO = new CategoryDAO();
 
@@ -27,8 +29,9 @@ public class ProductController extends HttpServlet {
         String categoryId = ValidationUtil.safeTrim(req.getParameter("category"));
         String priceRange = ValidationUtil.safeTrim(req.getParameter("price"));
         String sortBy     = ValidationUtil.safeTrim(req.getParameter("sort"));
+        String pageParam  = ValidationUtil.safeTrim(req.getParameter("page"));
 
-        // ── 1. BASE PRODUCT SELECTION ──────────────────────────────────
+        // 1. BASE PRODUCT SELECTION 
         List<ProductModel> products;
 
         if (!keyword.isEmpty()) {
@@ -43,7 +46,7 @@ public class ProductController extends HttpServlet {
             products = productDAO.getAllProducts();
         }
 
-        // ── 2. PRICE FILTER ────────────────────────────────────────────
+        //  2. PRICE FILTER 
         if (!priceRange.isEmpty()) {
             switch (priceRange) {
                 case "under2500":
@@ -67,7 +70,7 @@ public class ProductController extends HttpServlet {
             }
         }
 
-        // ── 3. SORT ────────────────────────────────────────────────────
+        //  3. SORT 
         if (!sortBy.isEmpty()) {
             switch (sortBy) {
                 case "price-asc":
@@ -82,23 +85,44 @@ public class ProductController extends HttpServlet {
                     products = products.stream()
                             .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())).toList();
                     break;
-                    
                 default:
                     break;
             }
         }
 
-        // ── 4. CATEGORIES LIST ─────────────────────────────────────────
+        // 4. PAGINATION 
+        int totalCount  = products.size();
+        int totalPages  = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+
+        int currentPage;
+        try {
+            currentPage = Integer.parseInt(pageParam);
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        } catch (NumberFormatException e) {
+            currentPage = 1;
+        }
+
+        int fromIndex = (currentPage - 1) * PAGE_SIZE;
+        int toIndex   = Math.min(fromIndex + PAGE_SIZE, totalCount);
+
+        List<ProductModel> pagedProducts = (fromIndex < totalCount)
+                ? products.subList(fromIndex, toIndex)
+                : List.of();
+
+        // 5. CATEGORIES LIST 
         List<CategoryModel> categories = categoryDAO.getAllCategories();
 
-        // ── 5. SET ATTRIBUTES ──────────────────────────────────────────
-        req.setAttribute("products",    products);
-        req.setAttribute("categories",  categories);
-        req.setAttribute("keyword",     keyword);
-        req.setAttribute("categoryId",  categoryId);
-        req.setAttribute("priceRange",  priceRange);
-        req.setAttribute("sortBy",      sortBy);
-        req.setAttribute("totalCount",  products.size());
+        // 6. SET ATTRIBUTES 
+        req.setAttribute("products",     pagedProducts);
+        req.setAttribute("categories",   categories);
+        req.setAttribute("keyword",      keyword);
+        req.setAttribute("categoryId",   categoryId);
+        req.setAttribute("priceRange",   priceRange);
+        req.setAttribute("sortBy",       sortBy);
+        req.setAttribute("totalCount",   totalCount);
+        req.setAttribute("totalPages",   totalPages);
+        req.setAttribute("currentPage",  currentPage);
 
         req.getRequestDispatcher("/WEB-INF/pages/products.jsp").forward(req, res);
     }

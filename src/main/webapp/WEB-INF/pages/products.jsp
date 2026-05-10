@@ -69,13 +69,46 @@
         }
         .buy-now-btn:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
         .buy-now-btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+
+        /* ── Pagination ── */
+        .pp-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2.5rem;
+            padding-bottom: 1rem;
+        }
+        .pp-page-btn {
+            min-width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e0d8d8;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            background: #fff;
+            transition: border-color .15s, color .15s, background .15s;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        .pp-page-btn:hover { border-color: #e8536a; color: #e8536a; }
+        .pp-page-active {
+            background: #e8536a;
+            border-color: #e8536a;
+            color: #fff;
+        }
+        .pp-page-active:hover { background: #e8536a; color: #fff; }
+        .pp-page-disabled { color: #ccc; border-color: #f0e8e8; cursor: not-allowed; }
+        .pp-page-arrow { font-size: 16px; }
     </style>
 </head>
 <body>
-<%-- ═══ CART TOAST POPUP TRIGGER ═══
-     Fires when the user is redirected back after adding to cart.
-     CartController stores the product details in session.
-     This block reads them, shows the popup, then clears the session. --%>
+
+<%-- ═══ CART TOAST POPUP TRIGGER ═══ --%>
 <c:if test="${not empty sessionScope.cartToast}">
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -110,15 +143,15 @@
             </svg>
         </a>
         <a href="${pageContext.request.contextPath}/cart" class="nav-icon-btn cart-icon-btn" title="Cart">
-		    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-		        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-		        <line x1="3" y1="6" x2="21" y2="6"/>
-		        <path d="M16 10a4 4 0 0 1-8 0"/>
-		    </svg>
-		    <c:if test="${not empty cart and cart.totalCount > 0}">
-		        <span class="cart-badge">${cart.totalCount}</span>
-		    </c:if>
-		</a>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <c:if test="${not empty cart and cart.totalCount > 0}">
+                <span class="cart-badge">${cart.totalCount}</span>
+            </c:if>
+        </a>
         <c:choose>
             <c:when test="${not empty currentUser}">
                 <div class="nav-user-wrap">
@@ -141,6 +174,13 @@
 
 <c:set var="cp" value="${pageContext.request.contextPath}"/>
 <c:set var="hasFilter" value="${not empty categoryId or not empty priceRange or not empty keyword}"/>
+
+<%-- Base query string for pagination links (preserves all active filters) --%>
+<c:set var="qsBase" value=""/>
+<c:if test="${not empty keyword}"><c:set var="qsBase" value="${qsBase}&amp;search=${keyword}"/></c:if>
+<c:if test="${not empty categoryId}"><c:set var="qsBase" value="${qsBase}&amp;category=${categoryId}"/></c:if>
+<c:if test="${not empty priceRange}"><c:set var="qsBase" value="${qsBase}&amp;price=${priceRange}"/></c:if>
+<c:if test="${not empty sortBy}"><c:set var="qsBase" value="${qsBase}&amp;sort=${sortBy}"/></c:if>
 
 <div class="products-page">
 
@@ -249,7 +289,12 @@
 
         <!-- ── MAIN GRID ── -->
         <main class="pp-main">
-            <p class="pp-count">${totalCount} product<c:if test="${totalCount != 1}">s</c:if> found</p>
+            <p class="pp-count">
+                ${totalCount} product<c:if test="${totalCount != 1}">s</c:if> found
+                <c:if test="${totalPages > 1}">
+                    &nbsp;&middot;&nbsp; Page ${currentPage} of ${totalPages}
+                </c:if>
+            </p>
 
             <!-- Flash messages -->
             <c:if test="${not empty sessionScope.successMessage}">
@@ -261,6 +306,7 @@
                 <c:remove var="errorMessage" scope="session"/>
             </c:if>
 
+            <!-- Product grid -->
             <div class="pp-grid" id="productGrid">
                 <c:choose>
                     <c:when test="${empty products}">
@@ -343,6 +389,48 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+
+            <!-- ── PAGINATION ── -->
+            <c:if test="${totalPages > 1}">
+                <nav class="pp-pagination" aria-label="Product pages">
+
+                    <%-- Previous arrow --%>
+                    <c:choose>
+                        <c:when test="${currentPage > 1}">
+                            <a href="${cp}/products?page=${currentPage - 1}${qsBase}"
+                               class="pp-page-btn pp-page-arrow" aria-label="Previous page">&#8592;</a>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="pp-page-btn pp-page-arrow pp-page-disabled" aria-disabled="true">&#8592;</span>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <%-- Page number buttons --%>
+                    <c:forEach begin="1" end="${totalPages}" var="p">
+                        <c:choose>
+                            <c:when test="${p == currentPage}">
+                                <span class="pp-page-btn pp-page-active" aria-current="page">${p}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${cp}/products?page=${p}${qsBase}" class="pp-page-btn">${p}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+                    <%-- Next arrow --%>
+                    <c:choose>
+                        <c:when test="${currentPage < totalPages}">
+                            <a href="${cp}/products?page=${currentPage + 1}${qsBase}"
+                               class="pp-page-btn pp-page-arrow" aria-label="Next page">&#8594;</a>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="pp-page-btn pp-page-arrow pp-page-disabled" aria-disabled="true">&#8594;</span>
+                        </c:otherwise>
+                    </c:choose>
+
+                </nav>
+            </c:if>
+
         </main>
     </div>
 </div>

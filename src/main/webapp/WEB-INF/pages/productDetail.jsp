@@ -597,16 +597,21 @@
 
             <c:choose>
                 <c:when test="${empty currentUser}">
-                    <div class="rv-login-nudge">
-                        <span>Sign in to leave a review for this product.</span>
-                        <a href="${pageContext.request.contextPath}/login">Login to Review</a>
-                    </div>
-                </c:when>
-                <c:when test="${alreadyReviewed}">
-                    <div class="rv-already">
-                        ✓ You've already reviewed this product. Thank you for your feedback!
-                    </div>
-                </c:when>
+				    <div class="rv-login-nudge">
+				        <span>Sign in to leave a review for this product.</span>
+				        <a href="${pageContext.request.contextPath}/login">Login to Review</a>
+				    </div>
+				</c:when>
+				<c:when test="${alreadyReviewed}">
+				    <div class="rv-already">
+				        ✓ You've already reviewed this product. Thank you for your feedback!
+				    </div>
+				</c:when>
+				<c:when test="${not canReview}">
+				    <div class="rv-login-nudge" style="background:#fdf8f8;">
+				        <span>Only customers who have received this product can leave a review.</span>
+				    </div>
+				</c:when>
                 <c:otherwise>
                     <div class="rv-form-card">
                         <div class="rv-form-title">Write a Review</div>

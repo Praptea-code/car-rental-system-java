@@ -242,4 +242,26 @@ public class OrderDAO {
         }
         return o;
     }
+
+        public boolean hasUserReceivedProduct(int userId, int productId) {
+            String sql = "SELECT COUNT(*) FROM orders o " +
+                         "JOIN order_items oi ON o.order_id = oi.order_id " +
+                         "WHERE o.user_id = ? AND oi.product_id = ? " +
+                         "AND o.status IN ('SHIPPED', 'DELIVERED')";
+            Connection conn = null;
+            try {
+                conn = DbConfig.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, userId);
+                ps.setInt(2, productId);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) return rs.getInt(1) > 0;
+            } catch (SQLException e) {
+                System.err.println("[OrderDAO.hasUserReceivedProduct] " + e.getMessage());
+            } finally {
+                DbConfig.closeConnection(conn);
+            }
+            return false;
+        }
+     
 }

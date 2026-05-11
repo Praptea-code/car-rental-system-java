@@ -1,6 +1,7 @@
 package com.spra.controller;
 
 import com.spra.dao.CategoryDAO;
+import com.spra.dao.OrderDAO;
 import com.spra.dao.ProductDAO;
 import com.spra.dao.ReviewDAO;
 import com.spra.dao.WishlistDAO;
@@ -27,6 +28,7 @@ public class ProductDetailController extends HttpServlet {
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final ReviewDAO   reviewDAO   = new ReviewDAO();
     private final WishlistDAO wishlistDAO = new WishlistDAO();
+    private final OrderDAO    orderDAO    = new OrderDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -73,10 +75,13 @@ public class ProductDetailController extends HttpServlet {
         UserModel currentUser    = SessionUtil.getLoggedInUser(req);
         boolean   alreadyReviewed = false;
         boolean   isWishlisted    = false;
+        // canReview = user has a SHIPPED or DELIVERED order containing this product
+        boolean   canReview       = false;
 
         if (currentUser != null) {
             alreadyReviewed = reviewDAO.hasUserReviewed(productId, currentUser.getUserId());
             isWishlisted    = wishlistDAO.isWishlisted(currentUser.getUserId(), productId);
+            canReview       = orderDAO.hasUserReceivedProduct(currentUser.getUserId(), productId);
         }
 
         // Cart for nav badge
@@ -98,6 +103,7 @@ public class ProductDetailController extends HttpServlet {
         req.setAttribute("isWishlisted",    isWishlisted);
         req.setAttribute("currentUser",     currentUser);
         req.setAttribute("cart",            cart);
+        req.setAttribute("canReview",       canReview);   // NEW
 
         req.getRequestDispatcher("/WEB-INF/pages/productDetail.jsp").forward(req, res);
     }

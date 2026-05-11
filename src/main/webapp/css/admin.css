@@ -117,33 +117,33 @@
     border-radius: 8px;
     font-size: 13px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.55);
-    transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
-    border: 1px solid transparent;
+    color: rgba(255, 255, 255, 0.45);
+    transition: color 0.16s ease;
+    border: none;
     text-decoration: none;
     white-space: nowrap;
+    background: none;
 }
 
 .admin-nav-link svg {
     flex-shrink: 0;
     min-width: 15px;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.3);
     transition: color 0.16s;
 }
 
 .admin-nav-link:hover {
-    background: rgba(232, 83, 106, 0.12);
-    color: rgba(255, 255, 255, 0.9);
-    border-color: rgba(232, 83, 106, 0.2);
+    color: rgba(255, 255, 255, 0.75);
+    background: none;
 }
-.admin-nav-link:hover svg { color: #e8536a; }
+.admin-nav-link:hover svg { color: rgba(255, 255, 255, 0.55); }
 
+/* Active: just brighter text + left dot, no background */
 .admin-nav-link.active {
-    background: rgba(232, 83, 106, 0.2);
-    color: rgba(255, 255, 255, 0.95);
-    border-color: rgba(232, 83, 106, 0.35);
+    color: #e8536a;
     font-weight: 500;
-    box-shadow: inset 3px 0 0 #e8536a;
+    background: none;
+    border: none;
 }
 .admin-nav-link.active svg { color: #e8536a; }
 
@@ -201,7 +201,6 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    box-shadow: 0 1px 0 var(--a-border), 0 4px 20px rgba(232, 83, 106, 0.04);
 }
 
 .admin-page-title {
@@ -257,25 +256,20 @@
     padding: 22px;
     position: relative;
     overflow: hidden;
-    transition: border-color .2s, transform .2s, box-shadow .2s;
-    box-shadow: 0 2px 12px rgba(232, 83, 106, 0.04);
+    /* Scale up cleanly on hover — no colour change */
+    transition: transform .22s cubic-bezier(.22,1,.36,1);
     cursor: pointer;
 }
-.admin-stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--a-pink-mid), var(--a-pink));
-    opacity: 0;
-    transition: opacity .25s;
-}
+
 .admin-stat-card:hover {
-    border-color: var(--a-pink-mid);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(232, 83, 106, 0.1);
+    transform: scale(1.045);
 }
-.admin-stat-card:hover::before { opacity: 1; }
+.admin-stat-card:hover .admin-stat-num {
+    color: var(--a-text);
+}
+
+/* Remove the pink gradient bar entirely */
+.admin-stat-card::before { display: none; }
 
 .admin-stat-icon {
     width: 36px; height: 36px;

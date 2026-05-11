@@ -1,5 +1,6 @@
 package com.spra.controller;
 
+import com.spra.dao.OrderDAO;
 import com.spra.dao.ReviewDAO;
 import com.spra.model.ReviewModel;
 import com.spra.model.UserModel;
@@ -15,7 +16,7 @@ import java.io.IOException;
 /**
  * ReviewController
  * Handles POST /review/add — submits a product review.
- * Redirects back to the product detail page with a session message.
+ * Only allows reviews from users who have had the product SHIPPED or DELIVERED.
  *
  * @author Spra Team
  */
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class ReviewController extends HttpServlet {
 
     private final ReviewDAO reviewDAO = new ReviewDAO();
+    private final OrderDAO  orderDAO  = new OrderDAO();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -40,7 +42,7 @@ public class ReviewController extends HttpServlet {
         String title          = ValidationUtil.safeTrim(req.getParameter("title"));
         String body           = ValidationUtil.safeTrim(req.getParameter("body"));
 
-        // Basic validation
+        // Parse product ID
         int productId;
         try {
             productId = Integer.parseInt(productIdParam);
@@ -49,6 +51,15 @@ public class ReviewController extends HttpServlet {
             return;
         }
 
+        // Must have received the product (SHIPPED or DELIVERED order)
+        if (!orderDAO.hasUserReceivedProduct(user.getUserId(), productId)) {
+            req.getSession().setAttribute("reviewError",
+                "You can only review products that have been shipped or delivered to you.");
+            res.sendRedirect(req.getContextPath() + "/productDetail?id=" + productId);
+            return;
+        }
+
+        // Validate rating
         int rating;
         try {
             rating = Integer.parseInt(ratingParam);

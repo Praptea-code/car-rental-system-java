@@ -135,7 +135,7 @@
             </svg>
         </div>
         <div class="order-popup-id">Order #SPR-${sessionScope.orderId} confirmed</div>
-        <h2 class="order-popup-title">You're all set,<br><em>beautiful!</em> 🎉</h2>
+        <h2 class="order-popup-title">You're all set,<br><em>beautiful!</em> </h2>
         <p class="order-popup-sub">
             Your order has been placed successfully. We'll prepare your goodies and deliver them 
             to your doorstep. Payment is Cash on Delivery — no worries!

@@ -12,9 +12,6 @@ import java.io.IOException;
 /**
  * RememberMeFilter — runs on every request, restores session from cookie.
  *
- * REGISTERED IN web.xml ONLY.
- * The @WebFilter annotation has been intentionally removed.
- * Must execute BEFORE AuthFilter — guaranteed only via web.xml ordering.
  */
 public class RememberMeFilter implements Filter {
 

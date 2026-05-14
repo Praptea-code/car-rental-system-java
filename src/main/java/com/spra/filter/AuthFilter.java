@@ -9,12 +9,6 @@ import java.io.IOException;
 
 /**
  * AuthFilter — protects every URL under /admin/*
- *
- * REGISTERED IN web.xml ONLY.
- * The @WebFilter annotation has been intentionally removed.
- * If @WebFilter is present alongside a web.xml declaration, Tomcat
- * registers the filter twice with undefined ordering, which breaks
- * the RememberMeFilter → AuthFilter execution sequence.
  */
 public class AuthFilter implements Filter {
 

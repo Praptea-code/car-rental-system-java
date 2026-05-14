@@ -156,6 +156,14 @@
 
 <!-- NAV -->
 <nav class="nav">
+	<button class="hamburger-btn" onclick="toggleNav()" aria-label="Menu">
+	    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" 
+	         stroke="currentColor" stroke-width="1.8">
+	        <line x1="3" y1="6" x2="21" y2="6"/>
+	        <line x1="3" y1="12" x2="21" y2="12"/>
+	        <line x1="3" y1="18" x2="21" y2="18"/>
+	    </svg>
+	</button>
     <a href="${pageContext.request.contextPath}/home" class="nav-logo">SPR<span class="nav-dot">A</span></a>
     <ul class="nav-links">
         <li><a href="${contextPath}/home">Home</a></li>

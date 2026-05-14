@@ -258,3 +258,15 @@ var SprLoader = {
     }
 };
 document.addEventListener('DOMContentLoaded', function () { SprLoader.dismissAfter(2800); });
+function toggleNav() {
+    var links = document.querySelector('.nav-links');
+    if (links) links.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+    var nav = document.querySelector('.nav');
+    var links = document.querySelector('.nav-links');
+    if (links && nav && !nav.contains(e.target)) {
+        links.classList.remove('open');
+    }
+});

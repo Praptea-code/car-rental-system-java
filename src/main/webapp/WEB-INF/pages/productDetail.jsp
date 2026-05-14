@@ -169,6 +169,94 @@
         }
         .pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
         .pd-btn-wishlist.wishlisted { border-color: #e8536a; background: #fdf0f2; }
+        
+        .review-toast{
+		    position: fixed;
+		    top: 30px;
+		    right: 30px;
+		    min-width: 320px;
+		    max-width: 420px;
+		
+		    background: #fff;
+		    border-radius: 16px;
+		    padding: 18px 20px;
+		
+		    display: flex;
+		    align-items: flex-start;
+		    gap: 14px;
+		
+		    box-shadow:
+		        0 10px 30px rgba(0,0,0,.12),
+		        0 2px 8px rgba(0,0,0,.08);
+		
+		    border-left: 5px solid #28a745;
+		
+		    transform: translateX(120%);
+		    opacity: 0;
+		    visibility: hidden;
+		
+		    transition:
+		        transform .45s cubic-bezier(.22,1,.36,1),
+		        opacity .3s ease;
+		
+		    z-index: 99999;
+		}
+		
+		.review-toast.show{
+		    transform: translateX(0);
+		    opacity: 1;
+		    visibility: visible;
+		}
+		
+		.review-toast.error{
+		    border-left-color: #dc3545;
+		}
+		
+		.review-toast-icon{
+		    width: 42px;
+		    height: 42px;
+		    border-radius: 50%;
+		
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		
+		    background: #eaf7ee;
+		    color: #28a745;
+		
+		    font-size: 20px;
+		    font-weight: 700;
+		
+		    flex-shrink: 0;
+		}
+		
+		.review-toast.error .review-toast-icon{
+		    background: #fdecec;
+		    color: #dc3545;
+		}
+		
+		.review-toast-title{
+		    font-size: 15px;
+		    font-weight: 700;
+		    color: #1a1a1a;
+		    margin-bottom: 3px;
+		}
+		
+		.review-toast-message{
+		    font-size: 13px;
+		    line-height: 1.6;
+		    color: #666;
+		}
+		
+		@media(max-width:600px){
+		    .review-toast{
+		        left: 15px;
+		        right: 15px;
+		        min-width: auto;
+		        max-width: none;
+		        top: 15px;
+		    }
+		}
     </style>
 </head>
 <body>
@@ -252,28 +340,73 @@
         <span class="pd-breadcrumb-current">${product.name}</span>
     </nav>
 
-    <!-- Flash messages -->
-    <c:if test="${not empty sessionScope.reviewSuccess}">
-        <div class="alert alert-success">${sessionScope.reviewSuccess}</div>
-        <c:remove var="reviewSuccess" scope="session"/>
-    </c:if>
-    <c:if test="${not empty sessionScope.reviewError}">
-        <div class="alert alert-error">${sessionScope.reviewError}</div>
-        <c:remove var="reviewError" scope="session"/>
-    </c:if>
-    <c:if test="${not empty sessionScope.successMessage}">
-        <div class="alert alert-success">${sessionScope.successMessage}</div>
-        <c:remove var="successMessage" scope="session"/>
-    </c:if>
-    <c:if test="${not empty sessionScope.wishlistToast}">
-        <div class="alert alert-success">${sessionScope.wishlistToast}</div>
-        <c:remove var="wishlistToast" scope="session"/>
-    </c:if>
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="alert alert-error">${sessionScope.errorMessage}</div>
-        <c:remove var="errorMessage" scope="session"/>
-    </c:if>
-
+	<c:if test="${not empty sessionScope.reviewSuccess}">
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	    showReviewToast(
+	        'Success',
+	        '${sessionScope.reviewSuccess}',
+	        'success'
+	    );
+	});
+	</script>
+	<c:remove var="reviewSuccess" scope="session"/>
+	</c:if>
+	
+	<c:if test="${not empty sessionScope.reviewError}">
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	    showReviewToast(
+	        'Error',
+	        '${sessionScope.reviewError}',
+	        'error'
+	    );
+	});
+	</script>
+	<c:remove var="reviewError" scope="session"/>
+	</c:if>
+	
+	<c:if test="${not empty sessionScope.successMessage}">
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	    showReviewToast(
+	        'Success',
+	        '${sessionScope.successMessage}',
+	        'success'
+	    );
+	});
+	</script>
+	<c:remove var="successMessage" scope="session"/>
+	</c:if>
+	
+	<c:if test="${not empty sessionScope.wishlistToast}">
+	    <script>
+	    document.addEventListener('DOMContentLoaded', function () {
+	        showWishlistToast(
+	            '${sessionScope.wishlistToast}',
+	            '${sessionScope.wishlistToastName}',
+	            '${sessionScope.wishlistToastImage}',
+	            '${pageContext.request.contextPath}'
+	        );
+	    });
+	    </script>
+	    <c:remove var="wishlistToast"      scope="session"/>
+	    <c:remove var="wishlistToastName"  scope="session"/>
+	    <c:remove var="wishlistToastImage" scope="session"/>
+	</c:if>
+	
+	<c:if test="${not empty sessionScope.errorMessage}">
+	<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	    showReviewToast(
+	        'Error',
+	        '${sessionScope.errorMessage}',
+	        'error'
+	    );
+	});
+	</script>
+	<c:remove var="errorMessage" scope="session"/>
+	</c:if>
     <!-- ── PRODUCT MAIN ── -->
     <div class="pd-main">
 
@@ -713,6 +846,16 @@
             </div>
         </section>
     </c:if>
+    
+    <div id="reviewToast" class="review-toast">
+	    <div class="review-toast-icon" id="reviewToastIcon">✓</div>
+	    <div class="review-toast-content">
+	        <div class="review-toast-title" id="reviewToastTitle">Success</div>
+	        <div class="review-toast-message" id="reviewToastMessage">
+	            Your review was submitted successfully.
+	        </div>
+	    </div>
+	</div>
 
 </main>
 
@@ -853,6 +996,32 @@ function validateReview() {
         img.style.transformOrigin = 'center center';
     });
 })();
+
+function showReviewToast(title, message, type) {
+
+    const toast = document.getElementById('reviewToast');
+    const toastTitle = document.getElementById('reviewToastTitle');
+    const toastMessage = document.getElementById('reviewToastMessage');
+    const toastIcon = document.getElementById('reviewToastIcon');
+
+    toastTitle.textContent = title;
+    toastMessage.textContent = message;
+
+    toast.classList.remove('error');
+
+    if(type === 'error'){
+        toast.classList.add('error');
+        toastIcon.textContent = '!';
+    } else {
+        toastIcon.textContent = '✓';
+    }
+
+    toast.classList.add('show');
+
+    setTimeout(function () {
+        toast.classList.remove('show');
+    }, 4000);
+}
 </script>
 
 </body>

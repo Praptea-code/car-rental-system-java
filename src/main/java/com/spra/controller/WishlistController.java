@@ -1,6 +1,8 @@
 package com.spra.controller;
 
+import com.spra.dao.ProductDAO;
 import com.spra.dao.WishlistDAO;
+import com.spra.model.ProductModel;
 import com.spra.model.UserModel;
 import com.spra.util.SessionUtil;
 import jakarta.servlet.ServletException;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class WishlistController extends HttpServlet {
 
     private final WishlistDAO wishlistDAO = new WishlistDAO();
+    private final ProductDAO  productDAO  = new ProductDAO();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
@@ -41,12 +44,21 @@ public class WishlistController extends HttpServlet {
 
         String uri = req.getRequestURI();
 
+        // Fetch product details for the toast
+        ProductModel product = productDAO.getProductById(productId);
+        String productName  = (product != null) ? product.getName()      : "";
+        String productImage = (product != null) ? product.getImagePath() : "";
+
         if (uri.endsWith("/add")) {
             wishlistDAO.addToWishlist(user.getUserId(), productId);
-            req.getSession().setAttribute("wishlistToast", "Added to your wishlist!");
+            req.getSession().setAttribute("wishlistToast",       "added");
+            req.getSession().setAttribute("wishlistToastName",   productName);
+            req.getSession().setAttribute("wishlistToastImage",  productImage);
         } else if (uri.endsWith("/remove")) {
             wishlistDAO.removeFromWishlist(user.getUserId(), productId);
-            req.getSession().setAttribute("wishlistToast", "Removed from wishlist.");
+            req.getSession().setAttribute("wishlistToast",       "removed");
+            req.getSession().setAttribute("wishlistToastName",   productName);
+            req.getSession().setAttribute("wishlistToastImage",  productImage);
         }
 
         String referer = req.getHeader("Referer");

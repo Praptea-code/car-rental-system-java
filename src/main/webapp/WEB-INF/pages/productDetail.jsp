@@ -169,95 +169,150 @@
         }
         .pd-btn-wishlist:hover { border-color: #e8536a; background: #fdf0f2; color: #e8536a; }
         .pd-btn-wishlist.wishlisted { border-color: #e8536a; background: #fdf0f2; }
-        
-        .review-toast{
-		    position: fixed;
-		    top: 30px;
-		    right: 30px;
-		    min-width: 320px;
-		    max-width: 420px;
-		
-		    background: #fff;
-		    border-radius: 16px;
-		    padding: 18px 20px;
-		
-		    display: flex;
-		    align-items: flex-start;
-		    gap: 14px;
-		
-		    box-shadow:
-		        0 10px 30px rgba(0,0,0,.12),
-		        0 2px 8px rgba(0,0,0,.08);
-		
-		    border-left: 5px solid #28a745;
-		
-		    transform: translateX(120%);
-		    opacity: 0;
-		    visibility: hidden;
-		
-		    transition:
-		        transform .45s cubic-bezier(.22,1,.36,1),
-		        opacity .3s ease;
-		
-		    z-index: 99999;
-		}
-		
-		.review-toast.show{
-		    transform: translateX(0);
-		    opacity: 1;
-		    visibility: visible;
-		}
-		
-		.review-toast.error{
-		    border-left-color: #dc3545;
-		}
-		
-		.review-toast-icon{
-		    width: 42px;
-		    height: 42px;
-		    border-radius: 50%;
-		
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-		
-		    background: #eaf7ee;
-		    color: #28a745;
-		
-		    font-size: 20px;
-		    font-weight: 700;
-		
-		    flex-shrink: 0;
-		}
-		
-		.review-toast.error .review-toast-icon{
-		    background: #fdecec;
-		    color: #dc3545;
-		}
-		
-		.review-toast-title{
-		    font-size: 15px;
-		    font-weight: 700;
-		    color: #1a1a1a;
-		    margin-bottom: 3px;
-		}
-		
-		.review-toast-message{
-		    font-size: 13px;
-		    line-height: 1.6;
-		    color: #666;
-		}
-		
-		@media(max-width:600px){
-		    .review-toast{
-		        left: 15px;
-		        right: 15px;
-		        min-width: auto;
-		        max-width: none;
-		        top: 15px;
-		    }
-		}
+
+        .review-toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            min-width: 320px;
+            max-width: 420px;
+
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 20px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,.12),
+                0 2px 8px rgba(0,0,0,.08);
+
+            transform: translateX(120%);
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                transform .45s cubic-bezier(.22,1,.36,1),
+                opacity .3s ease;
+
+            z-index: 99999;
+        }
+
+        .review-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .review-toast.error {
+        }
+
+        .review-toast-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eaf7ee;
+            color: #28a745;
+
+            font-size: 20px;
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+        .review-toast.error .review-toast-icon {
+            background: #fdecec;
+            color: #dc3545;
+        }
+
+        .review-toast-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .review-toast-message {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        @media(max-width:600px) {
+            .review-toast {
+                left: 15px;
+                right: 15px;
+                min-width: auto;
+                max-width: none;
+                top: 15px;
+            }
+        }
     </style>
+
+    <%-- ═══ DEFINE showReviewToast HERE in <head> so it is available
+             before any inline DOMContentLoaded callbacks fire ═══ --%>
+    <script>
+    /* ── Rating state — must be global & early so star onclicks work ── */
+    var currentRating = 0;
+    var starLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
+    function setRating(val) {
+        currentRating = val;
+        var ratingInput = document.getElementById('ratingInput');
+        if (ratingInput) ratingInput.value = val;
+        var starHint = document.getElementById('starHint');
+        if (starHint) starHint.textContent = starLabels[val] || '';
+        Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
+            var v = parseInt(btn.getAttribute('data-val'));
+            btn.classList.toggle('selected', v <= val);
+            btn.style.color = v <= val ? '#f5a623' : '#e0d8d8';
+        });
+    }
+
+    function validateReview() {
+        var ratingInput = document.getElementById('ratingInput');
+        var rating = ratingInput ? parseInt(ratingInput.value) : 0;
+        if (!rating || rating < 1) {
+            showReviewToast('Rating Required', 'Please select a star rating before submitting.', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    function showReviewToast(title, message, type) {
+        var toast        = document.getElementById('reviewToast');
+        var toastTitle   = document.getElementById('reviewToastTitle');
+        var toastMessage = document.getElementById('reviewToastMessage');
+        var toastIcon    = document.getElementById('reviewToastIcon');
+
+        if (!toast) return; /* guard: DOM not ready yet — should not happen after DOMContentLoaded */
+
+        toastTitle.textContent   = title;
+        toastMessage.textContent = message;
+
+        toast.classList.remove('error');
+
+        if (type === 'error') {
+            toast.classList.add('error');
+            toastIcon.textContent = '!';
+        } else {
+            toastIcon.textContent = '✓';
+        }
+
+        toast.classList.add('show');
+
+        setTimeout(function () {
+            toast.classList.remove('show');
+        }, 4000);
+    }
+    </script>
 </head>
 <body>
 <%-- ═══ CART TOAST POPUP TRIGGER ═══ --%>
@@ -340,73 +395,58 @@
         <span class="pd-breadcrumb-current">${product.name}</span>
     </nav>
 
-	<c:if test="${not empty sessionScope.reviewSuccess}">
-	<script>
-	document.addEventListener('DOMContentLoaded', function () {
-	    showReviewToast(
-	        'Success',
-	        '${sessionScope.reviewSuccess}',
-	        'success'
-	    );
-	});
-	</script>
-	<c:remove var="reviewSuccess" scope="session"/>
-	</c:if>
-	
-	<c:if test="${not empty sessionScope.reviewError}">
-	<script>
-	document.addEventListener('DOMContentLoaded', function () {
-	    showReviewToast(
-	        'Error',
-	        '${sessionScope.reviewError}',
-	        'error'
-	    );
-	});
-	</script>
-	<c:remove var="reviewError" scope="session"/>
-	</c:if>
-	
-	<c:if test="${not empty sessionScope.successMessage}">
-	<script>
-	document.addEventListener('DOMContentLoaded', function () {
-	    showReviewToast(
-	        'Success',
-	        '${sessionScope.successMessage}',
-	        'success'
-	    );
-	});
-	</script>
-	<c:remove var="successMessage" scope="session"/>
-	</c:if>
-	
-	<c:if test="${not empty sessionScope.wishlistToast}">
-	    <script>
-	    document.addEventListener('DOMContentLoaded', function () {
-	        showWishlistToast(
-	            '${sessionScope.wishlistToast}',
-	            '${sessionScope.wishlistToastName}',
-	            '${sessionScope.wishlistToastImage}',
-	            '${pageContext.request.contextPath}'
-	        );
-	    });
-	    </script>
-	    <c:remove var="wishlistToast"      scope="session"/>
-	    <c:remove var="wishlistToastName"  scope="session"/>
-	    <c:remove var="wishlistToastImage" scope="session"/>
-	</c:if>
-	
-	<c:if test="${not empty sessionScope.errorMessage}">
-	<script>
-	document.addEventListener('DOMContentLoaded', function () {
-	    showReviewToast(
-	        'Error',
-	        '${sessionScope.errorMessage}',
-	        'error'
-	    );
-	});
-	</script>
-	<c:remove var="errorMessage" scope="session"/>
-	</c:if>
+    <c:if test="${not empty sessionScope.reviewSuccess}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showReviewToast('Success', '${sessionScope.reviewSuccess}', 'success');
+    });
+    </script>
+    <c:remove var="reviewSuccess" scope="session"/>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.reviewError}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showReviewToast('Error', '${sessionScope.reviewError}', 'error');
+    });
+    </script>
+    <c:remove var="reviewError" scope="session"/>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.successMessage}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showReviewToast('Success', '${sessionScope.successMessage}', 'success');
+    });
+    </script>
+    <c:remove var="successMessage" scope="session"/>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.wishlistToast}">
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            showWishlistToast(
+                '${sessionScope.wishlistToast}',
+                '${sessionScope.wishlistToastName}',
+                '${sessionScope.wishlistToastImage}',
+                '${pageContext.request.contextPath}'
+            );
+        });
+        </script>
+        <c:remove var="wishlistToast"      scope="session"/>
+        <c:remove var="wishlistToastName"  scope="session"/>
+        <c:remove var="wishlistToastImage" scope="session"/>
+    </c:if>
+
+    <c:if test="${not empty sessionScope.errorMessage}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        showReviewToast('Error', '${sessionScope.errorMessage}', 'error');
+    });
+    </script>
+    <c:remove var="errorMessage" scope="session"/>
+    </c:if>
+
     <!-- ── PRODUCT MAIN ── -->
     <div class="pd-main">
 
@@ -507,13 +547,6 @@
 
             <div class="pd-divider"></div>
 
-            <!-- ══════════════════════════════════════════
-                 ACTION BUTTONS
-                 Add to Cart  — open to everyone
-                 Buy Now      — redirects guests to login
-                 Wishlist     — redirects guests to login
-                 ══════════════════════════════════════════ -->
-
             <!-- Quantity stepper — always visible -->
             <div class="pd-qty-row">
                 <label class="pd-qty-label">Quantity</label>
@@ -564,7 +597,6 @@
                             </form>
                         </c:when>
                         <c:otherwise>
-                            <%-- Looks identical but sends guest to login --%>
                             <a href="${pageContext.request.contextPath}/login"
                                class="pd-btn-buy-now"
                                style="flex:1; text-decoration:none;">
@@ -607,7 +639,7 @@
 
             </div>
 
-            <%-- Small nudge shown only to guests — below the buttons, not blocking --%>
+            <%-- Small nudge shown only to guests --%>
             <c:if test="${empty currentUser}">
                 <p style="font-size:12px; color:#aaa; margin-bottom:20px; line-height:1.6;">
                     <a href="${pageContext.request.contextPath}/login"
@@ -730,25 +762,26 @@
 
             <c:choose>
                 <c:when test="${empty currentUser}">
-				    <div class="rv-login-nudge">
-				        <span>Sign in to leave a review for this product.</span>
-				        <a href="${pageContext.request.contextPath}/login">Login to Review</a>
-				    </div>
-				</c:when>
-				<c:when test="${alreadyReviewed}">
-				    <div class="rv-already">
-				        ✓ You've already reviewed this product. Thank you for your feedback!
-				    </div>
-				</c:when>
-				<c:when test="${not canReview}">
-				    <div class="rv-login-nudge" style="background:#fdf8f8;">
-				        <span>Only customers who have received this product can leave a review.</span>
-				    </div>
-				</c:when>
+                    <div class="rv-login-nudge">
+                        <span>Sign in to leave a review for this product.</span>
+                        <a href="${pageContext.request.contextPath}/login">Login to Review</a>
+                    </div>
+                </c:when>
+                <c:when test="${alreadyReviewed}">
+                    <div class="rv-already">
+                        ✓ You've already reviewed this product. Thank you for your feedback!
+                    </div>
+                </c:when>
+                <c:when test="${not canReview}">
+                    <div class="rv-login-nudge" style="background:#fdf8f8;">
+                        <span>Only customers who have received this product can leave a review.</span>
+                    </div>
+                </c:when>
                 <c:otherwise>
                     <div class="rv-form-card">
                         <div class="rv-form-title">Write a Review</div>
-                        <form action="${pageContext.request.contextPath}/review/add" method="post" id="reviewForm">
+                        <form action="${pageContext.request.contextPath}/review/add" method="post" id="reviewForm"
+                              onsubmit="return validateReview()">
                             <input type="hidden" name="productId" value="${product.productId}"/>
                             <input type="hidden" name="rating" id="ratingInput" value="0"/>
                             <div class="rv-star-picker" id="starPicker">
@@ -762,8 +795,7 @@
                                    placeholder="Review title (optional)" maxlength="120"/>
                             <textarea name="body" class="rv-inp"
                                       placeholder="Share your experience with this product..." required></textarea>
-                            <button type="submit" class="rv-submit-btn"
-                                    onclick="return validateReview()">Post Review</button>
+                            <button type="submit" class="rv-submit-btn">Post Review</button>
                         </form>
                     </div>
                 </c:otherwise>
@@ -846,16 +878,17 @@
             </div>
         </section>
     </c:if>
-    
+
+    <%-- ═══ TOAST ELEMENT — must exist in DOM before any toast call ═══ --%>
     <div id="reviewToast" class="review-toast">
-	    <div class="review-toast-icon" id="reviewToastIcon">✓</div>
-	    <div class="review-toast-content">
-	        <div class="review-toast-title" id="reviewToastTitle">Success</div>
-	        <div class="review-toast-message" id="reviewToastMessage">
-	            Your review was submitted successfully.
-	        </div>
-	    </div>
-	</div>
+        <div class="review-toast-icon" id="reviewToastIcon">✓</div>
+        <div class="review-toast-content">
+            <div class="review-toast-title" id="reviewToastTitle">Success</div>
+            <div class="review-toast-message" id="reviewToastMessage">
+                Your review was submitted successfully.
+            </div>
+        </div>
+    </div>
 
 </main>
 
@@ -940,19 +973,7 @@ if (window.location.hash === '#tab-reviews') {
     if (btn) btn.click();
 }
 
-var currentRating = 0;
-var starLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
-
-function setRating(val) {
-    currentRating = val;
-    document.getElementById('ratingInput').value = val;
-    document.getElementById('starHint').textContent = starLabels[val] || '';
-    Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
-        var v = parseInt(btn.getAttribute('data-val'));
-        btn.classList.toggle('selected', v <= val);
-    });
-}
-
+/* Star hover effects — wired up after DOM is ready */
 Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
     btn.addEventListener('mouseenter', function() {
         var hoverVal = parseInt(btn.getAttribute('data-val'));
@@ -971,14 +992,6 @@ Array.from(document.querySelectorAll('.rv-star-btn')).forEach(function(btn) {
     });
 });
 
-function validateReview() {
-    if (currentRating === 0) {
-        alert('Please select a star rating before submitting.');
-        return false;
-    }
-    return true;
-}
-
 /* Image zoom on hover */
 (function() {
     var panel = document.getElementById('imagePanel');
@@ -996,32 +1009,6 @@ function validateReview() {
         img.style.transformOrigin = 'center center';
     });
 })();
-
-function showReviewToast(title, message, type) {
-
-    const toast = document.getElementById('reviewToast');
-    const toastTitle = document.getElementById('reviewToastTitle');
-    const toastMessage = document.getElementById('reviewToastMessage');
-    const toastIcon = document.getElementById('reviewToastIcon');
-
-    toastTitle.textContent = title;
-    toastMessage.textContent = message;
-
-    toast.classList.remove('error');
-
-    if(type === 'error'){
-        toast.classList.add('error');
-        toastIcon.textContent = '!';
-    } else {
-        toastIcon.textContent = '✓';
-    }
-
-    toast.classList.add('show');
-
-    setTimeout(function () {
-        toast.classList.remove('show');
-    }, 4000);
-}
 </script>
 
 </body>

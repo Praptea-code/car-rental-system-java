@@ -29,7 +29,7 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; line-height: 1.15; }
 }
 
 /* ============================================================
-   NAV  (single pink-bg navbar, no black bar)
+   NAV
    ============================================================ */
 .nav {
     background: #fff8f8;
@@ -53,114 +53,63 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; line-height: 1.15; }
 }
 .nav-dot { color: var(--pink); }
 
-.nav-links {
-    display: flex;
-    gap: 32px;
-}
-.nav-links a {
-    font-size: 14px;
-    color: #555;
-    font-weight: 400;
-    transition: color .2s;
-}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a { font-size: 14px; color: #555; font-weight: 400; transition: color .2s; }
 .nav-links a:hover,
 .nav-links a.active { color: var(--pink); }
 
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.nav-right { display: flex; align-items: center; gap: 14px; }
 
 .nav-icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #555;
-    transition: color .2s;
-    background: none;
-    border: none;
-    padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: #555; transition: color .2s; background: none; border: none; padding: 4px;
 }
 .nav-icon-btn:hover { color: var(--pink); }
 
 .nav-login-btn {
-    background: var(--pink);
-    color: #fff;
-    border: none;
-    padding: 9px 22px;
-    border-radius: 24px;
-    font-size: 13px;
-    font-weight: 500;
-    transition: opacity .2s;
+    background: var(--pink); color: #fff; border: none;
+    padding: 9px 22px; border-radius: 24px; font-size: 13px;
+    font-weight: 500; transition: opacity .2s;
 }
 .nav-login-btn:hover { opacity: .88; }
 
-.nav-user-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-.nav-username    { font-size: 14px; color: #555; }
+.nav-user-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.nav-username  { font-size: 14px; color: #555; }
 .nav-admin-btn,
 .nav-profile-btn {
-    font-size: 13px;
-    color: var(--pink);
-    border: 1px solid var(--pink);
-    padding: 5px 12px;
-    border-radius: 16px;
-    transition: background .2s, color .2s;
+    font-size: 13px; color: var(--pink); border: 1px solid var(--pink);
+    padding: 5px 12px; border-radius: 16px; transition: background .2s, color .2s;
 }
 .nav-admin-btn:hover,
 .nav-profile-btn:hover { background: var(--pink); color: #fff; }
 
 .nav-logout-btn {
-    background: none;
-    border: none;
-    font-size: 13px;
-    color: #888;
-    transition: color .2s;
-    padding: 0;
+    background: none; border: none; font-size: 13px;
+    color: #888; transition: color .2s; padding: 0;
 }
 .nav-logout-btn:hover { color: var(--pink); }
 
 /* ============================================================
-   FOOTER  (white background)
+   FOOTER
    ============================================================ */
-.footer {
-    background: #fff;
-    border-top: 1px solid #f0e8e8;
-    padding: 3rem 0 0;
-}
+.footer { background: #fff; border-top: 1px solid #f0e8e8; padding: 3rem 0 0; }
 .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
 
 .footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 2rem;
-    padding-bottom: 2.5rem;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem; padding-bottom: 2.5rem;
 }
 
 .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    color: #1a1a1a;
-    font-weight: 600;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
+    font-family: 'Cormorant Garamond', serif; font-size: 22px;
+    color: #1a1a1a; font-weight: 600; letter-spacing: 3px; margin-bottom: 10px;
 }
 .footer-logo span { color: var(--pink); }
 .footer-tagline   { font-size: 13px; color: #888; line-height: 1.7; }
 
 .footer-col-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: #1a1a1a;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    color: #1a1a1a; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
 }
 .footer-links li  { margin-bottom: 8px; }
 .footer-links a,
@@ -168,70 +117,44 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; line-height: 1.15; }
 .footer-links a:hover { color: var(--pink); }
 
 .footer-bottom {
-    border-top: 1px solid #f0e8e8;
-    padding: 1.2rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-top: 1px solid #f0e8e8; padding: 1.2rem 0;
+    display: flex; justify-content: space-between; align-items: center;
 }
-.footer-copy   { font-size: 12px; color: #aaa; }
-.footer-heart  { color: var(--pink); }
-.footer-legal  { display: flex; gap: 16px; }
+.footer-copy  { font-size: 12px; color: #aaa; }
+.footer-heart { color: var(--pink); }
+.footer-legal { display: flex; gap: 16px; }
 .footer-legal a { font-size: 12px; color: #aaa; }
 .footer-legal a:hover { color: var(--pink); }
 
 /* ============================================================
    SHARED SECTION HELPERS
    ============================================================ */
-.section-head      { text-align: center; margin-bottom: 2.5rem; }
-.section-title     { font-size: 34px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
-.section-sub       { font-size: 15px; color: #888; }
-.section-eyebrow   { font-size: 11px; color: var(--pink); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.section-head    { text-align: center; margin-bottom: 2.5rem; }
+.section-title   { font-size: 34px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+.section-sub     { font-size: 15px; color: #888; }
+.section-eyebrow { font-size: 11px; color: var(--pink); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
 
 /* ============================================================
-   PRODUCT CARD (shared between home + products page)
+   PRODUCT CARD
    ============================================================ */
 .product-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Ensures all cards in a row are the same height */
-    background: #fff;
-    border-radius: 8px; /* Optional: adds a soft look to the larger card */
-    overflow: hidden;
+    display: flex; flex-direction: column; height: 100%;
+    background: #fff; border-radius: 8px; overflow: hidden;
     transition: transform 0.3s ease;
 }
 .product-card:hover { transform: translateY(-4px); }
 
 .discount-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--pink);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 12px;
-    z-index: 2;
-}
-/* target the container to control the space the image occupies */
-.product-img-area {
-    width: 100%;
-    height: 300px; /* Adjust this base number until it looks 15% taller to you */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f9f9f9; /* Optional: light background for empty spaces */
+    position: absolute; top: 12px; left: 12px;
+    background: var(--pink); color: #fff; font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 12px; z-index: 2;
 }
 
-/* ensure the image fills the new height without stretching */
-.product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* This prevents the 'squished' look */
-    display: block;
+.product-img-area {
+    width: 100%; height: 300px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; background: #f9f9f9;
 }
+.product-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .product-info      { padding: 14px 16px; }
 .product-cat       { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
@@ -243,38 +166,32 @@ h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; line-height: 1.15; }
 /* ============================================================
    ALERT MESSAGES
    ============================================================ */
-.alert {
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 1rem;
-}
+.alert         { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 1rem; }
 .alert-success { background: #eaf3de; color: #3B6D11; border: 1px solid #c0dd97; }
 .alert-error   { background: #fceaea; color: #a32d2d; border: 1px solid #f09595; }
 
 /* ============================================================
-   FORMS (shared)
+   FORMS
    ============================================================ */
-.form-group    { margin-bottom: 18px; }
-.form-label    { display: block; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-.form-input    { width: 100%; padding: 11px 14px; border: 1px solid #e8e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a1a; background: #fff; outline: none; transition: border-color .2s; }
+.form-group  { margin-bottom: 18px; }
+.form-label  { display: block; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.form-input  { width: 100%; padding: 11px 14px; border: 1px solid #e8e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a1a; background: #fff; outline: none; transition: border-color .2s; }
 .form-input:focus { border-color: var(--pink); }
 textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
-.form-row-2    { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.field-hint    { font-size: 11px; color: #aaa; margin-top: 3px; display: block; }
-.form-check    { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
+.form-row-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field-hint  { font-size: 11px; color: #aaa; margin-top: 3px; display: block; }
+.form-check  { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
 
 /* ============================================================
    PASSWORD TOGGLE
    ============================================================ */
 .password-wrap { position: relative; }
 .password-wrap .form-input { padding-right: 56px; }
-.toggle-pass   { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 12px; color: #aaa; cursor: pointer; }
+.toggle-pass { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 12px; color: #aaa; cursor: pointer; }
 .toggle-pass:hover { color: var(--pink); }
 
-
 /* ============================================================
-   RESPONSIVE — BASIC
+   RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
     .nav { padding: 0 1.2rem; }
@@ -314,7 +231,6 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
 }
 
 .sl-drop-wrap { position: relative; width: 120px; height: 140px; margin-bottom: 36px; }
-
 .sl-drop {
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
   animation: dropFall 1s cubic-bezier(.4,0,.2,1) forwards; opacity: 0;
@@ -360,8 +276,7 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
 .sl-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, transparent, #e8536a, #f4a0b0, transparent);
-  width: 0%;
-  animation: barSweep 1.2s ease 1.5s forwards;
+  width: 0%; animation: barSweep 1.2s ease 1.5s forwards;
 }
 @keyframes barSweep { 0%{ width:0%; } 60%{ width:80%; } 100%{ width:100%; } }
 
@@ -378,30 +293,21 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
 }
 @keyframes slFadeIn { from { opacity:0; } to { opacity:1; } }
 
-
-/* These rules ensure the badge works on EVERY page     */
-.cart-icon-btn {
-    position: relative;   /* needed so the absolute badge positions correctly */
-}
+/* ============================================================
+   CART BADGE
+   ============================================================ */
+.cart-icon-btn { position: relative; }
 .cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #e8536a;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    pointer-events: none;
+    position: absolute; top: -6px; right: -6px;
+    background: #e8536a; color: #fff; font-size: 10px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1; pointer-events: none;
 }
 
-/* ---- Cart Toast Popup (slides in from top-right after Add to Cart) ---- */
+/* ============================================================
+   CART & WISHLIST TOAST POPUP
+   ============================================================ */
 .cart-toast-popup {
     position: fixed;
     top: 80px;
@@ -410,7 +316,6 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
     width: 340px;
     background: #fff;
     border: 1px solid #e8d8da;
-    border-left: 4px solid #e8536a;
     border-radius: 16px;
     padding: 18px 20px 16px;
     box-shadow: 0 8px 32px rgba(232,83,106,.15);
@@ -428,65 +333,34 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
     to   { opacity: 0; transform: translateX(60px); }
 }
 .ctp-close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    background: #f8f0f2;
-    border: none;
-    border-radius: 50%;
-    width: 26px;
-    height: 26px;
-    font-size: 16px;
-    color: #999;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: background .15s, color .15s;
+    position: absolute; top: 10px; right: 12px;
+    background: #f8f0f2; border: none; border-radius: 50%;
+    width: 26px; height: 26px; font-size: 16px; color: #999;
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; line-height: 1; transition: background .15s, color .15s;
 }
 .ctp-close:hover { background: #e8536a; color: #fff; }
 .ctp-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    padding-right: 22px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px; padding-right: 22px;
 }
 .ctp-check {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #e8536a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #e8536a; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
 }
 .ctp-check svg { display: block; }
 .ctp-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
 .ctp-sub   { font-size: 11px; color: #aaa; }
 .ctp-product {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #fdf8f8;
-    border: 1px solid #f0e0e0;
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+    background: #fdf8f8; border: 1px solid #f0e0e0;
+    border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;
 }
 .ctp-thumb {
-    width: 52px;
-    height: 52px;
-    border-radius: 8px;
-    background: #f0e8e8;
-    flex-shrink: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
+    width: 52px; height: 52px; border-radius: 8px;
+    background: #f0e8e8; flex-shrink: 0; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
 }
 .ctp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ctp-cat   { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
@@ -494,39 +368,22 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
 .ctp-price { font-size: 12px; font-weight: 600; color: #e8536a; }
 .ctp-btns  { display: flex; gap: 8px; }
 .ctp-btn-cart {
-    flex: 1;
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    flex: 1; background: #1a1a1a; color: #fff; border: none;
+    padding: 10px 12px; border-radius: 8px; font-size: 12px;
+    font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
     transition: background .18s;
 }
 .ctp-btn-cart:hover { background: #e8536a; }
 .ctp-btn-cont {
-    flex: 1;
-    background: #fff;
-    color: #555;
-    border: 1.5px solid #e8d8da;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    flex: 1; background: #fff; color: #555; border: 1.5px solid #e8d8da;
+    padding: 10px 12px; border-radius: 8px; font-size: 12px;
+    font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif;
     transition: border-color .18s, color .18s;
 }
 .ctp-btn-cont:hover { border-color: #e8536a; color: #e8536a; }
 .ctp-bar { height: 2px; background: #f0e0e0; border-radius: 1px; margin-top: 12px; overflow: hidden; }
 .ctp-bar-fill {
-    height: 100%;
-    background: #e8536a;
-    border-radius: 1px;
-    width: 100%;
-    animation: ctpCountdown 4s linear forwards;
+    height: 100%; background: #e8536a; border-radius: 1px;
+    width: 100%; animation: ctpCountdown 4s linear forwards;
 }
 @keyframes ctpCountdown { from { width: 100%; } to { width: 0%; } }

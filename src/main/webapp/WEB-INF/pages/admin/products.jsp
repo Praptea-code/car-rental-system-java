@@ -17,75 +17,7 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/admin.css">
     <link rel="icon" type="image/svg+xml" href="<%= contextPath %>/assets/images/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        /* ── View toggle ── */
-        .view-toggle {
-            display: flex; gap: 4px;
-            background: var(--a-bg); border: 1px solid var(--a-border);
-            border-radius: 8px; padding: 3px;
-        }
-        .view-toggle-btn {
-            width: 32px; height: 32px; background: none; border: none;
-            border-radius: 6px; display: flex; align-items: center; justify-content: center;
-            color: var(--a-muted); cursor: pointer; transition: all .15s;
-        }
-        .view-toggle-btn.active {
-            background: #fff; color: var(--a-pink);
-            box-shadow: 0 1px 4px rgba(0,0,0,.08);
-        }
 
-        /* ── Product card grid ── */
-        .product-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px; padding: 20px;
-        }
-        .pc-card {
-            background: var(--a-bg); border: 1px solid var(--a-border);
-            border-radius: 14px; overflow: hidden;
-            transition: transform .2s, box-shadow .2s;
-        }
-        .pc-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(232,83,106,.1);
-        }
-        .pc-card-img {
-            width: 100%; height: 160px; object-fit: cover;
-            background: #f0e8e8; display: block;
-        }
-        .pc-card-img-ph {
-            width: 100%; height: 160px; background: #fdf0f2;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem;
-        }
-        .pc-card-body { padding: 14px; }
-        .pc-card-cat {
-            font-size: 10px; color: var(--a-muted);
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;
-        }
-        .pc-card-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem; font-weight: 600; color: var(--a-text);
-            margin-bottom: 8px; white-space: nowrap;
-            overflow: hidden; text-overflow: ellipsis;
-        }
-        .pc-card-row {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 12px;
-        }
-        .pc-card-price { font-size: 13px; font-weight: 600; color: var(--a-text); }
-        .pc-card-stock-ok  { font-size: 11px; color: #3B6D11; background: #eaf3de; padding: 2px 8px; border-radius: 10px; }
-        .pc-card-stock-out { font-size: 11px; color: #a32d2d; background: #fceaea; padding: 2px 8px; border-radius: 10px; }
-        .pc-card-actions { display: flex; gap: 6px; }
-        .pc-card-actions button { flex: 1; text-align: center; font-size: 11px; padding: 6px 8px; }
-        .pc-card-featured {
-            position: absolute; top: 10px; left: 10px;
-            background: #e8536a; color: #fff; font-size: 9px;
-            font-weight: 700; padding: 2px 8px; border-radius: 10px;
-            text-transform: uppercase; letter-spacing: .5px;
-        }
-        .pc-card-wrap { position: relative; }
-    </style>
 </head>
 <body class="admin-body">
 <div class="admin-layout">

@@ -257,6 +257,12 @@ var SprLoader = {
         setTimeout(function () { self.dismiss(); }, ms);
     }
 };
+document.addEventListener('DOMContentLoaded', function () { SprLoader.dismissAfter(2800); });
+function toggleNav() {
+    var links = document.querySelector('.nav-links');
+    if (links) links.classList.toggle('open');
+}
+
 function toggleNav() {
     var links = document.querySelector('.nav-links');
     if (links) links.classList.toggle('open');

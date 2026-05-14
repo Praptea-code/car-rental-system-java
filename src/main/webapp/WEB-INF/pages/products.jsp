@@ -213,7 +213,8 @@
             <button type="submit" class="pp-search-btn">Search</button>
         </form>
 
-        <form action="<%= contextPath %>/products" method="get" id="sortForm" style="display:inline">
+        
+		<form action="<%= contextPath %>/products" method="get" id="sortForm" style="display:inline"; width:100%">
             <c:if test="${not empty categoryId}"><input type="hidden" name="category"  value="${categoryId}"/></c:if>
             <c:if test="${not empty priceRange}"> <input type="hidden" name="price"     value="${priceRange}"/></c:if>
             <c:if test="${not empty keyword}">    <input type="hidden" name="search"    value="${keyword}"/></c:if>

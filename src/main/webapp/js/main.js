@@ -11,10 +11,10 @@ function togglePassword(fieldId, btn) {
     }
 }
 
-/* ============================================================
+/* 
    CART TOAST POPUP
    showCartToast(name, category, price, imagePath, contextPath)
-   ============================================================ */
+    */
 var _ctpDismissTimer = null;
 
 function showCartToast(name, category, price, imagePath, contextPath) {
@@ -158,9 +158,9 @@ function updateNavCartBadge(count) {
     }
 }
 
-/* ============================================================
+/* 
    AJAX ADD TO CART  (used on home.jsp featured products)
-   ============================================================ */
+   */
 function addToCart(btn, productId, name, category, price, imagePath, contextPath) {
     btn.disabled = true;
     var original = btn.textContent;
@@ -205,9 +205,9 @@ function addToCart(btn, productId, name, category, price, imagePath, contextPath
     });
 }
 
-/* ============================================================
+/* 
    DOM READY — runs on every page
-   ============================================================ */
+    */
 document.addEventListener('DOMContentLoaded', function () {
 
     // Auto-dismiss server-rendered alert banners after 5s
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-/* ---- Beauty Ritual Loader ---- */
+/* Beauty Ritual Loader  */
 var SprLoader = {
     _el: document.getElementById('spra-loader'),
     dismiss: function () {
@@ -257,15 +257,20 @@ var SprLoader = {
         setTimeout(function () { self.dismiss(); }, ms);
     }
 };
-document.addEventListener('DOMContentLoaded', function () { SprLoader.dismissAfter(2800); });
 function toggleNav() {
     var links = document.querySelector('.nav-links');
     if (links) links.classList.toggle('open');
 }
 
+// Change the close handler to stop propagation
 document.addEventListener('click', function(e) {
     var nav = document.querySelector('.nav');
     var links = document.querySelector('.nav-links');
+    var hamburger = document.querySelector('.hamburger-btn');
+    
+    // Don't close if clicking the hamburger button
+    if (hamburger && hamburger.contains(e.target)) return;
+    
     if (links && nav && !nav.contains(e.target)) {
         links.classList.remove('open');
     }

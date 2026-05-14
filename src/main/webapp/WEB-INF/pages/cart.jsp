@@ -481,7 +481,7 @@
         </div>
     </div>
 </footer>
-
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 <script>
 function adjustQty(btn, delta) {
     var form  = btn.closest('form');

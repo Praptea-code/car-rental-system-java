@@ -182,19 +182,33 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
 .field-hint  { font-size: 11px; color: #aaa; margin-top: 3px; display: block; }
 .form-check  { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #555; }
 
-/* ============================================================
-   PASSWORD TOGGLE
-   ============================================================ */
+/* 
+   PASSWORD TOGGLE */
 .password-wrap { position: relative; }
 .password-wrap .form-input { padding-right: 56px; }
 .toggle-pass { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 12px; color: #aaa; cursor: pointer; }
 .toggle-pass:hover { color: var(--pink); }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 768px) {
-    .nav { padding: 0 1.2rem; }
+
+/* Put base style FIRST */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    padding: 6px;
+    color: #555;
+    cursor: pointer;
+}
+.hamburger-btn:hover { color: var(--pink); }
+
+/* Then the media query AFTER — now it correctly overrides */
+@media (max-width: 1024px) {
+    .nav { padding: 0 1.2rem; position: relative; }
+    
+    
+    .nav-username { display: none; }
+    .nav-user-wrap { gap: 6px; }
+    .nav-right { gap: 8px; }
     .nav-links {
         display: none;
         position: absolute;
@@ -208,24 +222,42 @@ textarea.form-input { min-height: 120px; resize: vertical; line-height: 1.6; }
         gap: 0;
         z-index: 99;
     }
-    .nav-links.open { display: flex; }
-    .nav-links a { padding: 12px 0; border-bottom: 1px solid #f0e8e8; font-size: 15px; }
+    .nav-links.open { 
+        display: flex;
+        flex-direction: column; /* ADD THIS */
+    }
+    .nav-links a { 
+        padding: 12px 0; 
+        border-bottom: 1px solid #f0e8e8; 
+        font-size: 15px; 
+    }
     .nav-links li:last-child a { border-bottom: none; }
-    .hamburger-btn { display: flex; }
+    .hamburger-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .form-row-2 { grid-template-columns: 1fr; }
+    
+    .pp-search-row {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+    
+    .pp-search-form {
+        width: 100%;
+    }
+    
+    .pp-sort {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
 }
-.hamburger-btn {
-    display: none;
-    background: none;
-    border: none;
-    padding: 6px;
-    color: #555;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-}
-.hamburger-btn:hover { color: var(--pink); }
+
+
 @media (max-width: 480px) {
     .footer-grid { grid-template-columns: 1fr; }
 }
